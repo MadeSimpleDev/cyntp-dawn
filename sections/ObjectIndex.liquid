@@ -36,10 +36,10 @@
       {% for metaobject in shop.metaobjects.course.values %}
         <div class="course-card" data-location="{{ metaobject.location | handleize }}">
           <a href="{{ metaobject.system.url }}">
-            {% if metaobject.image %}
+            {% if metaobject.hero_image %}
               <div
                 class="course-image"
-                style="background-image: url('{{ metaobject.image | image_url: width: 800 }}');"
+                style="background-image: url('{{ metaobject.hero_image | image_url: width: 800 }}');"
               >
                 <h3 class="course-title">{{ metaobject.name }}</h3>
               </div>
