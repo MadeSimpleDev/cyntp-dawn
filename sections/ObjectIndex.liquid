@@ -24,7 +24,7 @@
     <label for="location-filter">Filter by location:</label>
     <select id="location-filter">
       <option value="all">All Locations</option>
-      {% assign locations = shop.metaobjects.course.values | map: 'location' | uniq | sort %}
+      {% assign locations = shop.metaobjects.course.values | map: 'state' | uniq | sort %}
       {% for location in locations %}
         <option value="{{ location | handleize }}">{{ location }}</option>
       {% endfor %}
@@ -34,7 +34,7 @@
   <div class="course-grid">
     {% paginate shop.metaobjects.course.values by 25 %}
       {% for metaobject in shop.metaobjects.course.values %}
-        <div class="course-card" data-location="{{ metaobject.location | handleize }}">
+        <div class="course-card" data-location="{{ metaobject.state | handleize }}">
           <a href="{{ metaobject.system.url }}">
             {% if metaobject.hero_image %}
               <div
