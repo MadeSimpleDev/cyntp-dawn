@@ -144,16 +144,6 @@
     },
     "content_for_index": [],
     "blocks": {
-      "9356323809658795675": {
-        "type": "shopify://apps/reelup-shoppable-videos-reels/blocks/reelup/a8ec9e4d-d192-44f7-9c23-595f9ee7dd5b",
-        "disabled": false,
-        "settings": {
-          "debugging_popup_script": "",
-          "debugging_pops_script": "",
-          "debugging_global_script": "",
-          "enable_reelPops": true
-        }
-      },
       "4705145147225299685": {
         "type": "shopify://apps/tolstoy-shoppable-video-ugc/blocks/widget-block/06fa8282-42ff-403e-b67c-1936776aed11",
         "disabled": true,
@@ -163,6 +153,16 @@
         "type": "shopify://apps/videeo-mobile-commerce/blocks/app-embed-sdk/acf9f8eb-c211-4324-a19b-9f362f43b225",
         "disabled": true,
         "settings": {}
+      },
+      "9356323809658795675": {
+        "type": "shopify://apps/reelup-shoppable-videos-reels/blocks/reelup/a8ec9e4d-d192-44f7-9c23-595f9ee7dd5b",
+        "disabled": true,
+        "settings": {
+          "debugging_popup_script": "",
+          "debugging_pops_script": "",
+          "debugging_global_script": "",
+          "enable_reelPops": true
+        }
       }
     },
     "color_schemes": {
