@@ -21,16 +21,33 @@
   <h2>{{ section.settings.title }}</h2>
 
   <!-- Filter Dropdown -->
-  <div class="course-filter">
-    <label for="location-filter">Filter by location:</label>
-    <select id="location-filter">
-      <option value="all">All Locations</option>
-      {% assign locations = shop.metaobjects.course.values | map: 'state' | uniq | sort %}
-      {% for location in locations %}
-        <option value="{{ location | handleize }}">{{ location }}</option>
-      {% endfor %}
-    </select>
-  </div>
+  <facet-filters-form class="facets facets-vertical-sort page-width small-hide">
+    <form class="facets-vertical-form">
+      <div class="facet-filters sorting caption">
+        <div class="facet-filters__field">
+          <h2 class="facet-filters__label caption-large text-body">
+            <label for="location-filter">Filter by Location</label>
+          </h2>
+          <div class="select">
+            <select
+              id="location-filter"
+              class="facet-filters__sort select__select caption-large"
+              aria-describedby="a11y-refresh-page-message"
+            >
+              <option value="all">All Locations</option>
+              {% assign locations = shop.metaobjects.course.values | map: 'state' | uniq | sort %}
+              {% for location in locations %}
+                <option value="{{ location | handleize }}">{{ location }}</option>
+              {% endfor %}
+            </select>
+            <span class="svg-wrapper">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </form>
+  </facet-filters-form>
 
   <!-- Course Grid -->
   <div class="course-grid">
