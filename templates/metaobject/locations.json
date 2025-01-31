@@ -8,21 +8,6 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {
-    "main": {
-      "type": "main-page",
-      "settings": {
-        "padding_top": 28,
-        "padding_bottom": 28
-      }
-    },
-    "object_index_BzjYXD": {
-      "type": "ObjectIndex",
-      "settings": {}
-    }
-  },
-  "order": [
-    "main",
-    "object_index_BzjYXD"
-  ]
+  "sections": {},
+  "order": []
 }
