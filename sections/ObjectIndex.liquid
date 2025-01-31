@@ -20,6 +20,7 @@
 <section class="course-index">
   <h2>{{ section.settings.title }}</h2>
 
+  <!-- Filter Dropdown -->
   <div class="course-filter">
     <label for="location-filter">Filter by location:</label>
     <select id="location-filter">
@@ -31,6 +32,7 @@
     </select>
   </div>
 
+  <!-- Course Grid -->
   <div class="course-grid">
     {% paginate shop.metaobjects.course.values by 25 %}
       {% for metaobject in shop.metaobjects.course.values %}
@@ -92,22 +94,24 @@
 </style>
 
 <script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const filter = document.getElementById("location-filter");
-      const cards = document.querySelectorAll(".course-card");
+  document.addEventListener('DOMContentLoaded', function () {
+    const filter = document.getElementById('location-filter');
+    const cards = document.querySelectorAll('.course-card');
 
-      filter.addEventListener("change", function () {
-        const selectedLocation = this.value;
+    filter.addEventListener('change', function () {
+      const selectedLocation = this.value;
+      console.log('Selected Location:', selectedLocation); // Debugging
 
-        cards.forEach(card => {
-          if (selectedLocation === "all" || card.dataset.location === selectedLocation) {
-            card.style.display = "block";
-          } else {
-            card.style.display = "none";
-          }
-        });
+      cards.forEach((card) => {
+        const courseLocation = card.getAttribute('data-location');
+        console.log('Course Location:', courseLocation); // Debugging
+
+        if (selectedLocation === 'all' || courseLocation === selectedLocation) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
       });
     });
-  </script>
+  });
 </script>
