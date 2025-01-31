@@ -1,0 +1,109 @@
+{% schema %}
+{
+  "name": "Mascot Block",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Did you know?"
+    },
+    {
+      "type": "textarea",
+      "id": "content",
+      "label": "Content",
+      "default": "This course features one of the longest par 5s in the country!"
+    },
+    {
+      "type": "image_picker",
+      "id": "mascot_image",
+      "label": "Mascot Image"
+    },
+    {
+      "type": "color_scheme",
+      "id": "background_color_scheme",
+      "label": "Background Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "text_box_color_scheme",
+      "label": "Text Box Color Scheme",
+      "default": "scheme-2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mascot Block"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="mascot-block {{ section.settings.background_color_scheme }}">
+  <div class="mascot-container">
+    <div class="mascot-image">
+      {% if section.settings.mascot_image %}
+        <img src="{{ section.settings.mascot_image | img_url: '150x150' }}" alt="Mascot">
+      {% else %}
+        <img src="https://cdn.shopify.com/s/files/1/0604/2527/3392/files/CYNTP_Character_Full_Color.png?v=1735440903" alt="Mascot">
+      {% endif %}
+    </div>
+
+    <div class="mascot-content {{ section.settings.text_box_color_scheme }}">
+      <h3>{{ section.settings.title }}</h3>
+      <p>{{ section.settings.content }}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .mascot-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-background);
+    color: var(--color-text);
+    padding: 40px 20px;
+  }
+
+  .mascot-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 600px;
+  }
+
+  .mascot-image {
+    position: relative;
+    animation: floatMascot 2s infinite ease-in-out;
+  }
+
+  .mascot-image img {
+    width: 120px;
+    height: auto;
+  }
+
+  .mascot-content {
+    background: var(--color-background);
+    color: var(--color-text);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .mascot-content h3 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .mascot-content p {
+    font-size: 16px;
+    margin-top: 5px;
+  }
+
+  @keyframes floatMascot {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+</style>
