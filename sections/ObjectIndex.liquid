@@ -108,6 +108,74 @@
     font-size: 18px;
     border-radius: 4px;
   }
+  /* Shopify-style Filter Container */
+  .facet-filters {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* Facet Label */
+  .facet-filters__label {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--color-text);
+    margin-right: 10px;
+  }
+
+  /* Select Dropdown Wrapper */
+  .select {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Select Box (Dropdown) */
+  .select__select {
+    appearance: none;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: normal;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  /* Shopify-style Dropdown Arrow */
+  .select .svg-wrapper {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  /* Hover & Focus Effects */
+  .select__select:hover,
+  .select__select:focus {
+    border-color: var(--color-accent);
+    outline: none;
+  }
+
+  /* Mobile Optimization */
+  @media (max-width: 768px) {
+    .facet-filters {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .facet-filters__field {
+      width: 100%;
+    }
+
+    .select__select {
+      width: 100%;
+    }
+  }
 </style>
 
 <script>
