@@ -124,12 +124,14 @@
     font-weight: bold;
     color: var(--color-text);
     margin-right: 10px;
+    white-space: nowrap; /* Prevents text from breaking */
   }
 
   /* Select Dropdown Wrapper */
   .select {
     position: relative;
     display: inline-block;
+    width: 100%;
   }
 
   /* Select Box (Dropdown) */
@@ -137,21 +139,23 @@
     appearance: none;
     background: var(--color-background);
     border: 1px solid var(--color-border);
-    padding: 8px 12px;
+    padding: 10px 14px;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: normal;
     color: var(--color-text);
     cursor: pointer;
+    width: 100%; /* Ensures it fills container */
   }
 
   /* Shopify-style Dropdown Arrow */
   .select .svg-wrapper {
     position: absolute;
     top: 50%;
-    right: 10px;
+    right: 15px;
     transform: translateY(-50%);
     pointer-events: none;
+    z-index: 2; /* Ensures it's above the select */
   }
 
   /* Hover & Focus Effects */
@@ -161,10 +165,10 @@
     outline: none;
   }
 
-  /* Mobile Optimization */
+  /* 🔥 Mobile Optimization */
   @media (max-width: 768px) {
     .facet-filters {
-      flex-direction: column;
+      flex-direction: column; /* Stack items vertically */
       align-items: flex-start;
     }
 
@@ -172,8 +176,14 @@
       width: 100%;
     }
 
+    .select {
+      width: 100%; /* Full width */
+    }
+
     .select__select {
-      width: 100%;
+      width: 100%; /* Make dropdown full width */
+      font-size: 18px; /* Make text larger for tapability */
+      padding: 12px 16px;
     }
   }
 </style>
