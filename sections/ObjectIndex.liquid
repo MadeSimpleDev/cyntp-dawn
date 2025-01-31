@@ -1,6 +1,14 @@
 {% schema %}
 {
   "name": "Metafield Index",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Courses You Need to Play"
+    }
+  ],
   "presets": [
     {
       "name": "Metafield Index"
@@ -8,13 +16,98 @@
   ]
 }
 {% endschema %}
-{% paginate shop.metaobjects.course.values by 25 %}
-  
-  {% for metaobject in shop.metaobjects.course.values %}
-    <li>
-      {{ metaobject.name | link_to: metaobject.system.url }}
-    </li>
-  {% endfor %}
 
-  {{ paginate | default_pagination }}
-  {% endpaginate %}
+<section class="course-index">
+  <h2>{{ section.settings.title }}</h2>
+
+  <div class="course-filter">
+    <label for="location-filter">Filter by location:</label>
+    <select id="location-filter">
+      <option value="all">All Locations</option>
+      {% assign locations = shop.metaobjects.course.values | map: 'location' | uniq | sort %}
+      {% for location in locations %}
+        <option value="{{ location | handleize }}">{{ location }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="course-grid">
+    {% paginate shop.metaobjects.course.values by 25 %}
+      {% for metaobject in shop.metaobjects.course.values %}
+        <div class="course-card" data-location="{{ metaobject.location | handleize }}">
+          <a href="{{ metaobject.system.url }}">
+            {% if metaobject.image %}
+              <div
+                class="course-image"
+                style="background-image: url('{{ metaobject.image | image_url: width: 800 }}');"
+              >
+                <h3 class="course-title">{{ metaobject.name }}</h3>
+              </div>
+            {% endif %}
+          </a>
+        </div>
+      {% endfor %}
+
+      {{ paginate | default_pagination }}
+    {% endpaginate %}
+  </div>
+</section>
+
+<style>
+  .course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .course-card {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .course-card:hover {
+    transform: scale(1.05);
+  }
+
+  .course-image {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+
+  .course-title {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    font-size: 18px;
+    border-radius: 4px;
+  }
+</style>
+
+<script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const filter = document.getElementById("location-filter");
+      const cards = document.querySelectorAll(".course-card");
+
+      filter.addEventListener("change", function () {
+        const selectedLocation = this.value;
+
+        cards.forEach(card => {
+          if (selectedLocation === "all" || card.dataset.location === selectedLocation) {
+            card.style.display = "block";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      });
+    });
+  </script>
+</script>
