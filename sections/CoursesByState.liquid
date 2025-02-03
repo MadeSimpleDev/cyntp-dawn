@@ -1,0 +1,108 @@
+{% schema %}
+{
+  "name": "USA Golf Courses",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "USA Golf Courses"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="golf-courses-section color-{{ section.settings.color_scheme }}">
+  <!-- USA Golf Courses by State -->
+  <div class="golf-courses-container">
+    <h2 class="section-title">USA Golf Courses by State</h2>
+    <div class="golf-courses-grid">
+      {% assign states = 'Alabama,Alaska,Arizona,Arkansas,California,Colorado,Connecticut,Delaware,Florida,Georgia,Hawaii,Idaho,Illinois,Indiana,Iowa,Kansas,Kentucky,Louisiana,Maine,Maryland,Massachusetts,Michigan,Minnesota,Mississippi,Missouri,Montana,Nebraska,Nevada,New Hampshire,New Jersey,New Mexico,New York,North Carolina,North Dakota,Ohio,Oklahoma,Oregon,Pennsylvania,Rhode Island,South Carolina,South Dakota,Tennessee,Texas,Utah,Vermont,Virginia,Washington,West Virginia,Wisconsin,Wyoming'
+        | split: ','
+      %}
+      {% for state in states %}
+        <a href="/pages/locations/{{ state | handleize }}" class="golf-course-link">{{ state }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- USA Featured Golf Destinations -->
+  <div class="golf-courses-container">
+    <h2 class="section-title">USA Featured Golf Destinations</h2>
+    <div class="golf-courses-grid">
+      {% assign featured_destinations = 'Myrtle Beach,Hilton Head,Orlando,Phoenix/Scottsdale,Las Vegas,Palm Springs,Williamsburg,San Francisco,Atlanta,San Diego'
+        | split: ','
+      %}
+      {% for destination in featured_destinations %}
+        <a href="/pages/locations/{{ destination | handleize }}" class="golf-course-link">{{ destination }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* 🌟 Section Styling */
+  .golf-courses-section {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  /* 🌟 Container for Each Section */
+  .golf-courses-container {
+    margin-bottom: 40px;
+  }
+
+  /* 🌟 Section Titles */
+  .section-title {
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-top: 2px solid var(--color-text);
+    border-bottom: 2px solid var(--color-text);
+    display: inline-block;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+  }
+
+  /* 🌟 Grid Layout */
+  .golf-courses-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 Columns for Desktop */
+    gap: 15px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* 🌟 Links */
+  .golf-course-link {
+    display: block;
+    text-decoration: none;
+    color: var(--color-text);
+    font-size: 16px;
+    font-weight: normal;
+    transition: color 0.2s ease-in-out;
+  }
+
+  .golf-course-link:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  /* 🌟 Responsive Adjustments */
+  @media (max-width: 1024px) {
+    .golf-courses-grid {
+      grid-template-columns: repeat(3, 1fr); /* 3 Columns for Tablets */
+    }
+  }
+
+  @media (max-width: 768px) {
+    .golf-courses-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 Columns for Mobile */
+    }
+  }
+</style>
