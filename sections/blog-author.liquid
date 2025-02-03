@@ -1,7 +1,14 @@
 {% schema %}
 {
   "name": "Author Section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    }
+  ],
   "presets": [
     {
       "name": "Author Section"
@@ -13,7 +20,7 @@
 {% assign author = article.metafields.custom.author.value %}
 
 {% if author %}
-  <div class="author-section">
+  <div class="author-section color-{{ section.settings.color_scheme }}">
     <div class="author-header">
       <h2 class="author-title">About the Author</h2>
     </div>
@@ -44,7 +51,6 @@
       </div>
     </div>
 
-    <!-- 🌟 FINAL FIX: Ensure Bottom Golden Line Appears -->
     <div class="author-footer-line"></div>
   </div>
 {% endif %}
