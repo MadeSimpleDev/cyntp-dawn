@@ -52,100 +52,98 @@
 </section>
 
 <style>
-  /* 🌟 Section Styling */
+  /* 🌟 Scoped Section Styling */
   .golf-courses-section {
     text-align: center;
     padding: 40px 20px;
   }
 
-  /* 🌟 Container for Each Section */
-  .golf-courses-container {
+  /* 🌟 Scoped Container */
+  .golf-courses-section .golf-courses-container {
     margin-bottom: 40px;
-    position: relative;
   }
 
-  /* 🌟 Section Title Wrapper with Golden Bars */
-  .section-header {
+  /* 🌟 Scoped Title Wrapper */
+  .golf-courses-section .section-header {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    width: 100%;
     position: relative;
-    margin-bottom: 15px;
+    padding: 10px 0;
   }
 
-  .section-title {
+  /* 🌟 Scoped Section Titles */
+  .golf-courses-section .section-title {
     font-size: 22px;
     font-weight: bold;
     text-transform: uppercase;
-    color: #c3996b !important; /* Golden Color */
-    padding: 0 20px;
-    background-color: var(--color-background);
+    color: var(--color-text);
     position: relative;
+    white-space: nowrap;
+    padding: 0 15px;
     z-index: 2;
   }
 
-  /* 🌟 Horizontal Golden Lines */
-  .section-header::before,
-  .section-header::after {
+  /* 🌟 Scoped Bars (Above & Below Title) */
+  .golf-courses-section .section-header::before,
+  .golf-courses-section .section-header::after {
     content: '';
     flex-grow: 1;
     height: 2px;
-    background-color: #c3996b !important;
-    position: relative;
-    top: 50%;
+    background-color: var(--color-text);
   }
 
-  .section-header::before {
+  .golf-courses-section .section-header::before {
     margin-right: 15px;
   }
 
-  .section-header::after {
+  .golf-courses-section .section-header::after {
     margin-left: 15px;
   }
 
-  /* 🌟 Bottom Bar for Each Section */
-  .section-footer-line {
-    display: block;
+  /* 🌟 Scoped Bottom Line */
+  .golf-courses-section .section-footer-line {
     height: 2px;
-    background-color: #c3996b !important;
+    background-color: var(--color-text);
     width: 100%;
     margin-top: 15px;
   }
 
-  /* 🌟 Grid Layout */
-  .golf-courses-grid {
+  /* 🌟 Scoped Grid Layout */
+  .golf-courses-section .golf-courses-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 Columns for Desktop */
+    grid-template-columns: repeat(5, 1fr);
     gap: 15px;
     max-width: 900px;
     margin: 0 auto;
   }
 
-  /* 🌟 Links */
-  .golf-course-link {
+  /* 🌟 Scoped Links */
+  .golf-courses-section .golf-course-link {
     display: block;
     text-decoration: none;
     color: var(--color-text);
     font-size: 16px;
-    font-weight: normal;
     transition: color 0.2s ease-in-out;
   }
 
-  .golf-course-link:hover {
+  .golf-courses-section .golf-course-link:hover {
     color: var(--color-accent);
     text-decoration: underline;
   }
 
   /* 🌟 Responsive Adjustments */
   @media (max-width: 1024px) {
-    .golf-courses-grid {
-      grid-template-columns: repeat(3, 1fr); /* 3 Columns for Tablets */
+    .golf-courses-section .golf-courses-grid {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 
   @media (max-width: 768px) {
-    .golf-courses-grid {
-      grid-template-columns: repeat(2, 1fr); /* 2 Columns for Mobile */
+    .golf-courses-section .golf-courses-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>
