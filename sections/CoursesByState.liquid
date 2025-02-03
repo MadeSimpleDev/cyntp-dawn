@@ -31,7 +31,6 @@
         <a href="/pages/locations/{{ state | handleize }}" class="golf-course-link">{{ state }}</a>
       {% endfor %}
     </div>
-    <div class="section-footer-line"></div>
   </div>
 
   <!-- USA Featured Golf Destinations -->
@@ -47,7 +46,6 @@
         <a href="/pages/locations/{{ destination | handleize }}" class="golf-course-link">{{ destination }}</a>
       {% endfor %}
     </div>
-    <div class="section-footer-line"></div>
   </div>
 </section>
 
@@ -106,15 +104,6 @@
 
   .golf-courses-section .section-header::after {
     margin-left: 15px;
-  }
-
-  /* 🌟 Force Bottom Line to Appear */
-  .golf-courses-section .section-footer-line {
-    display: block !important;
-    height: 2px !important;
-    background-color: #c3996b !important;
-    width: 100% !important;
-    margin-top: 15px !important;
   }
 
   /* 🌟 Scoped Grid Layout */
