@@ -36,11 +36,18 @@
       "settings": {
         "title": ""
       }
+    },
+    "courses_by_state_Rrj8GU": {
+      "type": "CoursesByState",
+      "settings": {
+        "color_scheme": ""
+      }
     }
   },
   "order": [
     "main",
     "hero_banner_with_scroll_8aXYfH",
+    "courses_by_state_Rrj8GU",
     "object_index_BzjYXD"
   ]
 }
