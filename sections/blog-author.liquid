@@ -77,33 +77,43 @@
     margin: 40px auto;
     padding: 20px;
     font-family: inherit;
-    color: black; /* Set text color to black */
-    background: white; /* Set background to white */
-    border-radius: 8px; /* Optional: Add rounded corners for a polished look */
-  }
-
-  /* 🌟 Section Header */
-  .author-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
+    color: black; /* Ensure text is black */
+    background: white; /* White background */
+    border-radius: 8px; /* Optional: Adds a polished look */
     position: relative;
   }
 
+  /* 🌟 Section Header with Styled Golden Line */
+  .author-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+    text-align: center;
+  }
+
+  /* 🌟 "About the Author" Text with a Line on Both Sides */
   .author-title {
     font-size: 20px;
     font-weight: bold;
     font-style: oblique;
     color: var(--color-accent);
-    white-space: nowrap;
+    background: white; /* Ensure background covers line */
+    padding: 0 15px;
+    z-index: 2;
+    position: relative;
   }
 
-  /* 🌟 Golden Line (Extends Across the Header) */
-  .author-line {
+  /* 🌟 Golden Line Wrapping Around "About the Author" */
+  .author-header::before,
+  .author-header::after {
+    content: '';
     flex-grow: 1;
     height: 2px;
     background-color: var(--color-accent);
+    position: relative;
+    top: 50%;
   }
 
   /* 🌟 Author Content Layout */
