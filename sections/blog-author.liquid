@@ -77,7 +77,9 @@
     margin: 40px auto;
     padding: 20px;
     font-family: inherit;
-    color: var(--color-text);
+    color: black; /* Set text color to black */
+    background: white; /* Set background to white */
+    border-radius: 8px; /* Optional: Add rounded corners for a polished look */
   }
 
   /* 🌟 Section Header */
@@ -86,6 +88,7 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
+    position: relative;
   }
 
   .author-title {
@@ -96,6 +99,7 @@
     white-space: nowrap;
   }
 
+  /* 🌟 Golden Line (Extends Across the Header) */
   .author-line {
     flex-grow: 1;
     height: 2px;
@@ -141,6 +145,7 @@
     font-size: 18px;
     font-weight: bold;
     font-style: oblique;
+    color: black;
   }
 
   .author-handle {
@@ -152,6 +157,7 @@
     font-size: 14px;
     line-height: 1.5;
     margin-top: 5px;
+    color: black;
   }
 
   /* 🌟 Extras (Favorite Club & Latest Post) */
@@ -166,17 +172,20 @@
     font-size: 14px;
     font-weight: bold;
     font-style: oblique;
+    color: black;
   }
 
   .favorite-club p,
   .latest-post p {
     font-size: 14px;
+    color: black;
   }
 
-  /* 🌟 Footer Line */
+  /* 🌟 Bottom Golden Line */
   .author-footer-line {
     margin-top: 20px;
     height: 2px;
     background-color: var(--color-accent);
+    width: 100%;
   }
 </style>
