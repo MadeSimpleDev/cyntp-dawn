@@ -70,6 +70,7 @@
     position: relative;
     color: var(--color-text);
     padding: 10px 0;
+    gap: 20px; /* Ensure spacing between text and lines */
   }
 
   /* 🌟 Horizontal Line Extending Across the Section */
@@ -79,15 +80,8 @@
     flex-grow: 1;
     height: 2px;
     background-color: var(--color-text);
-  }
-
-  /* 🌟 Add spacing between the text and lines */
-  .section-title::before {
-    margin-right: 15px;
-  }
-
-  .section-title::after {
-    margin-left: 15px;
+    display: block; /* Ensures it's visible */
+    width: 100%; /* Ensures full extension */
   }
 
   /* 🌟 Grid Layout */
