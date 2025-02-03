@@ -77,44 +77,44 @@
     margin: 40px auto;
     padding: 20px;
     font-family: inherit;
-    color: black; /* Ensure text is black */
-    background: white; /* White background */
-    border-radius: 8px; /* Optional: Adds a polished look */
+    color: black !important; /* Ensure text is black */
+    background: white !important; /* White background */
+    border-top: 2px solid #c3996b !important; /* Force golden border */
+    border-bottom: 2px solid #c3996b !important; /* Force golden border */
+    padding-top: 15px;
+    padding-bottom: 15px;
     position: relative;
-    border-top: 2px solid var(--color-accent); /* Force top border */
-    border-bottom: 2px solid var(--color-accent); /* Force bottom border */
-    padding-top: 10px;
   }
 
-  /* 🌟 Section Header - Golden Text & Embedded in Top Border */
+  /* 🌟 Section Header - Left-Aligned "About the Author" */
   .author-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    position: relative;
-    text-align: center;
+    justify-content: flex-start; /* Left align */
+    text-align: left;
     margin-bottom: 20px;
+    position: relative;
   }
 
-  /* 🌟 "About the Author" Styled as Golden & Centered */
+  /* 🌟 "About the Author" Styled as Golden & Left-Aligned */
   .author-title {
     font-size: 20px;
     font-weight: bold;
     font-style: oblique;
-    color: var(--color-accent); /* Ensures golden color */
-    background: white; /* Ensure background covers line */
+    color: #c3996b !important; /* Force golden color */
+    background: white !important; /* Ensure it overlaps the golden line */
     padding: 0 15px;
     z-index: 2;
     position: relative;
+    white-space: nowrap;
   }
 
-  /* 🌟 Stronger Golden Line Wrapping Around "About the Author" */
-  .author-header::before,
+  /* 🌟 Golden Line Extending From "About the Author" */
   .author-header::after {
     content: '';
     flex-grow: 1;
     height: 2px;
-    background-color: var(--color-accent);
+    background-color: #c3996b !important; /* Force golden line */
     position: relative;
     top: 50%;
   }
@@ -138,7 +138,7 @@
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--color-accent);
+    border: 2px solid #c3996b;
   }
 
   /* 🌟 Social Icons */
@@ -194,70 +194,7 @@
     color: black;
   }
 
-  /* 🌟 Ensures the Bottom Golden Border is Strong */
-  .author-footer-line {
-    display: block;
-    margin-top: 20px;
-    height: 2px;
-    background-color: var(--color-accent);
-    width: 100%;
-  }
-  /* 🌟 Author Section Container - Ensure Borders Are Visible */
-  .author-section {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-    font-family: inherit;
-    color: black !important; /* Ensure text is black */
-    background: white !important; /* White background */
-    border-top: 2px solid #c3996b !important; /* Force golden border */
-    border-bottom: 2px solid #c3996b !important; /* Force golden border */
-    padding-top: 15px;
-    padding-bottom: 15px;
-    position: relative;
-  }
-
-  /* 🌟 Section Header - Ensure "About the Author" is Inside the Border */
-  .author-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    margin-bottom: 20px;
-    position: relative;
-  }
-
-  /* 🌟 "About the Author" Styled as Golden & Centered */
-  .author-title {
-    font-size: 20px;
-    font-weight: bold;
-    font-style: oblique;
-    color: #c3996b !important; /* Force golden color */
-    background: white !important; /* Make sure it overlaps the golden line */
-    padding: 0 15px;
-    z-index: 2;
-    position: relative;
-  }
-
-  /* 🌟 Golden Line Wrapping Around "About the Author" */
-  .author-header::before,
-  .author-header::after {
-    content: '';
-    flex-grow: 1;
-    height: 2px;
-    background-color: #c3996b !important; /* Force golden line */
-    position: relative;
-    top: 50%;
-  }
-
-  /* 🌟 Author Content Layout */
-  .author-content {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  /* 🌟 Ensures the Bottom Golden Border is Strong */
+  /* 🌟 Strong Bottom Golden Line */
   .author-footer-line {
     display: block;
     margin-top: 20px;
