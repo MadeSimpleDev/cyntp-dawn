@@ -13,62 +13,40 @@
 {% assign author = article.metafields.custom.author.value %}
 
 {% if author %}
-  <section class="author-section">
+  <div class="author-section">
     <div class="author-header">
       <h2 class="author-title">About the Author</h2>
-      <div class="author-line"></div>
     </div>
 
     <div class="author-content">
-      <!-- Author Image + Social Links -->
       <div class="author-image-wrapper">
-        {% if author.image %}
-          {{
-            author.image
-            | image_url: width: 150
-            | image_tag: class: 'author-image', alt: author.name, widths: '100, 150, 200'
-          }}
-        {% endif %}
-        {% if author.instagram %}
-          <a href="https://instagram.com/{{ author.instagram }}" target="_blank" class="social-icon">
-            {{ 'icon-instagram.svg' | inline_asset_content }}
-          </a>
-        {% endif %}
+        {{ author.image | image_url: width: 200 | image_tag: class: 'author-image' }}
+        {% comment %} <img src="{{ 'instagram-icon.svg' | asset_url }}" alt="Instagram" class="social-icon"> {% endcomment %}
       </div>
 
-      <!-- Author Info -->
       <div class="author-info">
-        <h3 class="author-name">
-          <strong>{{ author.name }}</strong>
-          {% if author.instagram %}
-            <span class="author-handle">(@{{ author.instagram }})</span>
-          {% endif %}
-        </h3>
+        <p class="author-name">
+          {{ author.name }}
+          <span class="author-handle">(@{{ author.instagram }})</span>
+        </p>
         <p class="author-bio">{{ author.bio }}</p>
 
-        <!-- Favorite Club -->
         <div class="author-extras">
           <div class="favorite-club">
-            <h4><em>Favorite Club in the Bag</em></h4>
+            <h4>Favorite Club in the Bag</h4>
             <p>{{ author.favorite_club }}</p>
           </div>
           <div class="latest-post">
-            <h4><em>Latest Post</em></h4>
-            <p>
-              {% if author.latest_post_url %}
-                <a href="{{ author.latest_post_url }}">{{ author.latest_post_title }}</a>
-              {% else %}
-                No recent posts
-              {% endif %}
-            </p>
+            <h4>Latest Post</h4>
+            <p>{{ author.latest_post | link_to: author.latest_post_url }}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 🌟 BOTTOM GOLDEN LINE - NEW FIX -->
+    <!-- 🌟 FINAL FIX: Ensure Bottom Golden Line Appears -->
     <div class="author-footer-line"></div>
-  </section>
+  </div>
 {% endif %}
 
 <style>
@@ -76,23 +54,22 @@
   .author-section {
     max-width: 800px;
     margin: 40px auto;
-    padding: 20px;
+    padding: 10px 20px; /* Reduced padding */
     font-family: inherit;
     color: black !important; /* Ensure text is black */
     background: white !important; /* White background */
     border-top: 2px solid #c3996b !important; /* Force golden border */
-    padding-top: 15px;
-    padding-bottom: 15px;
+    border-bottom: none; /* Remove default bottom border */
     position: relative;
   }
 
-  /* 🌟 Section Header - Left-Aligned "About the Author" */
+  /* 🌟 Reduce Gap Between Top Bar & Content */
   .author-header {
     display: flex;
     align-items: center;
     justify-content: flex-start; /* Left align */
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Reduce gap */
     position: relative;
   }
 
@@ -123,7 +100,7 @@
   .author-content {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px; /* Reduced gap for tighter layout */
   }
 
   /* 🌟 Author Image */
@@ -194,12 +171,13 @@
     color: black;
   }
 
-  /* 🌟 Strong Bottom Golden Line (NEW FIX) */
+  /* 🌟 Strong Bottom Golden Line (FINAL FIX) */
   .author-footer-line {
-    height: 2px;
+    display: block !important; /* Ensure visibility */
+    height: 2px !important;
     background-color: #c3996b !important; /* Force golden color */
-    width: 100%;
-    margin-top: 20px;
-    display: block; /* Ensure it's visible */
+    width: 100% !important;
+    margin-top: 15px !important; /* Ensures spacing is correct */
+    position: relative;
   }
 </style>
