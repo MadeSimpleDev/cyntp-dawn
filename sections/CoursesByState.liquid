@@ -57,16 +57,37 @@
     margin-bottom: 40px;
   }
 
-  /* 🌟 Section Titles */
+  /* 🌟 Section Titles with Full-Width Bars */
   .section-title {
     font-size: 22px;
     font-weight: bold;
     text-transform: uppercase;
-    border-top: 2px solid var(--color-text);
-    border-bottom: 2px solid var(--color-text);
-    display: inline-block;
-    padding: 10px 20px;
-    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    color: var(--color-text);
+    padding: 10px 0;
+  }
+
+  /* 🌟 Horizontal Line Extending Across the Section */
+  .section-title::before,
+  .section-title::after {
+    content: '';
+    flex-grow: 1;
+    height: 2px;
+    background-color: var(--color-text);
+  }
+
+  /* 🌟 Add spacing between the text and lines */
+  .section-title::before {
+    margin-right: 15px;
+  }
+
+  .section-title::after {
+    margin-left: 15px;
   }
 
   /* 🌟 Grid Layout */
@@ -114,29 +135,5 @@
   /* 🌟 Container for Each Section */
   .golf-courses-container {
     margin-bottom: 40px;
-  }
-
-  /* 🌟 Section Titles with Full-Width Bars */
-  .section-title {
-    font-size: 22px;
-    font-weight: bold;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-    position: relative;
-    color: var(--color-text);
-  }
-
-  /* 🌟 Horizontal Line Extending Across the Section */
-  .section-title::before,
-  .section-title::after {
-    content: '';
-    flex-grow: 1;
-    height: 2px;
-    background-color: var(--color-text);
-    margin: 0 15px; /* Space between text and lines */
   }
 </style>
