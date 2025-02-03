@@ -105,4 +105,38 @@
       grid-template-columns: repeat(2, 1fr); /* 2 Columns for Mobile */
     }
   }
+  /* 🌟 Section Styling */
+  .golf-courses-section {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  /* 🌟 Container for Each Section */
+  .golf-courses-container {
+    margin-bottom: 40px;
+  }
+
+  /* 🌟 Section Titles with Full-Width Bars */
+  .section-title {
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    color: var(--color-text);
+  }
+
+  /* 🌟 Horizontal Line Extending Across the Section */
+  .section-title::before,
+  .section-title::after {
+    content: '';
+    flex-grow: 1;
+    height: 2px;
+    background-color: var(--color-text);
+    margin: 0 15px; /* Space between text and lines */
+  }
 </style>
