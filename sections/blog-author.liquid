@@ -81,31 +81,34 @@
     background: white; /* White background */
     border-radius: 8px; /* Optional: Adds a polished look */
     position: relative;
+    border-top: 2px solid var(--color-accent); /* Force top border */
+    border-bottom: 2px solid var(--color-accent); /* Force bottom border */
+    padding-top: 10px;
   }
 
-  /* 🌟 Section Header with Styled Golden Line */
+  /* 🌟 Section Header - Golden Text & Embedded in Top Border */
   .author-header {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
     position: relative;
     text-align: center;
+    margin-bottom: 20px;
   }
 
-  /* 🌟 "About the Author" Text with a Line on Both Sides */
+  /* 🌟 "About the Author" Styled as Golden & Centered */
   .author-title {
     font-size: 20px;
     font-weight: bold;
     font-style: oblique;
-    color: var(--color-accent);
+    color: var(--color-accent); /* Ensures golden color */
     background: white; /* Ensure background covers line */
     padding: 0 15px;
     z-index: 2;
     position: relative;
   }
 
-  /* 🌟 Golden Line Wrapping Around "About the Author" */
+  /* 🌟 Stronger Golden Line Wrapping Around "About the Author" */
   .author-header::before,
   .author-header::after {
     content: '';
@@ -191,8 +194,9 @@
     color: black;
   }
 
-  /* 🌟 Bottom Golden Line */
+  /* 🌟 Ensures the Bottom Golden Border is Strong */
   .author-footer-line {
+    display: block;
     margin-top: 20px;
     height: 2px;
     background-color: var(--color-accent);
