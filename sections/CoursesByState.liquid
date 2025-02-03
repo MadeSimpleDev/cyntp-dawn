@@ -20,7 +20,9 @@
 <section class="golf-courses-section color-{{ section.settings.color_scheme }}">
   <!-- USA Golf Courses by State -->
   <div class="golf-courses-container">
-    <h2 class="section-title">USA Golf Courses by State</h2>
+    <div class="section-title-wrapper">
+      <h2 class="section-title">USA Golf Courses by State</h2>
+    </div>
     <div class="golf-courses-grid">
       {% assign states = 'Alabama,Alaska,Arizona,Arkansas,California,Colorado,Connecticut,Delaware,Florida,Georgia,Hawaii,Idaho,Illinois,Indiana,Iowa,Kansas,Kentucky,Louisiana,Maine,Maryland,Massachusetts,Michigan,Minnesota,Mississippi,Missouri,Montana,Nebraska,Nevada,New Hampshire,New Jersey,New Mexico,New York,North Carolina,North Dakota,Ohio,Oklahoma,Oregon,Pennsylvania,Rhode Island,South Carolina,South Dakota,Tennessee,Texas,Utah,Vermont,Virginia,Washington,West Virginia,Wisconsin,Wyoming'
         | split: ','
@@ -33,7 +35,9 @@
 
   <!-- USA Featured Golf Destinations -->
   <div class="golf-courses-container">
-    <h2 class="section-title">USA Featured Golf Destinations</h2>
+    <div class="section-title-wrapper">
+      <h2 class="section-title">USA Featured Golf Destinations</h2>
+    </div>
     <div class="golf-courses-grid">
       {% assign featured_destinations = 'Myrtle Beach,Hilton Head,Orlando,Phoenix/Scottsdale,Las Vegas,Palm Springs,Williamsburg,San Francisco,Atlanta,San Diego'
         | split: ','
@@ -58,30 +62,34 @@
   }
 
   /* 🌟 Section Titles with Full-Width Bars */
+  .section-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    margin: 20px 0;
+  }
+
+  /* 🌟 The Title Text */
   .section-title {
     font-size: 22px;
     font-weight: bold;
     text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-    position: relative;
     color: var(--color-text);
-    padding: 10px 0;
-    gap: 20px; /* Ensure spacing between text and lines */
+    background-color: var(--color-background); /* Ensures the text is readable */
+    padding: 0 15px;
+    z-index: 2; /* Ensures text is above the lines */
   }
 
   /* 🌟 Horizontal Line Extending Across the Section */
-  .section-title::before,
-  .section-title::after {
+  .section-title-wrapper::before,
+  .section-title-wrapper::after {
     content: '';
     flex-grow: 1;
     height: 2px;
     background-color: var(--color-text);
-    display: block; /* Ensures it's visible */
-    width: 100%; /* Ensures full extension */
+    display: block;
   }
 
   /* 🌟 Grid Layout */
@@ -119,15 +127,5 @@
     .golf-courses-grid {
       grid-template-columns: repeat(2, 1fr); /* 2 Columns for Mobile */
     }
-  }
-  /* 🌟 Section Styling */
-  .golf-courses-section {
-    text-align: center;
-    padding: 40px 20px;
-  }
-
-  /* 🌟 Container for Each Section */
-  .golf-courses-container {
-    margin-bottom: 40px;
   }
 </style>
