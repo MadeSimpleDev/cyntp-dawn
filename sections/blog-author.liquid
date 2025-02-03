@@ -62,8 +62,6 @@
     margin: 40px auto;
     padding: 10px 20px; /* Reduced padding */
     font-family: inherit;
-    color: black !important; /* Ensure text is black */
-    background: white !important; /* White background */
     border-top: 2px solid #c3996b !important; /* Force golden border */
     border-bottom: none; /* Remove default bottom border */
     position: relative;
@@ -85,7 +83,7 @@
     font-weight: bold;
     font-style: oblique;
     color: #c3996b !important; /* Force golden color */
-    background: white !important; /* Ensure it overlaps the golden line */
+    {% comment %} background: white !important; /* Ensure it overlaps the golden line */ {% endcomment %}
     padding: 0 15px;
     z-index: 2;
     position: relative;
