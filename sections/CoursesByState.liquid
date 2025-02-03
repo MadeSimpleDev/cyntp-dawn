@@ -56,11 +56,13 @@
   .golf-courses-section {
     text-align: center;
     padding: 40px 20px;
+    position: relative;
   }
 
   /* 🌟 Scoped Container */
   .golf-courses-section .golf-courses-container {
     margin-bottom: 40px;
+    position: relative;
   }
 
   /* 🌟 Scoped Title Wrapper */
@@ -79,22 +81,25 @@
     font-size: 22px;
     font-weight: bold;
     text-transform: uppercase;
-    color: var(--color-text);
+    color: #c3996b !important; /* Golden Color */
     position: relative;
-    white-space: nowrap;
-    padding: 0 15px;
+    background-color: var(--color-background); /* Ensures text visibility */
+    padding: 0 20px;
     z-index: 2;
+    white-space: nowrap;
   }
 
-  /* 🌟 Scoped Bars (Above & Below Title) */
+  /* 🌟 Force Title Bars to Show */
   .golf-courses-section .section-header::before,
   .golf-courses-section .section-header::after {
     content: '';
     flex-grow: 1;
     height: 2px;
-    background-color: var(--color-text);
+    background-color: #c3996b !important; /* Force Golden Bar */
+    display: block;
   }
 
+  /* 🌟 Ensure Bars Extend Fully */
   .golf-courses-section .section-header::before {
     margin-right: 15px;
   }
@@ -103,12 +108,13 @@
     margin-left: 15px;
   }
 
-  /* 🌟 Scoped Bottom Line */
+  /* 🌟 Force Bottom Line to Appear */
   .golf-courses-section .section-footer-line {
-    height: 2px;
-    background-color: var(--color-text);
-    width: 100%;
-    margin-top: 15px;
+    display: block !important;
+    height: 2px !important;
+    background-color: #c3996b !important;
+    width: 100% !important;
+    margin-top: 15px !important;
   }
 
   /* 🌟 Scoped Grid Layout */
