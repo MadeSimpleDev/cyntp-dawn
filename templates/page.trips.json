@@ -35,7 +35,7 @@
       "type": "ObjectIndex",
       "settings": {
         "title": "",
-        "metaobject_type": "trip"
+        "metaobject_type": "trips"
       }
     }
   },
