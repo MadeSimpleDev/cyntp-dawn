@@ -64,7 +64,7 @@
   <div class="course-grid">
     {% paginate selected_metaobjects by 25 %}
       {% for metaobject in selected_metaobjects %}
-        <div class="course-card" data-location="{{ metaobject.state | handleize }}">
+        <div class="course-card" data-location="{{ metaobject.state | default: 'unknown' | handleize }}">
           <a href="{{ metaobject.system.url }}">
             {% if metaobject.hero_image %}
               <div
@@ -204,12 +204,12 @@
     const cards = document.querySelectorAll('.course-card');
 
     filter.addEventListener('change', function () {
-      const selectedLocation = this.value;
-      console.log('Selected Location:', selectedLocation); // Debugging
+      const selectedLocation = this.value.toLowerCase(); // Ensure case-insensitive matching
+      console.log('Selected Location:', selectedLocation);
 
       cards.forEach((card) => {
         const courseLocation = card.getAttribute('data-location');
-        console.log('Course Location:', courseLocation); // Debugging
+        console.log('Course Location:', courseLocation);
 
         if (selectedLocation === 'all' || courseLocation === selectedLocation) {
           card.style.display = 'block';
