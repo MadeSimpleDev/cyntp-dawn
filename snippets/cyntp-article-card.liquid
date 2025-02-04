@@ -1,0 +1,156 @@
+{%- if article and article != empty -%}
+  {%- liquid
+    assign ratio = 1
+    if media_aspect_ratio != null
+      assign ratio = media_aspect_ratio
+    endif
+  -%}
+  <div class="article-card-wrapper card-wrapper underline-links-hover">
+    <div
+      class="
+        card article-card
+        card--{{ settings.blog_card_style }}
+        {% if media_height and media_height != 'adapt' %} article-card__image--{{ media_height }}{% endif %}
+        {% if article.image %} card--media{% else %} card--text{% endif %}
+      "
+      style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
+    >
+      <div class="card__inner">
+        {%- if article.image -%}
+          <div class="article-card__image-wrapper">
+            <div class="article-card__image media media--hover-effect">
+              <img
+                srcset="
+                  {%- if article.image.src.width >= 165 -%}{{ article.image.src | image_url: width: 165 }} 165w,{%- endif -%}
+                  {%- if article.image.src.width >= 360 -%}{{ article.image.src | image_url: width: 360 }} 360w,{%- endif -%}
+                  {%- if article.image.src.width >= 533 -%}{{ article.image.src | image_url: width: 533 }} 533w,{%- endif -%}
+                  {%- if article.image.src.width >= 720 -%}{{ article.image.src | image_url: width: 720 }} 720w,{%- endif -%}
+                  {%- if article.image.src.width >= 1000 -%}{{ article.image.src | image_url: width: 1000 }} 1000w,{%- endif -%}
+                  {%- if article.image.src.width >= 1500 -%}{{ article.image.src | image_url: width: 1500 }} 1500w,{%- endif -%}
+                  {{ article.image.src | image_url }} {{ article.image.src.width }}w
+                "
+                src="{{ article.image.src | image_url: width: 533 }}"
+                sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
+                alt="{{ article.image.src.alt | escape }}"
+                class="motion-reduce"
+                loading="lazy"
+                width="{{ article.image.width }}"
+                height="{{ article.image.height }}"
+              >
+            </div>
+          </div>
+        {%- endif -%}
+
+        <!-- Floating Title + Date + Author + Arrow -->
+        <div class="article-overlay">
+          {%- if show_date -%}
+            <span class="article-date">{{ article.published_at | time_tag: format: 'date' }}</span>
+          {%- endif -%}
+          <h3 class="article-title">
+            <a href="{{ article.url }}" class="full-unstyled-link">{{ article.title | escape }}</a>
+          </h3>
+          {%- if show_author -%}
+            <span class="article-author">{{ article.author }}</span>
+          {%- endif -%}
+          <a href="{{ article.url }}" class="article-arrow">→</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+<style>
+  /* 🌟 Article Card Wrapper */
+  .article-card {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .article-card:hover {
+    transform: scale(1.03);
+  }
+
+  /* 🌟 Article Image */
+  .article-card__image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 250px;
+  }
+
+  .article-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* 🌟 Floating Overlay */
+  .article-overlay {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 6px;
+    color: white;
+    text-align: right;
+    max-width: 70%;
+  }
+
+  /* 🌟 Article Title */
+  .article-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 0;
+  }
+
+  .article-title a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .article-title a:hover {
+    text-decoration: underline;
+  }
+
+  /* 🌟 Date & Author */
+  .article-date,
+  .article-author {
+    display: block;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  /* 🌟 Arrow */
+  .article-arrow {
+    display: inline-block;
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 5px;
+    color: white;
+    text-decoration: none;
+  }
+
+  .article-arrow:hover {
+    transform: translateX(5px);
+  }
+
+  /* 🌟 Responsive Adjustments */
+  @media (max-width: 768px) {
+    .article-overlay {
+      max-width: 90%;
+      padding: 8px;
+      bottom: 10px;
+      right: 10px;
+    }
+
+    .article-title {
+      font-size: 16px;
+    }
+
+    .article-arrow {
+      font-size: 20px;
+    }
+  }
+</style>
