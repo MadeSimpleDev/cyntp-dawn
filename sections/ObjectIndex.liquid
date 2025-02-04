@@ -6,7 +6,17 @@
       "type": "text",
       "id": "title",
       "label": "Section Title",
-      "default": "Courses You Need to Play"
+      "default": "Explore Golf Experiences"
+    },
+    {
+      "type": "select",
+      "id": "metaobject_type",
+      "label": "Select Data Type",
+      "options": [
+        { "value": "course", "label": "Courses" },
+        { "value": "trip", "label": "Trips" }
+      ],
+      "default": "course"
     }
   ],
   "presets": [
@@ -35,7 +45,8 @@
               aria-describedby="a11y-refresh-page-message"
             >
               <option value="all">All Locations</option>
-              {% assign locations = shop.metaobjects.course.values | map: 'state' | uniq | sort %}
+              {% assign selected_metaobjects = shop.metaobjects[section.settings.metaobject_type].values %}
+              {% assign locations = selected_metaobjects | map: 'state' | uniq | sort %}
               {% for location in locations %}
                 <option value="{{ location | handleize }}">{{ location }}</option>
               {% endfor %}
@@ -49,11 +60,11 @@
     </form>
   </facet-filters-form>
 
-  <!-- Course Grid -->
+  <!-- Dynamic Metaobject Grid -->
   <div class="course-grid">
-    {% paginate shop.metaobjects.course.values by 25 %}
-      {% for metaobject in shop.metaobjects.course.values %}
-        <div class="course-card" data-location="{{ metaobject.state | handleize }}">
+    {% paginate selected_metaobjects by 25 %}
+      {% for metaobject in selected_metaobjects %}
+        <div class="course-card" data-location="{{ metaobject.state | default: 'unknown' | handleize }}">
           <a href="{{ metaobject.system.url }}">
             {% if metaobject.hero_image %}
               <div
@@ -66,7 +77,6 @@
           </a>
         </div>
       {% endfor %}
-
       {{ paginate | default_pagination }}
     {% endpaginate %}
   </div>
@@ -194,12 +204,12 @@
     const cards = document.querySelectorAll('.course-card');
 
     filter.addEventListener('change', function () {
-      const selectedLocation = this.value;
-      console.log('Selected Location:', selectedLocation); // Debugging
+      const selectedLocation = this.value.toLowerCase(); // Ensure case-insensitive matching
+      console.log('Selected Location:', selectedLocation);
 
       cards.forEach((card) => {
         const courseLocation = card.getAttribute('data-location');
-        console.log('Course Location:', courseLocation); // Debugging
+        console.log('Course Location:', courseLocation);
 
         if (selectedLocation === 'all' || courseLocation === selectedLocation) {
           card.style.display = 'block';

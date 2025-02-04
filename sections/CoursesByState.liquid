@@ -1,0 +1,144 @@
+{% schema %}
+{
+  "name": "USA Golf Courses",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "USA Golf Courses"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="golf-courses-section color-{{ section.settings.color_scheme }}">
+  <!-- USA Golf Courses by State -->
+  <div class="golf-courses-container">
+    <div class="section-header">
+      <h2 class="section-title">USA Golf Courses by State</h2>
+    </div>
+    <div class="golf-courses-grid">
+      {% assign states = 'Alabama,Alaska,Arizona,Arkansas,California,Colorado,Connecticut,Delaware,Florida,Georgia,Hawaii,Idaho,Illinois,Indiana,Iowa,Kansas,Kentucky,Louisiana,Maine,Maryland,Massachusetts,Michigan,Minnesota,Mississippi,Missouri,Montana,Nebraska,Nevada,New Hampshire,New Jersey,New Mexico,New York,North Carolina,North Dakota,Ohio,Oklahoma,Oregon,Pennsylvania,Rhode Island,South Carolina,South Dakota,Tennessee,Texas,Utah,Vermont,Virginia,Washington,West Virginia,Wisconsin,Wyoming'
+        | split: ','
+      %}
+      {% for state in states %}
+        <a href="/pages/locations/{{ state | handleize }}" class="golf-course-link">{{ state }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- USA Featured Golf Destinations -->
+  <div class="golf-courses-container">
+    <div class="section-header">
+      <h2 class="section-title">USA Featured Golf Destinations</h2>
+    </div>
+    <div class="golf-courses-grid">
+      {% assign featured_destinations = 'Myrtle Beach,Hilton Head,Orlando,Phoenix/Scottsdale,Las Vegas,Palm Springs,Williamsburg,San Francisco,Atlanta,San Diego'
+        | split: ','
+      %}
+      {% for destination in featured_destinations %}
+        <a href="/pages/locations/{{ destination | handleize }}" class="golf-course-link">{{ destination }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* 🌟 Scoped Section Styling */
+  .golf-courses-section {
+    text-align: center;
+    padding: 40px 20px;
+    position: relative;
+  }
+
+  /* 🌟 Scoped Container */
+  .golf-courses-section .golf-courses-container {
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  /* 🌟 Scoped Title Wrapper */
+  .golf-courses-section .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    padding: 10px 0;
+  }
+
+  /* 🌟 Scoped Section Titles */
+  .golf-courses-section .section-title {
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #c3996b !important; /* Golden Color */
+    position: relative;
+    background-color: var(--color-background); /* Ensures text visibility */
+    padding: 0 20px;
+    z-index: 2;
+    white-space: nowrap;
+  }
+
+  /* 🌟 Force Title Bars to Show */
+  .golf-courses-section .section-header::before,
+  .golf-courses-section .section-header::after {
+    content: '';
+    flex-grow: 1;
+    height: 2px;
+    background-color: #c3996b !important; /* Force Golden Bar */
+    display: block;
+  }
+
+  /* 🌟 Ensure Bars Extend Fully */
+  .golf-courses-section .section-header::before {
+    margin-right: 15px;
+  }
+
+  .golf-courses-section .section-header::after {
+    margin-left: 15px;
+  }
+
+  /* 🌟 Scoped Grid Layout */
+  .golf-courses-section .golf-courses-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* 🌟 Scoped Links */
+  .golf-courses-section .golf-course-link {
+    display: block;
+    text-decoration: none;
+    color: var(--color-text);
+    font-size: 16px;
+    transition: color 0.2s ease-in-out;
+  }
+
+  .golf-courses-section .golf-course-link:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  /* 🌟 Responsive Adjustments */
+  @media (max-width: 1024px) {
+    .golf-courses-section .golf-courses-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .golf-courses-section .golf-courses-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

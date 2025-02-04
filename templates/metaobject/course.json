@@ -19,6 +19,7 @@
       ],
       "settings": {
         "hero_video": "{{ metaobject.hero_video.value }}",
+        "enable_scroll_indicator": true,
         "logo_width": 200,
         "heading": "{{ metaobject.name.value }}",
         "subheading": "{{ metaobject.city.value }}, {{ metaobject.state.value }}",
@@ -38,7 +39,7 @@
         "slope": "130",
         "course_type": "Public",
         "course_rating": "70",
-        "color_scheme": "scheme-2"
+        "color_scheme": "scheme-1"
       }
     },
     "rich_text_rh7iGk": {
@@ -65,7 +66,7 @@
       "settings": {
         "desktop_content_position": "left",
         "content_alignment": "left",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
@@ -113,8 +114,8 @@
         "desktop_content_position": "middle",
         "desktop_content_alignment": "center",
         "content_layout": "overlap",
-        "section_color_scheme": "scheme-2",
-        "color_scheme": "scheme-1",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-2",
         "image_behavior": "none",
         "mobile_content_alignment": "center",
         "padding_top": 0,
@@ -154,7 +155,7 @@
         "desktop_content_position": "middle-center",
         "show_text_box": false,
         "desktop_content_alignment": "center",
-        "color_scheme": "",
+        "color_scheme": "scheme-2",
         "image_behavior": "none",
         "mobile_content_alignment": "center",
         "stack_images_on_mobile": true,
@@ -205,7 +206,7 @@
       ],
       "custom_css": [
         "img {border-radius: 10px;}",
-        ".floating-header h2 {color: #F7F7F7;}"
+        ".floating-header h2 {color: #f7f7f7;}"
       ],
       "settings": {
         "title": "Related Courses",
@@ -217,7 +218,7 @@
         "background_style": "none",
         "button_label": "See more",
         "button_link": "shopify://pages/itineraries",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "columns_mobile": "1",
         "swipe_on_mobile": true,
         "padding_top": 16,
