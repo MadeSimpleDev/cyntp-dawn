@@ -7,48 +7,41 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
-    "sections": {
-      "main": {
-        "type": "main-page",
-        "disabled": true,
-        "settings": {
-          "padding_top": 28,
-          "padding_bottom": 28
-        }
-      },
-      "hero_banner_with_scroll_8aXYfH": {
-        "type": "HeroBannerWithScroll",
-        "custom_css": [],
-        "settings": {
-          "hero_image": "shopify://shop_images/Screenshot_2025-01-25_at_8.52.49_PM.png",
-          "enable_scroll_indicator": true,
-          "logo_width": 200,
-          "heading": "Courses",
-          "subheading": "",
-          "button_link": "",
-          "button_text": "",
-          "section_color_scheme": ""
-        }
-      },
-      "object_index_BzjYXD": {
-        "type": "ObjectIndex",
-        "settings": {
-          "title": ""
-        }
-      },
-      "courses_by_state_Rrj8GU": {
-        "type": "CoursesByState",
-        "settings": {
-          "color_scheme": ""
-        }
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
       }
     },
-    "order": [
-      "main",
-      "hero_banner_with_scroll_8aXYfH",
-      "courses_by_state_Rrj8GU",
-      "object_index_BzjYXD"
-    ]
-  }
-  
+    "hero_banner_with_scroll_8aXYfH": {
+      "type": "HeroBannerWithScroll",
+      "custom_css": [],
+      "settings": {
+        "hero_image": "shopify://shop_images/Screenshot_2025-01-25_at_8.52.49_PM.png",
+        "enable_scroll_indicator": true,
+        "logo_width": 200,
+        "heading": "Courses",
+        "subheading": "",
+        "button_link": "",
+        "button_text": "",
+        "section_color_scheme": ""
+      }
+    },
+    "object_index_BzjYXD": {
+      "type": "ObjectIndex",
+      "settings": {
+        "title": "",
+        "metaobject_type": "trip"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "hero_banner_with_scroll_8aXYfH",
+    "object_index_BzjYXD"
+  ]
+}
