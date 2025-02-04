@@ -73,33 +73,34 @@
 <header class="hero-banner {{ section.settings.section_color_scheme }}">
   <div class="hero-media-wrapper">
     {% if section.settings.hero_video %}
-      {{ section.settings.hero_video | video_tag: preload: true, autoplay: true, loop: true, muted: true, controls: false, preload: "none", class: "hero-media" }}
-    {% elsif section.settings.hero_image %}
       {{
-        section.settings.hero_image
-        | image_url: width: 3840
-        | image_tag: class: "hero-media", alt: "Hero Image"
+        section.settings.hero_video
+        | video_tag:
+          preload: true,
+          autoplay: true,
+          loop: true,
+          muted: true,
+          controls: false,
+          preload: 'none',
+          class: 'hero-media'
       }}
+    {% elsif section.settings.hero_image %}
+      {{ section.settings.hero_image | image_url: width: 3840 | image_tag: class: 'hero-media', alt: 'Hero Image' }}
     {% endif %}
   </div>
 
   <div class="hero-overlay">
-{% if section.settings.overlay_logo %}
-  {{
-    section.settings.overlay_logo
-    | image_url: width: 320
-    | image_tag:
-      widths: "100, 200, 320",
-      class: "hero-logo",
-      alt: "Hero Logo",
-      fetchpriority: "high",
-      preload: true
-  }}
-{% endif %}
-    
+    {% if section.settings.overlay_logo %}
+      {{
+        section.settings.overlay_logo
+        | image_url: width: 320
+        | image_tag: widths: '100, 200, 320', class: 'hero-logo', alt: 'Hero Logo', fetchpriority: 'high', preload: true
+      }}
+    {% endif %}
+
     <h1>{{ section.settings.heading }}</h1>
     <p>{{ section.settings.subheading }}</p>
-    
+
     {% if section.settings.button_link %}
       <a href="{{ section.settings.button_link }}" class="hero-button">
         {{ section.settings.button_text }}
@@ -112,110 +113,117 @@
   {% endif %}
 </header>
 <style>
-/* 🌟 Hero Banner Section - Ensures transparency */
-.hero-banner {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  background: transparent !important; /* Ensures full transparency */
-}
+  /* 🌟 Hero Banner Section - Ensures transparency */
+  .hero-banner {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: transparent !important; /* Ensures full transparency */
+  }
 
-/* 🌟 Media Wrapper (Handles Both Image & Video) */
-.hero-media-wrapper {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: -2; /* Keeps it behind everything */
-}
+  /* 🌟 Media Wrapper (Handles Both Image & Video) */
+  .hero-media-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -2; /* Keeps it behind everything */
+  }
 
-.hero-media {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+  .hero-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-/* 🌟 Hero Content Overlay */
-.hero-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  z-index: 2;
-  color: white;
-  width: 100%;
-  padding: 0 20px;
-  background: transparent !important; /* Ensures full transparency */
-}
+  /* 🌟 Hero Content Overlay */
+  .hero-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+    color: white;
+    width: 100%;
+    padding: 0 20px;
+    background: transparent !important; /* Ensures full transparency */
+  }
 
-/* 🌟 Scroll Indicator */
-.scroll-indicator {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 24px;
-  color: white;
-  animation: bounce 1.5s infinite;
-  z-index: 2; /* Ensures it remains visible */
-}
+  /* 🌟 Scroll Indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    color: white;
+    animation: bounce 1.5s infinite;
+    z-index: 2; /* Ensures it remains visible */
+  }
 
-/* 🌟 Hide Scroll Indicator when disabled */
-.scroll-indicator.hidden {
-  display: none;
-}
+  /* 🌟 Hide Scroll Indicator when disabled */
+  .scroll-indicator.hidden {
+    display: none;
+  }
 
-/* 🌟 Transparent Header Fix */
-.header-wrapper {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: transparent !important; /* Restores full transparency */
-  color: white !important;
-  border-bottom: none !important;
-  transition: background 0.3s ease-in-out, color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
-  z-index: 1000;
-}
-.header__heading-logo {
-  opacity: 0;
-}
+  /* 🌟 Transparent Header Fix */
+  .header-wrapper {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: transparent !important; /* Restores full transparency */
+    color: white !important;
+    border-bottom: none !important;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+    z-index: 1000;
+  }
+  .header__heading-logo {
+    opacity: 0;
+  }
 
-/* When scrolled past, restore background */
-.scrolled-past-header .header-wrapper {
-  background: var(--gradient-background) !important; /* Ensures correct background */
-  color: var(--color-text) !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-}
-.scrolled-past-header .header__heading-logo {
-  opacity: 1;
-}
+  /* When scrolled past, restore background */
+  .scrolled-past-header .header-wrapper {
+    background: var(--gradient-background) !important; /* Ensures correct background */
+    color: var(--color-text) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  }
+  .scrolled-past-header .header__heading-logo {
+    opacity: 1;
+  }
 
 
-/* 🌟 Ensure text/logo remains visible */
-.header-wrapper a,
-.header-wrapper svg,
-.header-wrapper .site-logo img {
-  transition: color 0.3s ease-in-out, filter 0.3s ease-in-out;
-}
+  /* 🌟 Ensure text/logo remains visible */
+  .header-wrapper a,
+  .header-wrapper svg,
+  .header-wrapper .site-logo img {
+    transition: color 0.3s ease-in-out, filter 0.3s ease-in-out;
+  }
 
-/* 🌟 Improve text visibility on transparent nav */
-:not(.scrolled-past-header) .header-wrapper a,
-:not(.scrolled-past-header) .header-wrapper svg,
-:not(.scrolled-past-header) .header-wrapper .site-logo img {
-  color: white !important;
-  filter: brightness(100);
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
-}
+  /* 🌟 Improve text visibility on transparent nav */
+  :not(.scrolled-past-header) .header-wrapper a,
+  :not(.scrolled-past-header) .header-wrapper svg,
+  :not(.scrolled-past-header) .header-wrapper .site-logo img {
+    color: white !important;
+    filter: brightness(100);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+  }
 
-/* When scrolled past, remove text shadow and restore normal colors */
-.scrolled-past-header .header-wrapper a,
-.scrolled-past-header .header-wrapper svg,
-.scrolled-past-header .header-wrapper .site-logo img {
-  color: var(--color-text) !important;
-  text-shadow: none;
-}
+  /* When scrolled past, remove text shadow and restore normal colors */
+  .scrolled-past-header .header-wrapper a,
+  .scrolled-past-header .header-wrapper svg,
+  .scrolled-past-header .header-wrapper .site-logo img {
+    color: var(--color-text) !important;
+    text-shadow: none;
+  }
+
+  /* 🌟 When menu is open, force background */
+  .menu-open .header-wrapper {
+    background: var(--color-background) !important;
+    color: var(--color-text) !important;
+    border-bottom: 1px solid var(--color-border); /*
+  }
 </style>
