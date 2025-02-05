@@ -11,6 +11,10 @@
   "sections": {
     "hero_banner_with_scroll_mwAbFW": {
       "type": "HeroBannerWithScroll",
+      "custom_css": [
+        "p,h1 {width: 90%; /* Ensures text stays centered */ text-align: center; font-style: oblique; font-weight: bold; color: white; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);}",
+        "h1 {font-size: 4em;}"
+      ],
       "settings": {
         "hero_image": "{{ article.image }}",
         "enable_scroll_indicator": false,
