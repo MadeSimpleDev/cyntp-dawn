@@ -25,22 +25,23 @@
         "enable_scroll_indicator": true,
         "logo_width": 200,
         "heading": "Courses",
-        "subheading": "",
+        "subheading": "Let us help you find the course you want to play next.",
         "button_link": "",
         "button_text": "",
         "section_color_scheme": ""
-      }
-    },
-    "object_index_BzjYXD": {
-      "type": "ObjectIndex",
-      "settings": {
-        "title": ""
       }
     },
     "courses_by_state_Rrj8GU": {
       "type": "CoursesByState",
       "settings": {
         "color_scheme": ""
+      }
+    },
+    "object_index_BzjYXD": {
+      "type": "ObjectIndex",
+      "settings": {
+        "title": "",
+        "metaobject_type": "course"
       }
     }
   },
