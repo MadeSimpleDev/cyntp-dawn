@@ -31,7 +31,18 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    let comments = window.commentsData || [];
+    // Ensure JSON data is parsed correctly
+    let comments = [];
+    try {
+      comments = JSON.parse(window.commentsData);
+      if (!Array.isArray(comments)) {
+        comments = [];
+      }
+    } catch (error) {
+      console.error('Error parsing comments JSON:', error);
+      comments = [];
+    }
+
     const commentList = document.getElementById('comment-list');
     const commentForm = document.getElementById('comment-form');
 
@@ -69,7 +80,7 @@
 
     // Handle new comment submissions
     commentForm.addEventListener('submit', async function (e) {
-      e.preventDefault(); // Prevent the default form submission
+      e.preventDefault(); // Prevent default form submission
 
       const commentInput = document.getElementById('comment-input');
       const commentText = commentInput.value.trim();
