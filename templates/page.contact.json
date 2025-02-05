@@ -134,14 +134,33 @@
         "padding_bottom": 52
       }
     },
-    "form": {
-      "type": "contact-form",
+    "17387857452d9aa31f": {
+      "type": "apps",
+      "blocks": {
+        "forms_inline_fcJjkL": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "335793",
+            "text_color": "#ffffff",
+            "button_background_color": "#c3996b",
+            "button_label_color": "#121212",
+            "links_color": "#1878B9",
+            "errors_color": "#E02229",
+            "text_alignment": "center",
+            "form_alignment": "flex-start",
+            "padding_top": 0,
+            "padding_bottom": 0,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        }
+      },
+      "block_order": [
+        "forms_inline_fcJjkL"
+      ],
+      "custom_css": [],
       "settings": {
-        "heading": "Shoot us a Message",
-        "heading_size": "h1",
-        "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "include_margins": true
       }
     },
     "multicolumn_BH3Cr9": {
@@ -208,7 +227,7 @@
     "image_banner_rhaKVn",
     "rich_text_T3pgHp",
     "rich_text_qcK4Fi",
-    "form",
+    "17387857452d9aa31f",
     "multicolumn_BH3Cr9"
   ]
 }
