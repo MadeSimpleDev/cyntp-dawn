@@ -46,12 +46,17 @@
         "title": "",
         "metaobject_type": "course"
       }
+    },
+    "cyntp_comments_dqNX4D": {
+      "type": "cyntp-comments",
+      "settings": {}
     }
   },
   "order": [
     "main",
     "hero_banner_with_scroll_8aXYfH",
     "courses_by_state_Rrj8GU",
-    "object_index_BzjYXD"
+    "object_index_BzjYXD",
+    "cyntp_comments_dqNX4D"
   ]
 }
