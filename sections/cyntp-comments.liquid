@@ -1,0 +1,125 @@
+{% schema %}
+{
+  "name": "Comments Section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Comments Section"
+    }
+  ]
+}
+{% endschema %}
+
+<div id="comments-section">
+  <h3>Comments</h3>
+  <div id="comment-list"></div>
+
+  {% if customer %}
+    <form id="comment-form">
+      <textarea name="comment" id="comment-input" placeholder="Leave a comment..." required></textarea>
+      <button type="submit">Submit</button>
+    </form>
+  {% else %}
+    <p><a href="{{ routes.account_login_url }}">Log in</a> to leave a comment.</p>
+  {% endif %}
+</div>
+
+<!-- Inject JSON data into a <script> tag -->
+<script>
+  window.commentsData = {{ page.metafields.comments.comment_thread | default: '[]' | json }};
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    let comments = window.commentsData || [];
+    const commentList = document.getElementById('comment-list');
+
+    // Render comments
+    function renderComments() {
+      commentList.innerHTML = ''; // Clear previous content
+      if (comments.length > 0) {
+        comments.forEach((comment) => {
+          let commentHtml = `
+                        <div class="comment" id="comment-${comment.id}">
+                            <p><strong>${comment.user}</strong>: ${comment.text}</p>
+                            <small>${new Date(comment.timestamp).toLocaleString()}</small>
+                            <div class="replies">
+                                ${comment.replies
+                                  .map(
+                                    (reply) => `
+                                    <div class="reply">
+                                        <p><strong>${reply.user}</strong>: ${reply.text}</p>
+                                        <small>${new Date(reply.timestamp).toLocaleString()}</small>
+                                    </div>
+                                `
+                                  )
+                                  .join('')}
+                            </div>
+                            <button class="reply-button" data-comment-id="${comment.id}">Reply</button>
+                        </div>
+                    `;
+          commentList.innerHTML += commentHtml;
+        });
+      } else {
+        commentList.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+      }
+    }
+
+    renderComments();
+
+    // Add reply button functionality
+    document.querySelectorAll('.reply-button').forEach((button) => {
+      button.addEventListener('click', function () {
+        const commentId = this.getAttribute('data-comment-id');
+        const replyText = prompt('Enter your reply:');
+        if (replyText) {
+          addCommentOrReply({ text: replyText, parentId: commentId });
+        }
+      });
+    });
+
+    // Handle new comments
+    document.getElementById('comment-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const commentText = document.getElementById('comment-input').value;
+      addCommentOrReply({ text: commentText });
+    });
+
+    async function addCommentOrReply({ text, parentId = null }) {
+      const userName = '{{ customer.first_name }}';
+      const newEntry = {
+        id: `comment-${Date.now()}`,
+        user: userName,
+        text: text,
+        timestamp: new Date().toISOString(),
+        replies: [],
+      };
+
+      if (parentId) {
+        const parentComment = comments.find((c) => c.id === parentId);
+        if (parentComment) {
+          parentComment.replies.push(newEntry);
+        }
+      } else {
+        comments.push(newEntry);
+      }
+
+      // Update Shopify Metafield
+      const pageId = '{{ page.id }}';
+      await fetch(`/admin/api/2023-01/pages/${pageId}/metafields.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          metafield: {
+            namespace: 'comments',
+            key: 'comment_thread',
+            value: JSON.stringify(comments),
+            type: 'json',
+          },
+        }),
+      });
+
+      location.reload(); // Refresh to reflect new comments
+    }
+  });
+</script>
