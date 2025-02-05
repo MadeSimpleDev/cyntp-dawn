@@ -143,6 +143,62 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "multicolumn_BH3Cr9": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_WENqpM": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/CYNTP_Character_Wordmark_forLightBG_f1466168-c2cf-44b0-a94d-182ec796239f.png",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_Atmhnr": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/CYNTP_Character_Wordmark_forLightBG.png",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_eKwxdk": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/CYNTP_Character_Wordmark_forLightBG_f1466168-c2cf-44b0-a94d-182ec796239f.png",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_WENqpM",
+        "column_Atmhnr",
+        "column_eKwxdk"
+      ],
+      "settings": {
+        "title": "<em><strong>Some folks we've worked with</strong></em>",
+        "heading_size": "h2",
+        "image_width": "half",
+        "image_ratio": "square",
+        "columns_desktop": 3,
+        "column_alignment": "center",
+        "background_style": "none",
+        "button_label": "Button label",
+        "button_link": "",
+        "color_scheme": "",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -152,6 +208,7 @@
     "image_banner_rhaKVn",
     "rich_text_T3pgHp",
     "rich_text_qcK4Fi",
-    "form"
+    "form",
+    "multicolumn_BH3Cr9"
   ]
 }
