@@ -19,7 +19,10 @@
     },
     "hero_banner_with_scroll_8aXYfH": {
       "type": "HeroBannerWithScroll",
-      "custom_css": [],
+      "custom_css": [
+        "p,h1 {left: 5%; width: 90%; /* Ensures text stays centered */ text-align: left; font-style: oblique; font-weight: bold; color: white; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);}",
+        "h1 {font-size: 4em;}"
+      ],
       "settings": {
         "hero_image": "shopify://shop_images/Trips_Page_Header.png",
         "enable_scroll_indicator": true,
