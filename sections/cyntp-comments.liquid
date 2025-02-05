@@ -33,8 +33,8 @@
   document.addEventListener('DOMContentLoaded', function () {
     let comments = window.commentsData || [];
     const commentList = document.getElementById('comment-list');
+    const commentForm = document.getElementById('comment-form');
 
-    // Render comments
     function renderComments() {
       commentList.innerHTML = ''; // Clear previous content
       if (comments.length > 0) {
@@ -65,61 +65,65 @@
       }
     }
 
-    renderComments();
+    renderComments(); // Load comments on page load
 
-    // Add reply button functionality
-    document.querySelectorAll('.reply-button').forEach((button) => {
-      button.addEventListener('click', function () {
-        const commentId = this.getAttribute('data-comment-id');
-        const replyText = prompt('Enter your reply:');
-        if (replyText) {
-          addCommentOrReply({ text: replyText, parentId: commentId });
-        }
-      });
-    });
+    // Handle new comment submissions
+    commentForm.addEventListener('submit', async function (e) {
+      e.preventDefault(); // Prevent the default form submission
 
-    // Handle new comments
-    document.getElementById('comment-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const commentText = document.getElementById('comment-input').value;
-      addCommentOrReply({ text: commentText });
-    });
+      const commentInput = document.getElementById('comment-input');
+      const commentText = commentInput.value.trim();
 
-    async function addCommentOrReply({ text, parentId = null }) {
-      const userName = '{{ customer.first_name }}';
-      const newEntry = {
+      if (commentText === '') {
+        alert('Please enter a comment.');
+        return;
+      }
+
+      const userName = '{{ customer.first_name }}'; // Shopify Liquid variable
+      const newComment = {
         id: `comment-${Date.now()}`,
         user: userName,
-        text: text,
+        text: commentText,
         timestamp: new Date().toISOString(),
         replies: [],
       };
 
-      if (parentId) {
-        const parentComment = comments.find((c) => c.id === parentId);
-        if (parentComment) {
-          parentComment.replies.push(newEntry);
-        }
-      } else {
-        comments.push(newEntry);
-      }
+      comments.push(newComment); // Add new comment to JSON array
 
       // Update Shopify Metafield
-      const pageId = '{{ page.id }}';
-      await fetch(`/admin/api/2023-01/pages/${pageId}/metafields.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+      await updateMetafield(comments);
+
+      // Reset input field
+      commentInput.value = '';
+
+      // Refresh comments display
+      renderComments();
+    });
+
+    async function updateMetafield(updatedComments) {
+      const pageId = '{{ page.id }}'; // Get page ID dynamically
+
+      const response = await fetch(`/admin/api/2023-01/metafields.json`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Access-Token': '{{ shop.metafields_access_token }}',
+        },
         body: JSON.stringify({
           metafield: {
             namespace: 'comments',
             key: 'comment_thread',
-            value: JSON.stringify(comments),
+            value: JSON.stringify(updatedComments),
             type: 'json',
           },
         }),
       });
 
-      location.reload(); // Refresh to reflect new comments
+      if (response.ok) {
+        console.log('Metafield updated successfully');
+      } else {
+        console.error('Failed to update metafield', await response.text());
+      }
     }
   });
 </script>
