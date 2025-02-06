@@ -19,6 +19,12 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "enable_fade_overlay",
+      "label": "Enable Bottom Fade",
+      "default": false
+    },
+    {
       "type": "image_picker",
       "id": "overlay_logo",
       "label": "Overlay Logo (.png)"
@@ -86,6 +92,9 @@
       }}
     {% elsif section.settings.hero_image %}
       {{ section.settings.hero_image | image_url: width: 3840 | image_tag: class: 'hero-media', alt: 'Hero Image' }}
+    {% endif %}
+    {% if section.settings.enable_fade_overlay %}
+      <div class="fade-overlay"></div>
     {% endif %}
   </div>
 
@@ -224,5 +233,16 @@
     background: var(--gradient-background) !important;
     color: var(--color-text) !important;
     border-bottom: 1px solid var(--color-border);
+  }
+  .fade-overlay {
+    position: relative;
+  }
+  .fade-overlay::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
   }
 </style>
