@@ -70,7 +70,8 @@
         "column_weNa8m"
       ],
       "custom_css": [
-        ".floating-header h2 {color: #f7f7f7;}"
+        ".floating-header h2 {color: #f7f7f7;}",
+        "img {border-radius: 15px;}"
       ],
       "settings": {
         "title": "",
