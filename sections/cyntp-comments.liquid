@@ -1,0 +1,140 @@
+{% schema %}
+{
+  "name": "Comments Section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Comments Section"
+    }
+  ]
+}
+{% endschema %}
+
+<div id="comments-section">
+  <h3>Comments</h3>
+  <div id="comment-list"></div>
+
+  {% if customer %}
+    <form id="comment-form">
+      <textarea name="comment" id="comment-input" placeholder="Leave a comment..." required></textarea>
+      <button type="submit">Submit</button>
+    </form>
+  {% else %}
+    <p><a href="{{ routes.account_login_url }}">Log in</a> to leave a comment.</p>
+  {% endif %}
+</div>
+
+<!-- Inject JSON data into a <script> tag -->
+<script>
+  window.commentsData = {{ page.metafields.comments.comment_thread | default: '[]' | json }};
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Ensure JSON data is parsed correctly
+    let comments = [];
+    try {
+      comments = JSON.parse(window.commentsData);
+      if (!Array.isArray(comments)) {
+        comments = [];
+      }
+    } catch (error) {
+      console.error('Error parsing comments JSON:', error);
+      comments = [];
+    }
+
+    const commentList = document.getElementById('comment-list');
+    const commentForm = document.getElementById('comment-form');
+
+    function renderComments() {
+      commentList.innerHTML = ''; // Clear previous content
+      if (comments.length > 0) {
+        comments.forEach((comment) => {
+          let commentHtml = `
+                        <div class="comment" id="comment-${comment.id}">
+                            <p><strong>${comment.user}</strong>: ${comment.text}</p>
+                            <small>${new Date(comment.timestamp).toLocaleString()}</small>
+                            <div class="replies">
+                                ${comment.replies
+                                  .map(
+                                    (reply) => `
+                                    <div class="reply">
+                                        <p><strong>${reply.user}</strong>: ${reply.text}</p>
+                                        <small>${new Date(reply.timestamp).toLocaleString()}</small>
+                                    </div>
+                                `
+                                  )
+                                  .join('')}
+                            </div>
+                            <button class="reply-button" data-comment-id="${comment.id}">Reply</button>
+                        </div>
+                    `;
+          commentList.innerHTML += commentHtml;
+        });
+      } else {
+        commentList.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+      }
+    }
+
+    renderComments(); // Load comments on page load
+
+    // Handle new comment submissions
+    commentForm.addEventListener('submit', async function (e) {
+      e.preventDefault(); // Prevent default form submission
+
+      const commentInput = document.getElementById('comment-input');
+      const commentText = commentInput.value.trim();
+
+      if (commentText === '') {
+        alert('Please enter a comment.');
+        return;
+      }
+
+      const userName = '{{ customer.first_name }}'; // Shopify Liquid variable
+      const newComment = {
+        id: `comment-${Date.now()}`,
+        user: userName,
+        text: commentText,
+        timestamp: new Date().toISOString(),
+        replies: [],
+      };
+
+      comments.push(newComment); // Add new comment to JSON array
+
+      // Update Shopify Metafield
+      await updateMetafield(comments);
+
+      // Reset input field
+      commentInput.value = '';
+
+      // Refresh comments display
+      renderComments();
+    });
+
+    async function updateMetafield(updatedComments) {
+      const pageId = '{{ page.id }}'; // Get page ID dynamically
+
+      const response = await fetch(`/admin/api/2023-01/metafields.json`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Access-Token': '{{ shop.metafields_access_token }}',
+        },
+        body: JSON.stringify({
+          metafield: {
+            namespace: 'comments',
+            key: 'comment_thread',
+            value: JSON.stringify(updatedComments),
+            type: 'json',
+          },
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Metafield updated successfully');
+      } else {
+        console.error('Failed to update metafield', await response.text());
+      }
+    }
+  });
+</script>

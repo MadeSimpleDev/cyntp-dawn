@@ -19,22 +19,19 @@
     },
     "hero_banner_with_scroll_8aXYfH": {
       "type": "HeroBannerWithScroll",
-      "custom_css": [],
+      "custom_css": [
+        "p,h1 {left: 5%; width: 90%; /* Ensures text stays centered */ text-align: left; font-style: oblique; font-weight: bold; color: white; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);}",
+        "h1 {font-size: 4em;}"
+      ],
       "settings": {
         "hero_image": "shopify://shop_images/Screenshot_2025-01-25_at_8.52.49_PM.png",
         "enable_scroll_indicator": true,
         "logo_width": 200,
         "heading": "Courses",
-        "subheading": "",
+        "subheading": "Let us help you find the course you want to play next.",
         "button_link": "",
         "button_text": "",
         "section_color_scheme": ""
-      }
-    },
-    "object_index_BzjYXD": {
-      "type": "ObjectIndex",
-      "settings": {
-        "title": ""
       }
     },
     "courses_by_state_Rrj8GU": {
@@ -42,12 +39,24 @@
       "settings": {
         "color_scheme": ""
       }
+    },
+    "object_index_BzjYXD": {
+      "type": "ObjectIndex",
+      "settings": {
+        "title": "",
+        "metaobject_type": "course"
+      }
+    },
+    "cyntp_comments_dqNX4D": {
+      "type": "cyntp-comments",
+      "settings": {}
     }
   },
   "order": [
     "main",
     "hero_banner_with_scroll_8aXYfH",
     "courses_by_state_Rrj8GU",
-    "object_index_BzjYXD"
+    "object_index_BzjYXD",
+    "cyntp_comments_dqNX4D"
   ]
 }

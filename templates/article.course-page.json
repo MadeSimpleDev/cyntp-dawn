@@ -11,9 +11,14 @@
   "sections": {
     "hero_banner_with_scroll_mwAbFW": {
       "type": "HeroBannerWithScroll",
+      "custom_css": [
+        "p,h1 {width: 90%; /* Ensures text stays centered */ text-align: center; font-style: oblique; font-weight: bold; color: white; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);}",
+        "h1 {font-size: 4em;}"
+      ],
       "settings": {
         "hero_image": "{{ article.image }}",
         "enable_scroll_indicator": false,
+        "enable_fade_overlay": false,
         "logo_width": 200,
         "heading": "{{ article.title }}",
         "subheading": "",
@@ -35,7 +40,7 @@
           "type": "caption",
           "disabled": true,
           "settings": {
-            "caption": "{{ article.author }}",
+            "caption": "",
             "text_style": "caption-with-letter-spacing",
             "text_size": "medium"
           }
@@ -64,7 +69,7 @@
     "image_banner_QVFeyM": {
       "type": "image-banner",
       "settings": {
-        "image": "{{ article.metafields.custom.additional_section_image.value }}",
+        "image_2": "shopify://shop_images/Screenshot_2025-01-25_at_8.52.49_PM.png",
         "image_overlay_opacity": 0,
         "image_height": "medium",
         "desktop_content_position": "middle-center",
@@ -77,13 +82,43 @@
         "show_text_below": true
       }
     },
+    "rich_text_hCGx4Q": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_URCMMR": {
+          "type": "heading",
+          "settings": {
+            "heading": "<em><strong>The Course and Our Experience</strong></em>",
+            "heading_size": "h2"
+          }
+        },
+        "text_tiaat7": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_URCMMR",
+        "text_tiaat7"
+      ],
+      "settings": {
+        "desktop_content_position": "left",
+        "content_alignment": "left",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "image_with_text_NW9jw3": {
       "type": "image-with-text",
       "blocks": {
         "heading_XYXwWF": {
           "type": "heading",
           "settings": {
-            "heading": "Image with text",
+            "heading": "19th Hole",
             "heading_size": "h1"
           }
         },
@@ -108,19 +143,50 @@
         "text_8LG8RT",
         "button_cjGgMU"
       ],
+      "custom_css": [],
       "settings": {
-        "image": "{{ article.metafields.custom.additional_section_image.value }}",
+        "image": "shopify://shop_images/work_with_us.png",
         "height": "medium",
-        "desktop_image_width": "large",
+        "desktop_image_width": "medium",
         "layout": "image_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "overlap",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "center",
+        "content_layout": "no-overlap",
         "section_color_scheme": "scheme-1",
         "color_scheme": "scheme-2",
         "image_behavior": "none",
         "mobile_content_alignment": "left",
         "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "rich_text_iBU8jt": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_eMcbCk": {
+          "type": "heading",
+          "settings": {
+            "heading": "<em><strong>Was it Worth it?</strong></em>",
+            "heading_size": "h2"
+          }
+        },
+        "text_x8HppL": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Discover golf courses that excel on every level. Our curated selection ensures a memorable experience with each game.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_eMcbCk",
+        "text_x8HppL"
+      ],
+      "settings": {
+        "desktop_content_position": "left",
+        "content_alignment": "left",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
         "padding_bottom": 0
       }
     },
@@ -166,7 +232,9 @@
     "hero_banner_with_scroll_mwAbFW",
     "rich_text_aCMn7d",
     "image_banner_QVFeyM",
+    "rich_text_hCGx4Q",
     "image_with_text_NW9jw3",
+    "rich_text_iBU8jt",
     "blog_author_gAxrKz",
     "main"
   ]

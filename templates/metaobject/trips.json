@@ -11,9 +11,16 @@
   "sections": {
     "hero_banner_with_scroll_jmAwdC": {
       "type": "HeroBannerWithScroll",
+      "custom_css": [
+        ".hero-overlay {position: absolute; top: 50%; left: 5%; transform: translateY(-50%); text-align: left; display: flex; flex-direction: column; align-items: flex-start;}",
+        ".hero-overlay h1,.hero-overlay p {text-align: left; width: 100%; font-style: oblique; font-weight: bold; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Adds contrast */ transition: text-shadow 0.3s ease-in-out, color 0.3s ease-in-out;}",
+        ".hero-overlay h1 {font-size: 5em; margin-bottom: 0px; color: white;}",
+        ".hero-overlay p {margin-top: 0px;}"
+      ],
       "settings": {
-        "hero_image": "{{ metaobject.hero_media.value }}",
+        "hero_image": "{{ metaobject.hero_image.value }}",
         "enable_scroll_indicator": true,
+        "enable_fade_overlay": false,
         "logo_width": 200,
         "heading": "{{ metaobject.name.value }}",
         "subheading": "{{ metaobject.location.value }}",
@@ -71,10 +78,15 @@
       "block_order": [
         "column_GyaxDK"
       ],
+      "custom_css": [
+        ".floating-header h2 {color: white;}",
+        ".media {border-radius: 15px;}",
+        "/* On devices with a viewport width of 1024px and above, center the container */@media screen and (min-width: 1024px) {slider-component {width: 50%; margin: 0 auto; /* This centers the container */ }}"
+      ],
       "settings": {
         "title": "Courses You'll Be Playing",
         "heading_size": "h2",
-        "image_width": "half",
+        "image_width": "full",
         "image_ratio": "square",
         "columns_desktop": 2,
         "column_alignment": "left",
@@ -82,7 +94,7 @@
         "button_label": "",
         "button_link": "",
         "color_scheme": "scheme-1",
-        "columns_mobile": "2",
+        "columns_mobile": "1",
         "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36
@@ -122,7 +134,8 @@
         "button_MapGci"
       ],
       "custom_css": [
-        ".button {color: black; font-size: 1.25em; font-weight: bold; font-style: oblique; border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; border-top-left-radius: 50px; border-top-right-radius: 50px;}"
+        ".button {color: black; font-size: 1.25em; font-weight: bold; font-style: oblique; border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; border-top-left-radius: 50px; border-top-right-radius: 50px;}",
+        ".rich-text__buttons {position: relative; left: 50%;}"
       ],
       "settings": {
         "desktop_content_position": "left",
@@ -154,6 +167,7 @@
         "heading_KyMkyi",
         "text_ft77Dq"
       ],
+      "custom_css": [],
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -185,7 +199,7 @@
           "type": "column",
           "source": "{{ metaobject }}",
           "settings": {
-            "image": "{{ metaobject.hero_media.value }}",
+            "image": "{{ metaobject.hero_image.value }}",
             "floating_header": "{{ metaobject.name.value }}",
             "title": "",
             "text": "",
@@ -200,8 +214,8 @@
       "settings": {
         "title": "CYNTP Suggested Trips",
         "heading_size": "h1",
-        "image_width": "full",
-        "image_ratio": "adapt",
+        "image_width": "third",
+        "image_ratio": "portrait",
         "columns_desktop": 3,
         "column_alignment": "left",
         "background_style": "none",
