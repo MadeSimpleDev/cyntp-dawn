@@ -210,15 +210,15 @@
         ".floating-header h2 {color: #f7f7f7;}"
       ],
       "settings": {
-        "title": "Related Courses",
+        "title": "Suggested Courses",
         "heading_size": "h2",
         "image_width": "full",
         "image_ratio": "adapt",
         "columns_desktop": 3,
-        "column_alignment": "left",
+        "column_alignment": "center",
         "background_style": "none",
         "button_label": "See more",
-        "button_link": "shopify://pages/itineraries",
+        "button_link": "shopify://pages/courses",
         "color_scheme": "scheme-1",
         "columns_mobile": "1",
         "swipe_on_mobile": true,
