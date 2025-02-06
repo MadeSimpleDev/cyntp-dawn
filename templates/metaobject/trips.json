@@ -80,7 +80,8 @@
       ],
       "custom_css": [
         ".floating-header h2 {color: white;}",
-        ".media {border-radius: 15px;}"
+        ".media {border-radius: 15px;}",
+        "slider-component {width: 90%; margin: 0 auto;}"
       ],
       "settings": {
         "title": "Courses You'll Be Playing",
