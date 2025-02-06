@@ -89,7 +89,7 @@
         "heading_XYXwWF": {
           "type": "heading",
           "settings": {
-            "heading": "Image with text",
+            "heading": "19th Hole",
             "heading_size": "h1"
           }
         },
@@ -114,20 +114,51 @@
         "text_8LG8RT",
         "button_cjGgMU"
       ],
+      "custom_css": [],
       "settings": {
-        "image": "{{ article.metafields.custom.additional_section_image.value }}",
+        "image": "shopify://shop_images/work_with_us.png",
         "height": "medium",
-        "desktop_image_width": "large",
+        "desktop_image_width": "medium",
         "layout": "image_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "overlap",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "center",
+        "content_layout": "no-overlap",
         "section_color_scheme": "scheme-1",
         "color_scheme": "scheme-2",
         "image_behavior": "none",
         "mobile_content_alignment": "left",
         "padding_top": 0,
         "padding_bottom": 0
+      }
+    },
+    "rich_text_iBU8jt": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_eMcbCk": {
+          "type": "heading",
+          "settings": {
+            "heading": "<em>Was it Worth it?</em>",
+            "heading_size": "h1"
+          }
+        },
+        "text_x8HppL": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_eMcbCk",
+        "text_x8HppL"
+      ],
+      "settings": {
+        "desktop_content_position": "left",
+        "content_alignment": "left",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
       }
     },
     "blog_author_gAxrKz": {
@@ -173,6 +204,7 @@
     "rich_text_aCMn7d",
     "image_banner_QVFeyM",
     "image_with_text_NW9jw3",
+    "rich_text_iBU8jt",
     "blog_author_gAxrKz",
     "main"
   ]
