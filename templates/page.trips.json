@@ -26,9 +26,10 @@
       "settings": {
         "hero_image": "shopify://shop_images/Trips_Page_Header.png",
         "enable_scroll_indicator": true,
+        "enable_fade_overlay": false,
         "logo_width": 200,
         "heading": "Trips",
-        "subheading": "",
+        "subheading": "CYNTP Certified Trips perfect for your next outing.",
         "button_link": "",
         "button_text": "",
         "section_color_scheme": ""
