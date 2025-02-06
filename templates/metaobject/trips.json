@@ -12,8 +12,9 @@
     "hero_banner_with_scroll_jmAwdC": {
       "type": "HeroBannerWithScroll",
       "settings": {
-        "hero_image": "{{ metaobject.hero_media.value }}",
+        "hero_image": "{{ metaobject.hero_image.value }}",
         "enable_scroll_indicator": true,
+        "enable_fade_overlay": false,
         "logo_width": 200,
         "heading": "{{ metaobject.name.value }}",
         "subheading": "{{ metaobject.location.value }}",
@@ -185,7 +186,7 @@
           "type": "column",
           "source": "{{ metaobject }}",
           "settings": {
-            "image": "{{ metaobject.hero_media.value }}",
+            "image": "{{ metaobject.hero_image.value }}",
             "floating_header": "{{ metaobject.name.value }}",
             "title": "",
             "text": "",
