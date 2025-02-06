@@ -79,12 +79,13 @@
         "column_GyaxDK"
       ],
       "custom_css": [
-        ".floating-header h2 {color: white;}"
+        ".floating-header h2 {color: white;}",
+        ".media {border-radius: 15px;}"
       ],
       "settings": {
         "title": "Courses You'll Be Playing",
         "heading_size": "h2",
-        "image_width": "half",
+        "image_width": "full",
         "image_ratio": "square",
         "columns_desktop": 2,
         "column_alignment": "left",
@@ -92,7 +93,7 @@
         "button_label": "",
         "button_link": "",
         "color_scheme": "scheme-1",
-        "columns_mobile": "2",
+        "columns_mobile": "1",
         "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36
@@ -132,7 +133,8 @@
         "button_MapGci"
       ],
       "custom_css": [
-        ".button {color: black; font-size: 1.25em; font-weight: bold; font-style: oblique; border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; border-top-left-radius: 50px; border-top-right-radius: 50px;}"
+        ".button {color: black; font-size: 1.25em; font-weight: bold; font-style: oblique; border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; border-top-left-radius: 50px; border-top-right-radius: 50px;}",
+        ".rich-text__buttons {position:relative; left:50%;}"
       ],
       "settings": {
         "desktop_content_position": "left",
@@ -164,6 +166,7 @@
         "heading_KyMkyi",
         "text_ft77Dq"
       ],
+      "custom_css": [],
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
