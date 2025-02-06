@@ -49,7 +49,7 @@
         "heading_HqKwkX": {
           "type": "heading",
           "settings": {
-            "heading": "Course Overview",
+            "heading": "<em><strong>Course Overview</strong></em>",
             "heading_size": "h1"
           }
         },
