@@ -78,6 +78,9 @@
       "block_order": [
         "column_GyaxDK"
       ],
+      "custom_css": [
+        ".floating-header h2 {color: white;}"
+      ],
       "settings": {
         "title": "Courses You'll Be Playing",
         "heading_size": "h2",
