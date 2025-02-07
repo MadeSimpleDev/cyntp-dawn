@@ -12,16 +12,16 @@
     "hero_banner_with_scroll_pLN6nm": {
       "type": "HeroBannerWithScroll",
       "custom_css": [
-        "p {position: absolute; bottom: 10%; /* Adjust to sit above the scroll indicator */ left: 50%; transform: translateX(-50%); width: 90%; /* Ensures text stays centered */ text-align: center; font-style: oblique; font-weight: bold; font-size: 1.5em;}",
+        "p {position: absolute; bottom: 5%; /* Adjust to sit above the scroll indicator */ left: 50%; transform: translateX(-50%); width: 90%; /* Ensures text stays centered */ text-align: center; font-style: oblique; font-weight: bold; font-size: 1.5em;}",
         ".hero-overlay {height: 100%;}"
       ],
       "settings": {
-        "hero_video": "shopify://files/videos/Trimmed.mp4",
+        "hero_video": "shopify://files/videos/Website Home Page hero video.mp4",
         "enable_scroll_indicator": true,
         "enable_fade_overlay": true,
         "logo_width": 320,
         "heading": "",
-        "subheading": "Find your next golf trip",
+        "subheading": "Your next golf trip starts here",
         "button_link": "",
         "button_text": "",
         "section_color_scheme": ""
@@ -75,7 +75,7 @@
       ],
       "settings": {
         "title": "",
-        "heading_size": "h1",
+        "heading_size": "h2",
         "image_width": "full",
         "image_ratio": "portrait",
         "columns_desktop": 3,
