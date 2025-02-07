@@ -24,7 +24,7 @@
         "h1 {font-size: 4em;}"
       ],
       "settings": {
-        "hero_image": "shopify://shop_images/Feed_Header.png",
+        "hero_image": "shopify://shop_images/Contact_page_header.png",
         "enable_scroll_indicator": true,
         "enable_fade_overlay": false,
         "logo_width": 200,
@@ -48,7 +48,7 @@
         "text_h6bmVy": {
           "type": "text",
           "settings": {
-            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+            "text": "<p>The honest truth is that we are three normal dudes and lifelong friends (Beau, Noah, and Cameron) that are obsessed with golf. We got together in 2022 and thought it would be fun to start a social media page dedicated to highlighting golf courses around the world that didn’t get enough recognition. Fast forward a few years and we are traveling the country to give our first-hand experience of what it is like to play these awesome courses. <br/><br/>We want our website to be a place where people can come and do research before planning their next golf trip, add their reviews of the courses that they have played, and build a community of golfers that enjoy the game as much as we do. </p>"
           }
         }
       },
@@ -57,10 +57,10 @@
         "text_h6bmVy"
       ],
       "settings": {
-        "desktop_content_position": "left",
-        "content_alignment": "left",
+        "desktop_content_position": "center",
+        "content_alignment": "center",
         "color_scheme": "",
-        "full_width": true,
+        "full_width": false,
         "padding_top": 40,
         "padding_bottom": 52
       }
@@ -118,7 +118,7 @@
         "text_4RyAhV": {
           "type": "text",
           "settings": {
-            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+            "text": "<p>As mentioned in the previous paragraph. We enjoy finding the next best golf trip. If we haven’t had a chance to experience your amazing course or set of courses yet, we want to make it happen. Whenever we go on trips, we bring our camera gear and document our time in the town and on the course. These videos can be seen all over our social media pages (Instagram, TikTok, and Youtube) and throughout our website. With millions of visitors to our socials and website monthly, we are certain that we can get your course or your gear in front of a very targeted audience. For more information send us message through the form below.</p>"
           }
         }
       },
@@ -127,8 +127,8 @@
         "text_4RyAhV"
       ],
       "settings": {
-        "desktop_content_position": "left",
-        "content_alignment": "left",
+        "desktop_content_position": "center",
+        "content_alignment": "center",
         "color_scheme": "",
         "full_width": true,
         "padding_top": 40,
@@ -149,8 +149,8 @@
             "errors_color": "#e02229",
             "text_alignment": "center",
             "form_alignment": "center",
-            "padding_top": 0,
-            "padding_bottom": 0,
+            "padding_top": 32,
+            "padding_bottom": 32,
             "padding_right": 0,
             "padding_left": 0
           }
