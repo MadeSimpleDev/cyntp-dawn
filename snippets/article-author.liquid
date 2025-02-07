@@ -1,4 +1,5 @@
 {% assign author = article.metafields.custom.author.value %}
+{% assing instagram_handle_url = 'www.instagram.com/' | append: author.instagram_handle %}
 
 {% if author %}
   <div class="author-section color-{{ section.settings.color_scheme }}">
@@ -17,12 +18,7 @@
           {{ author.name }}
           <span class="author-handle"
             >(
-            {{-
-              '@'
-              | append: author.instagram_handle
-              | link_to: 'www.instagram.com/'
-              | append: author.instagram_handle
-            -}}
+            {{- '@' | append: author.instagram_handle | link_to: instagram_handle_url -}}
             )</span
           >
         </p>
