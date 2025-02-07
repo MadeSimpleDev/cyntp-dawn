@@ -26,6 +26,7 @@
       "settings": {
         "hero_image": "shopify://shop_images/Feed_Header.png",
         "enable_scroll_indicator": true,
+        "enable_fade_overlay": false,
         "logo_width": 200,
         "heading": "Contact",
         "subheading": "Courses You Need To Play",
@@ -67,7 +68,7 @@
     "image_banner_rhaKVn": {
       "type": "image-banner",
       "settings": {
-        "image": "shopify://shop_images/work_with_us.png",
+        "image": "shopify://shop_images/IMG_5261.jpg",
         "image_overlay_opacity": 0,
         "image_height": "small",
         "desktop_content_position": "bottom-center",

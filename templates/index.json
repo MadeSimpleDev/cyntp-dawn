@@ -134,29 +134,28 @@
         "show_text_below": false
       }
     },
-    "image_banner_YcJN66": {
-      "type": "image-banner",
+    "rich_text_DbYDgp": {
+      "type": "rich-text",
       "blocks": {
-        "heading_8FWdxD": {
+        "heading_Ryk8QW": {
           "type": "heading",
           "settings": {
-            "heading": "Meet the CYNTP Team",
+            "heading": "<em><strong>Meet the CYNTP Team</strong></em>",
             "heading_size": "h1"
           }
         },
-        "text_aKFjqM": {
+        "text_7rBfYb": {
           "type": "text",
           "settings": {
-            "text": "CYNTP is made up of three freinds (Beau, Noah, & Cameron) with a passion for golf who have a fresh take on golf social media content. Couses You Need to Play highlights golf courses all around the world that deserve more recognition than they receive. As we travel across the country playing golf, we document our average gameplay at the above average courses we play.",
-            "text_style": "body"
+            "text": "<p>CYNTP is made up of three freinds (Beau, Noah, & Cameron) with a passion for golf who have a fresh take on golf social media content. Couses You Need to Play highlights golf courses all around the world that deserve more recognition than they receive. As we travel across the country playing golf, we document our average gameplay at the above average courses we play.</p>"
           }
         },
-        "buttons_n3kRXj": {
-          "type": "buttons",
+        "button_9UpbDq": {
+          "type": "button",
           "settings": {
-            "button_label_1": "Work with us!",
-            "button_link_1": "shopify://pages/contact",
-            "button_style_secondary_1": true,
+            "button_label": "Work With Us!",
+            "button_link": "",
+            "button_style_secondary": true,
             "button_label_2": "",
             "button_link_2": "",
             "button_style_secondary_2": false
@@ -164,16 +163,27 @@
         }
       },
       "block_order": [
-        "heading_8FWdxD",
-        "text_aKFjqM",
-        "buttons_n3kRXj"
+        "heading_Ryk8QW",
+        "text_7rBfYb",
+        "button_9UpbDq"
       ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "image_banner_YcJN66": {
+      "type": "image-banner",
       "custom_css": [
         ".banner__content {border-color: black; border-width: 10px;}",
         ".button {color: black; font-style: italic; font-size: 30px;}"
       ],
       "settings": {
-        "image": "shopify://shop_images/work_with_us.png",
+        "image": "shopify://shop_images/Work_with_us_697de70a-9ecc-4037-921f-d541fab5fccc.png",
         "image_overlay_opacity": 0,
         "image_height": "adapt",
         "desktop_content_position": "top-center",
@@ -279,6 +289,7 @@
     "hero_banner_with_scroll_pLN6nm",
     "multicolumn_with_floating_zMM4PV",
     "image_banner_P98y7R",
+    "rich_text_DbYDgp",
     "image_banner_YcJN66",
     "newsletter_jzapKN",
     "rich_text_EDr8U3",
