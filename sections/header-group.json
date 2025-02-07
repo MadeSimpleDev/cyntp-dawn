@@ -17,7 +17,7 @@
         "a {font-size: 1em; font-style: oblique; font-weight: bold;}"
       ],
       "settings": {
-        "logo_position": "middle-left",
+        "logo_position": "top-center",
         "menu": "main-menu",
         "menu_type_desktop": "mega",
         "sticky_header_type": "reduce-logo-size",
