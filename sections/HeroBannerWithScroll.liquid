@@ -190,18 +190,12 @@
     transition: background 0.3s ease-in-out, color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
     z-index: 1000;
   }
-  .header__heading-logo {
-    opacity: 0;
-  }
 
   /* When scrolled past, restore background */
   .scrolled-past-header .header-wrapper {
     background: var(--gradient-background) !important; /* Ensures correct background */
     color: var(--color-text) !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  }
-  .scrolled-past-header .header__heading-logo {
-    opacity: 1;
   }
 
   /* 🌟 Ensure text/logo remains visible */
