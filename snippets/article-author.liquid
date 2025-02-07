@@ -16,7 +16,10 @@
       <div class="author-info">
         <p class="author-name">
           {{ author.name }}
-          <span class="author-handle"
+          <span
+            class="author-handle"
+            Handle:
+            {{ instagram_handle_url }}
             >(
             {{- '@' | append: author.instagram_handle | link_to: instagram_handle_url -}}
             )</span
