@@ -19,8 +19,7 @@
           <span
             class="author-handle"
           >
-            handle url: {{ instagram_handle_url }}
-            <a href="{{ instagram_handle_url }}">{{- '@' | append: author.instagram_handle -}}</a>
+            {{- '@' | append: author.instagram_handle | link_to: instagram_handle_url -}}
             )</span
           >
         </p>
