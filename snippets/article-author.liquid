@@ -15,7 +15,7 @@
       <div class="author-info">
         <p class="author-name">
           {{ author.name }}
-          <span class="author-handle">(@{{ author.instagram_handle }})</span>
+          <span class="author-handle">(@{{ author.instagram_handle | link_to: author.instagram_handle }})</span>
         </p>
         <p class="author-bio">{{ author.bio }}</p>
 
