@@ -82,7 +82,7 @@
 }
 {% endschema %}
 
-<header class="hero-banner {{ section.settings.section_color_scheme }}">
+<header class="hero-banner {{ section.settings.section_color_scheme }} {% if section.settings.enable_full_height %}full-height{% endif %}">
   <div class="hero-media-wrapper">
     {% if section.settings.hero_video %}
       {{
