@@ -12,19 +12,20 @@
     "hero_banner_with_scroll_pLN6nm": {
       "type": "HeroBannerWithScroll",
       "custom_css": [
-        "p {position: absolute; bottom: 0; /* Adjust to sit above the scroll indicator */ left: 50%; top: 120%; transform: translateX(-50%); width: 90%; /* Ensures text stays centered */ text-align: center; font-style: oblique; font-weight: bold; font-size: 1.5em;}"
+        "p {position: absolute; bottom: 10%; /* Adjust to sit above the scroll indicator */ left: 50%; transform: translateX(-50%); width: 90%; /* Ensures text stays centered */ text-align: center; font-style: oblique; font-weight: bold; font-size: 1.5em;}",
+        ".hero-overlay {height: 100%;}"
       ],
       "settings": {
         "hero_video": "shopify://files/videos/Trimmed.mp4",
         "enable_scroll_indicator": true,
         "enable_fade_overlay": true,
-        "overlay_logo": "shopify://shop_images/Bird_with_logo.png",
         "logo_width": 320,
         "heading": "",
         "subheading": "Find your next golf trip",
         "button_link": "",
         "button_text": "",
-        "section_color_scheme": ""
+        "section_color_scheme": "",
+        "enable_full_height": true
       }
     },
     "multicolumn_with_floating_zMM4PV": {
@@ -245,6 +246,34 @@
         "padding_top": 40,
         "padding_bottom": 52
       }
+    },
+    "1738897121ad002c87": {
+      "type": "apps",
+      "blocks": {
+        "forms_inline_BryEFd": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "337552",
+            "text_color": "#202020",
+            "button_background_color": "#202020",
+            "button_label_color": "#ffffff",
+            "links_color": "#1878b9",
+            "errors_color": "#e02229",
+            "text_alignment": "center",
+            "form_alignment": "center",
+            "padding_top": 0,
+            "padding_bottom": 0,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        }
+      },
+      "block_order": [
+        "forms_inline_BryEFd"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
@@ -253,6 +282,7 @@
     "image_banner_P98y7R",
     "image_banner_YcJN66",
     "newsletter_jzapKN",
-    "rich_text_EDr8U3"
+    "rich_text_EDr8U3",
+    "1738897121ad002c87"
   ]
 }

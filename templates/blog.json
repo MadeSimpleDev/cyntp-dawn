@@ -18,6 +18,7 @@
       "settings": {
         "hero_image": "shopify://shop_images/Feed_Header.png",
         "enable_scroll_indicator": false,
+        "enable_fade_overlay": false,
         "logo_width": 200,
         "heading": "The CYNTP Feed",
         "subheading": "Trips - Giveaways - Promos - News",
@@ -96,7 +97,7 @@
         "show_date": true,
         "show_author": true,
         "padding_top": 0,
-        "padding_bottom": 0
+        "padding_bottom": 24
       }
     }
   },

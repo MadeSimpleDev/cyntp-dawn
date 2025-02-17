@@ -66,6 +66,12 @@
       "id": "section_color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_full_height",
+      "label": "Enable Full Height (100vh)",
+      "default": false
     }
   ],
   "presets": [
@@ -76,7 +82,7 @@
 }
 {% endschema %}
 
-<header class="hero-banner {{ section.settings.section_color_scheme }}">
+<header class="hero-banner {{ section.settings.section_color_scheme }} {% if section.settings.enable_full_height %}full-height{% endif %}">
   <div class="hero-media-wrapper">
     {% if section.settings.hero_video %}
       {{
@@ -122,13 +128,17 @@
   {% endif %}
 </header>
 <style>
-  /* 🌟 Hero Banner Section - Ensures transparency */
   .hero-banner {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 50vh; /* Default to half height */
     overflow: hidden;
-    background: transparent !important; /* Ensures full transparency */
+    background: transparent !important;
+  }
+
+  /* When full height is enabled, override the height */
+  .hero-banner.full-height {
+    height: 100vh;
   }
 
   /* 🌟 Media Wrapper (Handles Both Image & Video) */
@@ -190,18 +200,12 @@
     transition: background 0.3s ease-in-out, color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
     z-index: 1000;
   }
-  .header__heading-logo {
-    opacity: 0;
-  }
 
   /* When scrolled past, restore background */
   .scrolled-past-header .header-wrapper {
     background: var(--gradient-background) !important; /* Ensures correct background */
     color: var(--color-text) !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  }
-  .scrolled-past-header .header__heading-logo {
-    opacity: 1;
   }
 
   /* 🌟 Ensure text/logo remains visible */
