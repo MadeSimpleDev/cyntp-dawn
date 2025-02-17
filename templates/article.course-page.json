@@ -24,7 +24,8 @@
         "subheading": "",
         "button_link": "",
         "button_text": "",
-        "section_color_scheme": ""
+        "section_color_scheme": "",
+        "enable_full_height": false
       }
     },
     "rich_text_aCMn7d": {
@@ -190,12 +191,6 @@
         "padding_bottom": 0
       }
     },
-    "blog_author_gAxrKz": {
-      "type": "blog-author",
-      "settings": {
-        "color_scheme": "scheme-1"
-      }
-    },
     "main": {
       "type": "main-article",
       "blocks": {
@@ -235,7 +230,6 @@
     "rich_text_hCGx4Q",
     "image_with_text_NW9jw3",
     "rich_text_iBU8jt",
-    "blog_author_gAxrKz",
     "main"
   ]
 }
