@@ -44,16 +44,9 @@
       ],
       "custom_css": [],
       "settings": {}
-    },
-    "blog_author_arhJxw": {
-      "type": "blog-author",
-      "settings": {
-        "color_scheme": ""
-      }
     }
   },
   "order": [
-    "main",
-    "blog_author_arhJxw"
+    "main"
   ]
 }
