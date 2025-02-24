@@ -28,11 +28,11 @@
         {% assign has_courses = false %}
         {% assign has_trips = false %}
 
-        {% if location.courses.value and location.courses.value.size > 0 %}
+        {% if location.courses and location.courses.size > 0 %}
           {% assign has_courses = true %}
         {% endif %}
 
-        {% if location.trips.value and location.trips.value.size > 0 %}
+        {% if location.trips and location.trips.size > 0 %}
           {% assign has_trips = true %}
         {% endif %}
 
@@ -53,11 +53,11 @@
         {% assign has_courses = false %}
         {% assign has_trips = false %}
 
-        {% if location.courses.value and location.courses.value.size > 0 %}
+        {% if location.courses and location.courses.size > 0 %}
           {% assign has_courses = true %}
         {% endif %}
 
-        {% if location.trips.value and location.trips.value.size > 0 %}
+        {% if location.trips and location.trips.size > 0 %}
           {% assign has_trips = true %}
         {% endif %}
 
