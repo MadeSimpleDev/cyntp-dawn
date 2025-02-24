@@ -68,18 +68,23 @@
                       role="link" aria-disabled="true"
                     {% else %}
                       href="{{ block.settings.button_link }}"
+                      {% if block.settings.button_link_new_window %}target="_blank" rel="noopener noreferrer"{% endif %}
                     {% endif %}
                     class="button{% if block.settings.button_style_secondary %} button--secondary{% else %} button--primary{% endif %}"
                   >
                     {{- block.settings.button_label | escape -}}
                   </a>
                 {%- endif -%}
+
                 {%- if block.settings.button_label_2 != blank -%}
                   <a
                     {% if block.settings.button_link_2 == blank %}
                       role="link" aria-disabled="true"
                     {% else %}
                       href="{{ block.settings.button_link_2 }}"
+                      {% if block.settings.button_link_2_new_window -%}
+                        target="_blank" rel="noopener noreferrer"
+                      {%- endif %}
                     {% endif %}
                     class="button{% if block.settings.button_style_secondary_2 %} button--secondary{% else %} button--primary{% endif %}"
                   >
@@ -309,6 +314,12 @@
           "label": "t:sections.rich-text.blocks.buttons.settings.button_style_secondary_1.label"
         },
         {
+          "type": "checkbox",
+          "id": "button_link_new_window",
+          "default": false,
+          "label": "Open Button 1 in New Window"
+        },
+        {
           "type": "text",
           "id": "button_label_2",
           "label": "t:sections.rich-text.blocks.buttons.settings.button_label_2.label",
@@ -324,6 +335,12 @@
           "id": "button_style_secondary_2",
           "default": false,
           "label": "t:sections.rich-text.blocks.buttons.settings.button_style_secondary_2.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_link_2_new_window",
+          "default": false,
+          "label": "Open Button 2 in New Window"
         }
       ]
     }
