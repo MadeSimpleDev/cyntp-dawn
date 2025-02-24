@@ -22,25 +22,37 @@
       {{ blog.title | escape }}
     </h1>
 
+    <!-- 🏷 Filter Links -->
+    <div class="blog-filters">
+      <span>Filter by:</span>
+      <a href="{{ blog.url }}" class="{% if current_tags == blank %}active{% endif %}">All</a>
+      <a href="{{ blog.url }}/tagged/courses" class="{% if current_tags contains 'courses' %}active{% endif %}"
+        >Courses</a
+      >
+      <a href="{{ blog.url }}/tagged/gear" class="{% if current_tags contains 'gear' %}active{% endif %}">Gear</a>
+    </div>
+
     <div class="blog-articles {% if section.settings.layout == 'collage' %}blog-articles--collage{% endif %}">
       {%- for article in blog.articles -%}
-        <div
-          class="blog-articles__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-          {% if settings.animations_reveal_on_scroll %}
-            data-cascade
-            style="--animation-order: {{ forloop.index }};"
-          {% endif %}
-        >
-          {%- render 'cyntp-article-card',
-            article: article,
-            media_height: section.settings.image_height,
-            media_aspect_ratio: article.image.aspect_ratio,
-            show_image: section.settings.show_image,
-            show_date: section.settings.show_date,
-            show_author: section.settings.show_author,
-            show_excerpt: true
-          -%}
-        </div>
+        {% if current_tags == blank or article.tags contains current_tags.first %}
+          <div
+            class="blog-articles__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {% if settings.animations_reveal_on_scroll %}
+              data-cascade
+              style="--animation-order: {{ forloop.index }};"
+            {% endif %}
+          >
+            {%- render 'cyntp-article-card',
+              article: article,
+              media_height: section.settings.image_height,
+              media_aspect_ratio: article.image.aspect_ratio,
+              show_image: section.settings.show_image,
+              show_date: section.settings.show_date,
+              show_author: section.settings.show_author,
+              show_excerpt: true
+            -%}
+          </div>
+        {% endif %}
       {%- endfor -%}
     </div>
 
@@ -49,6 +61,42 @@
     {%- endif -%}
   </div>
 {%- endpaginate -%}
+
+<style>
+  /* 🌟 Filter Links */
+  .blog-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    align-items: center;
+  }
+
+  .blog-filters span {
+    font-weight: bold;
+    color: var(--color-text);
+  }
+
+  .blog-filters a {
+    padding: 6px 12px;
+    border: 1px solid var(--color-text);
+    border-radius: 6px;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .blog-filters a:hover {
+    background: var(--color-accent);
+    color: white;
+  }
+
+  .blog-filters a.active {
+    background: var(--color-accent);
+    color: white;
+    font-weight: bold;
+  }
+</style>
 
 {% schema %}
 {
