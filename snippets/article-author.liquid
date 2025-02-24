@@ -14,6 +14,9 @@
   {% endfor %}
   <h1>author: {{ author.name }}</h1>
   <h2>Blog author: {{ article.author }}</h2>
+  {% if author.name == articl.author %}
+    THEY THEY SAME
+  {% endif %}
   <h3>Latest post: {{ latest_post.title }}</h3>
 
   <div class="author-section color-{{ section.settings.color_scheme }}">
