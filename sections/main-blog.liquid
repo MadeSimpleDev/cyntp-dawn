@@ -23,10 +23,11 @@
     </h1>
 
     <!-- 🏷 Filter Links -->
+    <!-- 🏷 Filter Links -->
     <div class="blog-filters">
       <span>Filter by:</span>
       <a href="{{ blog.url }}" class="{% if current_tags == blank %}active{% endif %}">All</a>
-      <a href="{{ blog.url }}/tagged/courses" class="{% if current_tags contains 'courses' %}active{% endif %}"
+      <a href="{{ blog.url }}/tagged/course" class="{% if current_tags contains 'courses' %}active{% endif %}"
         >Courses</a
       >
       <a href="{{ blog.url }}/tagged/gear" class="{% if current_tags contains 'gear' %}active{% endif %}">Gear</a>
@@ -79,22 +80,20 @@
 
   .blog-filters a {
     padding: 6px 12px;
-    border: 1px solid var(--color-text);
-    border-radius: 6px;
     color: var(--color-text);
     text-decoration: none;
-    transition: background 0.3s, color 0.3s;
+    transition: color 0.3s;
   }
 
-  .blog-filters a:hover {
-    background: var(--color-accent);
-    color: white;
-  }
-
+  /* ✅ Active Link Underline */
   .blog-filters a.active {
-    background: var(--color-accent);
-    color: white;
+    text-decoration: underline;
     font-weight: bold;
+  }
+
+  /* ✅ Hover Effect */
+  .blog-filters a:hover {
+    color: var(--color-accent);
   }
 </style>
 
