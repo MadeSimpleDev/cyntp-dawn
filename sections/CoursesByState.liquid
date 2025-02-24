@@ -25,8 +25,16 @@
     </div>
     <div class="golf-courses-grid">
       {% for location in shop.metaobjects.location.values %}
-        {% assign has_courses = location.courses.value.size > 0 %}
-        {% assign has_trips = location.trips.value.size > 0 %}
+        {% assign has_courses = false %}
+        {% assign has_trips = false %}
+
+        {% if location.courses.value and location.courses.value.size > 0 %}
+          {% assign has_courses = true %}
+        {% endif %}
+
+        {% if location.trips.value and location.trips.value.size > 0 %}
+          {% assign has_trips = true %}
+        {% endif %}
 
         {% if has_courses or has_trips %}
           <a href="/pages/locations/{{ location.name | handleize }}" class="golf-course-link">{{ location.name }}</a>
@@ -42,10 +50,18 @@
     </div>
     <div class="golf-courses-grid">
       {% for location in shop.metaobjects.location.values %}
-        {% assign has_courses = location.courses.value.size > 0 %}
-        {% assign has_trips = location.trips.value.size > 0 %}
+        {% assign has_courses = false %}
+        {% assign has_trips = false %}
 
-        {% if has_courses or has_trips and location.featured_destination == true %}
+        {% if location.courses.value and location.courses.value.size > 0 %}
+          {% assign has_courses = true %}
+        {% endif %}
+
+        {% if location.trips.value and location.trips.value.size > 0 %}
+          {% assign has_trips = true %}
+        {% endif %}
+
+        {% if (has_courses or has_trips) and location.featured_destination == true %}
           <a href="/pages/locations/{{ location.name | handleize }}" class="golf-course-link">{{ location.name }}</a>
         {% endif %}
       {% endfor %}
