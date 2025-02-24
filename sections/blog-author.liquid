@@ -46,7 +46,8 @@
           <div class="latest-post">
             <h4>Latest Post</h4>
             {% assign latest_post = false %}
-
+            <h1>{{ author }}</h1>
+            <h2>{{ article.author }}</h2>
             {% for blog in blogs %}
               {% for article in blog.articles %}
                 {% if article.author == author %}
