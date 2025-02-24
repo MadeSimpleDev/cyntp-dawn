@@ -5,7 +5,11 @@
       assign ratio = media_aspect_ratio
     endif
   -%}
-  <div class="article-card-wrapper card-wrapper underline-links-hover">
+  <a
+    href="{{ article.url }}"
+    class="article-card-wrapper card-wrapper underline-links-hover clickable-card"
+    aria-label="Read more about {{ article.title | escape }}"
+  >
     <div
       class="
         card article-card
@@ -47,31 +51,39 @@
             {%- if show_date -%}
               <span class="article-date">{{ article.published_at | time_tag: format: 'date' }}</span>
             {%- endif -%}
-            <h3 class="article-title">
-              <a href="{{ article.url }}" class="full-unstyled-link">{{ article.title | escape }}</a>
-            </h3>
+            <h3 class="article-title">{{ article.title | escape }}</h3>
             {%- if show_author -%}
               <span class="article-author">By: {{ article.author }}</span>
             {%- endif -%}
           </div>
-          <a href="{{ article.url }}" class="article-arrow">→</a>
+          <div class="article-arrow">→</div>
         </div>
       </div>
     </div>
-  </div>
+  </a>
 {%- endif -%}
 
 <style>
-  /* 🌟 Article Card Wrapper */
-  .article-card {
+  /* 🌟 Article Card Wrapper - Entire Card Clickable */
+  .clickable-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
     position: relative;
     border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    cursor: pointer;
   }
 
-  .article-card:hover {
+  .clickable-card:hover {
     transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  /* 🌟 Remove default link styling */
+  .clickable-card:hover .article-title a {
+    text-decoration: none;
   }
 
   /* 🌟 Article Image */
@@ -104,6 +116,7 @@
     padding: 10px 15px;
     border-radius: 8px;
     color: white;
+    pointer-events: none; /* Disable pointer events to allow entire card to be clickable */
   }
 
   /* 🌟 Text Content - Aligned to the Left */
@@ -121,15 +134,6 @@
     margin: 3px 0;
   }
 
-  .article-title a {
-    color: white;
-    text-decoration: none;
-  }
-
-  .article-title a:hover {
-    text-decoration: underline;
-  }
-
   /* 🌟 Date & Author */
   .article-date,
   .article-author {
@@ -144,10 +148,6 @@
     font-weight: bold;
     color: white;
     text-decoration: none;
-  }
-
-  .article-arrow:hover {
-    transform: translateX(5px);
   }
 
   /* 🌟 Responsive Adjustments */
