@@ -45,7 +45,23 @@
           </div>
           <div class="latest-post">
             <h4>Latest Post</h4>
-            <p>{{ author.latest_post | link_to: author.latest_post_url }}</p>
+            {% assign latest_post = false %}
+
+            {% for blog in blogs %}
+              {% for article in blog.articles %}
+                {% if article.author == author.name %}
+                  {% assign latest_post = article %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+
+            {% if latest_post %}
+              <div class="latest-post">
+                <h4>Latest Post</h4>
+                <a href="{{ latest_post.url }}" class="author-latest-post-link">{{ latest_post.title }}</a>
+              </div>
+            {% endif %}
           </div>
         </div>
       </div>
