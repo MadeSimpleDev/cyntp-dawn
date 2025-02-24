@@ -44,31 +44,53 @@
   </div>
 
   <!-- USA Featured Golf Destinations -->
-  <div class="golf-courses-container">
-    <div class="section-header">
-      <h2 class="section-title">USA Featured Golf Destinations</h2>
-    </div>
-    <div class="golf-courses-grid">
-      {% for location in shop.metaobjects.locations.values %}
-        {% assign has_courses = false %}
-        {% assign has_trips = false %}
+  {% assign has_featured_destinations = false %}
+  {% for location in shop.metaobjects.locations.values %}
+    {% assign has_courses = false %}
+    {% assign has_trips = false %}
 
-        {% if location.courses.value and location.courses.value != blank %}
-          {% assign has_courses = true %}
-        {% endif %}
+    {% if location.courses.value and location.courses.value != blank %}
+      {% assign has_courses = true %}
+    {% endif %}
 
-        {% if location.trips.value and location.trips.value != blank %}
-          {% assign has_trips = true %}
-        {% endif %}
+    {% if location.trips.value and location.trips.value != blank %}
+      {% assign has_trips = true %}
+    {% endif %}
 
-        {% if has_courses or has_trips %}
-          {% if location.featured_destination == true %}
-            <a href="/pages/locations/{{ location.system.handle }}" class="golf-course-link">{{ location.name }}</a>
+    {% if has_courses or has_trips %}
+      {% if location.featured_destination == true %}
+        {% assign has_featured_destinations = true %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+
+  {% if has_featured_destinations %}
+    <div class="golf-courses-container">
+      <div class="section-header">
+        <h2 class="section-title">USA Featured Golf Destinations</h2>
+      </div>
+      <div class="golf-courses-grid">
+        {% for location in shop.metaobjects.locations.values %}
+          {% assign has_courses = false %}
+          {% assign has_trips = false %}
+
+          {% if location.courses.value and location.courses.value != blank %}
+            {% assign has_courses = true %}
           {% endif %}
-        {% endif %}
-      {% endfor %}
+
+          {% if location.trips.value and location.trips.value != blank %}
+            {% assign has_trips = true %}
+          {% endif %}
+
+          {% if has_courses or has_trips %}
+            {% if location.featured_destination == true %}
+              <a href="/pages/locations/{{ location.system.handle }}" class="golf-course-link">{{ location.name }}</a>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
-  </div>
+  {% endif %}
 </section>
 
 <style>
