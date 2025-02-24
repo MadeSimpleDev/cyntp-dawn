@@ -24,7 +24,7 @@
       <h2 class="section-title">USA Golf Courses by State</h2>
     </div>
     <div class="golf-courses-grid">
-      {% for location in shop.metaobjects.location.values %}
+      {% for location in shop.metaobjects.locations.values %}
         {% assign has_courses = false %}
         {% assign has_trips = false %}
 
@@ -49,7 +49,7 @@
       <h2 class="section-title">USA Featured Golf Destinations</h2>
     </div>
     <div class="golf-courses-grid">
-      {% for location in shop.metaobjects.location.values %}
+      {% for location in shop.metaobjects.locations.values %}
         {% assign has_courses = false %}
         {% assign has_trips = false %}
 
