@@ -81,9 +81,10 @@
                   {% assign spaced_image = true %}
                 {% endif %}
                 <div class="multicolumn-card__image-wrapper multicolumn-card__image-wrapper--{{ section.settings.image_width }}-width{% if section.settings.image_width != 'full' or spaced_image %} multicolumn-card-spacing{% endif %}">
-  <div class="floating-header">
-    <h2>{{ block.settings.floating_header }}</h2>
-  </div>                  <div
+                  <div class="floating-header">
+                    <h2>{{ block.settings.floating_header }}</h2>
+                  </div>
+                  <div
                     class="media media--transparent media--{{ section.settings.image_ratio }}"
                     {% if section.settings.image_ratio == 'adapt' %}
                       style="padding-bottom: {{ 1 | divided_by: highest_ratio | times: 100 }}%;"
@@ -192,33 +193,33 @@
   </div>
 </div>
 {% style %}
-/* 🌟 Floating Header Positioned at Bottom, Left-Aligned */
-.floating-header {
-  position: absolute;
-  bottom: 10px; /* Moves text to the bottom of the image */
-  left: 10px; /* Aligns text to the left */
-  color: white; /* Ensure readability */
-  text-align: left;
-  z-index: 2;
-  width: 90%;
-}
+  /* 🌟 Floating Header Positioned at Bottom, Left-Aligned */
+  .floating-header {
+    position: absolute;
+    bottom: 10px; /* Moves text to the bottom of the image */
+    left: 10px; /* Aligns text to the left */
+    color: white; /* Ensure readability */
+    text-align: left;
+    z-index: 2;
+    width: 90%;
+  }
 
-/* 🌟 Ensure Image Wrapper is Positioned Relative */
-.multicolumn-card__image-wrapper {
-  position: relative;
-  overflow: hidden;
-}
+  /* 🌟 Ensure Image Wrapper is Positioned Relative */
+  .multicolumn-card__image-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
 
-/* 🌟 Style h2 Floating Header */
-.floating-header h2 {
-  margin: 0;
-  padding: 0;
-  font-size: 40px; /* Twice as big */
-  font-weight: bold; /* Make it bold */
-  font-style: oblique; /* Make it oblique */
-  line-height: 1.2;
-}
-  {% endstyle %}
+  /* 🌟 Style h2 Floating Header */
+  .floating-header h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5em; /* Twice as big */
+    font-weight: bold; /* Make it bold */
+    font-style: oblique; /* Make it oblique */
+    line-height: 1.2;
+  }
+{% endstyle %}
 {% schema %}
 {
   "name": "Multicolumn+Float",
@@ -425,12 +426,12 @@
           "id": "image",
           "label": "t:sections.multicolumn.blocks.column.settings.image.label"
         },
-{
-  "type": "text",
-  "id": "floating_header",
-  "label": "Floating Header",
-  "default": "Floating Title"
-},        
+        {
+          "type": "text",
+          "id": "floating_header",
+          "label": "Floating Header",
+          "default": "Floating Title"
+        },
         {
           "type": "inline_richtext",
           "id": "title",
