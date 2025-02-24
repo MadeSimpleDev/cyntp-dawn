@@ -4,7 +4,7 @@
 {% if author %}
   {% assign latest_post = false %}
 
-  {% for article in blogs.feed %}
+  {% for article in blogs.feed.articles %}
     <p>Blog: {{ blog.title }}</p>
     <p>Article: {{ article.title }}</p>
     <p>Author: {{ article.author }}</p>
