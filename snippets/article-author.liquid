@@ -6,6 +6,9 @@
 
   {% for blog in blogs %}
     {% for article in blog.articles %}
+      <p>Blog: {{ blog.title }}</p>
+      <p>Article: {{ article.title }}</p>
+      <p>Author: {{ article.author }}</p>
       {% if article.author == author.name %}
         {% assign latest_post = article %}
         {% break %}
@@ -14,9 +17,6 @@
   {% endfor %}
   <h1>author: {{ author.name | upcase }}</h1>
   <h2>Blog author: {{ article.author | upcase }}</h2>
-  {% if author.name == articl.author %}
-    THEY THEY SAME
-  {% endif %}
   <h3>Latest post: {{ latest_post.title }}</h3>
 
   <div class="author-section color-{{ section.settings.color_scheme }}">
