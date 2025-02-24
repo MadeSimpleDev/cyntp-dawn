@@ -49,7 +49,7 @@
 
             {% for blog in blogs %}
               {% for article in blog.articles %}
-                {% if article.author == author.name %}
+                {% if article.author == author %}
                   {% assign latest_post = article %}
                   {% break %}
                 {% endif %}
