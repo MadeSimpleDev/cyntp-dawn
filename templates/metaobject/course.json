@@ -19,6 +19,7 @@
       ],
       "settings": {
         "hero_video": "{{ metaobject.hero_video.value }}",
+        "hero_image": "{{ metaobject.hero_image.value }}",
         "enable_scroll_indicator": true,
         "enable_fade_overlay": false,
         "logo_width": 200,
