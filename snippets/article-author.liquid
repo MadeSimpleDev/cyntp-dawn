@@ -2,6 +2,17 @@
 {% assign instagram_handle_url = 'https://www.instagram.com/' | append: author.instagram_handle %}
 
 {% if author %}
+  {% assign latest_post = false %}
+
+  {% for blog in blogs %}
+    {% for article in blog.articles %}
+      {% if article.author == author.name %}
+        {% assign latest_post = article %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
   <div class="author-section color-{{ section.settings.color_scheme }}">
     <div class="author-header">
       <h2 class="author-title">About the Author</h2>
@@ -10,18 +21,14 @@
     <div class="author-content">
       <div class="author-image-wrapper">
         {{ author.image | image_url: width: 200 | image_tag: class: 'author-image' }}
-        {% comment %} <img src="{{ 'instagram-icon.svg' | asset_url }}" alt="Instagram" class="social-icon"> {% endcomment %}
       </div>
 
       <div class="author-info">
         <p class="author-name">
           {{ author.name }}
-          <span
-            class="author-handle"
-            >(
-            {{- '@' | append: author.instagram_handle | link_to: instagram_handle_url -}}
-            )</span
-          >
+          <span class="author-handle">
+            ({{ '@' | append: author.instagram_handle | link_to: instagram_handle_url }})
+          </span>
         </p>
         <p class="author-bio">{{ author.bio }}</p>
 
@@ -30,10 +37,15 @@
             <h4>Favorite Club in the Bag</h4>
             <p>{{ author.favorite_club }}</p>
           </div>
-          <div class="latest-post">
-            <h4>Latest Post</h4>
-            <p>{{ author.latest_post | link_to: author.latest_post_url }}</p>
-          </div>
+
+          {% if latest_post %}
+            <div class="latest-post">
+              <h4>Latest Post</h4>
+              <p>
+                <a href="{{ latest_post.url }}" class="author-latest-post-link">{{ latest_post.title }}</a>
+              </p>
+            </div>
+          {% endif %}
         </div>
       </div>
     </div>
