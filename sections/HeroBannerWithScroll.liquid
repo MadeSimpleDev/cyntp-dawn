@@ -172,25 +172,26 @@
   }
 
   /* 🌟 Hero Title - Responsive Font Size */
-  /* 🌟 Hero Title - Responsive Font Size */
   .hero-overlay h1 {
-    font-size: clamp(28px, 4vw, 64px); /* Dynamic scaling: Smaller start, larger max */
+    font-size: clamp(28px, 4vw, 64px);
     line-height: 1.2;
-    white-space: normal; /* Allows wrapping */
-    overflow-wrap: break-word; /* Allows long words to break onto a new line */
-    word-break: normal; /* Avoids breaking words mid-way */
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
     max-width: 90%;
-    margin: 0 auto 10px auto; /* Added margin to avoid overlapping nav */
+    margin: 0 auto 10px auto;
     display: block;
     text-align: center;
   }
 
+  /* ✅ MOBILE: Aggressive Font Shrink for Very Long Titles */
   @media (max-width: 768px) {
     .hero-overlay h1 {
-      font-size: clamp(20px, 5vw, 36px); /* Smaller on mobile to prevent overflow */
-      line-height: 1.1; /* Slightly tighter spacing to fit better */
-      margin-top: 20px; /* Pushes title down to avoid overlapping nav */
-      word-break: break-word; /* Ensure long words break properly */
+      font-size: clamp(16px, 4.5vw, 32px); /* Super small minimum size */
+      line-height: 1.1;
+      margin-top: 20px;
+      word-break: break-word;
+      hyphens: auto; /* Helps break long words more naturally */
     }
   }
 
