@@ -24,7 +24,8 @@
         "subheading": "Trips - Giveaways - Promos - News",
         "button_link": "",
         "button_text": "Discover More",
-        "section_color_scheme": "scheme-1"
+        "section_color_scheme": "scheme-1",
+        "enable_full_height": false
       }
     },
     "newsletter_qBhkMT": {
@@ -75,6 +76,7 @@
       "block_order": [
         "heading_V6xp6F"
       ],
+      "disabled": true,
       "settings": {
         "desktop_content_position": "left",
         "content_alignment": "left",
@@ -86,10 +88,7 @@
     },
     "main": {
       "type": "main-blog",
-      "custom_css": [
-        ".title--primary {display: none;}",
-        "div {border-radius: 15px;}"
-      ],
+      "custom_css": [],
       "settings": {
         "layout": "collage",
         "show_image": true,
