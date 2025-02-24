@@ -24,11 +24,13 @@
       <h2 class="section-title">USA Golf Courses by State</h2>
     </div>
     <div class="golf-courses-grid">
-      {% assign states = 'Alabama,Alaska,Arizona,Arkansas,California,Colorado,Connecticut,Delaware,Florida,Georgia,Hawaii,Idaho,Illinois,Indiana,Iowa,Kansas,Kentucky,Louisiana,Maine,Maryland,Massachusetts,Michigan,Minnesota,Mississippi,Missouri,Montana,Nebraska,Nevada,New Hampshire,New Jersey,New Mexico,New York,North Carolina,North Dakota,Ohio,Oklahoma,Oregon,Pennsylvania,Rhode Island,South Carolina,South Dakota,Tennessee,Texas,Utah,Vermont,Virginia,Washington,West Virginia,Wisconsin,Wyoming'
-        | split: ','
-      %}
-      {% for state in states %}
-        <a href="/pages/locations/{{ state | handleize }}" class="golf-course-link">{{ state }}</a>
+      {% for location in shop.metaobjects.location.values %}
+        {% assign has_courses = location.courses.value.size > 0 %}
+        {% assign has_trips = location.trips.value.size > 0 %}
+
+        {% if has_courses or has_trips %}
+          <a href="/pages/locations/{{ location.name | handleize }}" class="golf-course-link">{{ location.name }}</a>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
@@ -39,11 +41,13 @@
       <h2 class="section-title">USA Featured Golf Destinations</h2>
     </div>
     <div class="golf-courses-grid">
-      {% assign featured_destinations = 'Myrtle Beach,Hilton Head,Orlando,Phoenix/Scottsdale,Las Vegas,Palm Springs,Williamsburg,San Francisco,Atlanta,San Diego'
-        | split: ','
-      %}
-      {% for destination in featured_destinations %}
-        <a href="/pages/locations/{{ destination | handleize }}" class="golf-course-link">{{ destination }}</a>
+      {% for location in shop.metaobjects.location.values %}
+        {% assign has_courses = location.courses.value.size > 0 %}
+        {% assign has_trips = location.trips.value.size > 0 %}
+
+        {% if has_courses or has_trips and location.featured_destination == true %}
+          <a href="/pages/locations/{{ location.name | handleize }}" class="golf-course-link">{{ location.name }}</a>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
