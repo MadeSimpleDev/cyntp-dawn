@@ -27,7 +27,7 @@
     <div class="blog-filters">
       <span>Filter by:</span>
       <a href="{{ blog.url }}" class="{% if current_tags == blank %}active{% endif %}">All</a>
-      <a href="{{ blog.url }}/tagged/course" class="{% if current_tags contains 'courses' %}active{% endif %}"
+      <a href="{{ blog.url }}/tagged/courses" class="{% if current_tags contains 'courses' %}active{% endif %}"
         >Courses</a
       >
       <a href="{{ blog.url }}/tagged/gear" class="{% if current_tags contains 'gear' %}active{% endif %}">Gear</a>
