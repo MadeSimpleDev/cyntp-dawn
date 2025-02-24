@@ -80,7 +80,11 @@
                 {% if section.settings.image_ratio == 'adapt' or section.settings.image_ratio == 'circle' %}
                   {% assign spaced_image = true %}
                 {% endif %}
-                <div class="multicolumn-card__image-wrapper multicolumn-card__image-wrapper--{{ section.settings.image_width }}-width{% if section.settings.image_width != 'full' or spaced_image %} multicolumn-card-spacing{% endif %}">
+                <a
+                  href="{{ block.settings.link }}"
+                  class="multicolumn-card__image-wrapper clickable-image multicolumn-card__image-wrapper--{{ section.settings.image_width }}-width{% if section.settings.image_width != 'full' or spaced_image %} multicolumn-card-spacing{% endif %}"
+                >
+                  aria-label="{{ block.settings.title }}"
                   <div class="floating-header">
                     <h2>{{ block.settings.floating_header }}</h2>
                   </div>
@@ -119,7 +123,7 @@
                         class: 'multicolumn-card__image'
                     }}
                   </div>
-                </div>
+                </a>
               {%- endif -%}
               <div class="multicolumn-card__info">
                 {%- if block.settings.title != blank -%}
@@ -218,6 +222,30 @@
     font-weight: bold; /* Make it bold */
     font-style: oblique; /* Make it oblique */
     line-height: 1.2;
+  }
+
+  /* Make entire image wrapper clickable */
+  .clickable-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .clickable-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  /* Hover Effect */
+  .clickable-image:hover img {
+    transform: scale(1.05); /* Optional hover effect */
   }
 {% endstyle %}
 {% schema %}
