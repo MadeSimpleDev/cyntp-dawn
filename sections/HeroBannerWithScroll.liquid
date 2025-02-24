@@ -172,24 +172,25 @@
   }
 
   /* 🌟 Hero Title - Responsive Font Size */
+  /* 🌟 Hero Title - Responsive Font Size */
   .hero-overlay h1 {
-    font-size: clamp(24px, 5vw, 50px); /* Minimum 24px, scales up to 50px, based on viewport width */
-    line-height: 1.2; /* Improved readability */
-    white-space: nowrap; /* Prevents breaking until overflow is needed */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Adds "..." if text overflows */
-    max-width: 90%; /* Limits width within container */
-    margin: 0 auto; /* Centers text horizontally */
+    font-size: clamp(28px, 4vw, 64px); /* Dynamic scaling: Smaller start, larger max */
+    line-height: 1.2;
+    white-space: normal; /* Allows wrapping */
+    overflow-wrap: break-word; /* Allows long words to break onto a new line */
+    word-break: normal; /* Avoids breaking words mid-way */
+    max-width: 90%;
+    margin: 0 auto 10px auto; /* Added margin to avoid overlapping nav */
     display: block;
+    text-align: center;
   }
 
   @media (max-width: 768px) {
     .hero-overlay h1 {
-      font-size: clamp(18px, 4vw, 36px); /* Smaller on mobile */
-      white-space: normal; /* Allows wrapping */
-      overflow-wrap: break-word; /* Wraps long words */
-      word-break: break-word; /* Breaks words if too long */
-      max-width: 90%; /* Keeps text within container */
+      font-size: clamp(20px, 5vw, 36px); /* Smaller on mobile to prevent overflow */
+      line-height: 1.1; /* Slightly tighter spacing to fit better */
+      margin-top: 20px; /* Pushes title down to avoid overlapping nav */
+      word-break: break-word; /* Ensure long words break properly */
     }
   }
 
