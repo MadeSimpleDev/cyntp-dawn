@@ -61,8 +61,10 @@
           {% assign has_trips = true %}
         {% endif %}
 
-        {% if (has_courses or has_trips) and location.featured_destination == true %}
-          <a href="/pages/locations/{{ location.name | handleize }}" class="golf-course-link">{{ location.name }}</a>
+        {% if has_courses or has_trips %}
+          {% if location.featured_destination == true %}
+            <a href="/pages/locations/{{ location.name | handleize }}" class="golf-course-link">{{ location.name }}</a>
+          {% endif %}
         {% endif %}
       {% endfor %}
     </div>
