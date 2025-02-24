@@ -12,8 +12,8 @@
       {% endif %}
     {% endfor %}
   {% endfor %}
-  <h1>author: {{ author.name }}</h1>
-  <h2>Blog author: {{ article.author }}</h2>
+  <h1>author: {{ author.name | upcase }}</h1>
+  <h2>Blog author: {{ article.author | upcase }}</h2>
   {% if author.name == articl.author %}
     THEY THEY SAME
   {% endif %}
