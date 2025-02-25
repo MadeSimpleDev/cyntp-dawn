@@ -8,6 +8,185 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "hero_banner_with_scroll_eYtTbH": {
+      "type": "HeroBannerWithScroll",
+      "settings": {
+        "enable_scroll_indicator": true,
+        "enable_fade_overlay": false,
+        "logo_width": 200,
+        "heading": "Golfing in {{ metaobject.name.value }}",
+        "subheading": "",
+        "button_link": "",
+        "button_text": "",
+        "section_color_scheme": "scheme-1",
+        "enable_full_height": false
+      }
+    },
+    "image_with_text_TnXaNJ": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_WkkiMi": {
+          "type": "heading",
+          "settings": {
+            "heading": "Image with text",
+            "heading_size": "h1"
+          }
+        },
+        "text_mLUUjm": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_fw8gXA": {
+          "type": "button",
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_WkkiMi",
+        "text_mLUUjm",
+        "button_fw8gXA"
+      ],
+      "settings": {
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "multicolumn_with_floating_YgDNax": {
+      "type": "multicolumn-with-floating",
+      "blocks": {
+        "column_4zUJnr": {
+          "type": "column",
+          "repeater": "{{ metaobject.courses.value }}",
+          "settings": {
+            "image": "{{ block.repeater.hero_image.value }}",
+            "floating_header": "{{ block.repeater.name.value }}",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": "{{ block.repeater.system.url }}"
+          }
+        },
+        "column_a7DHxB": {
+          "type": "column",
+          "settings": {
+            "floating_header": "Floating Title",
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_4zUJnr",
+        "column_a7DHxB"
+      ],
+      "settings": {
+        "title": "Courses in {{ metaobject.name.value }}",
+        "heading_size": "h1",
+        "image_width": "third",
+        "image_ratio": "portrait",
+        "columns_desktop": 5,
+        "column_alignment": "left",
+        "background_style": "none",
+        "button_label": "Button label",
+        "button_link": "",
+        "color_scheme": "scheme-2",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "multicolumn_with_floating_QyjxMC": {
+      "type": "multicolumn-with-floating",
+      "blocks": {
+        "column_ExghYk": {
+          "type": "column",
+          "repeater": "{{ metaobject.trips.value }}",
+          "settings": {
+            "image": "{{ block.repeater.hero_image.value }}",
+            "floating_header": "{{ block.repeater.name.value }}",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": "{{ block.repeater.system.url }}"
+          }
+        },
+        "column_kD6c8q": {
+          "type": "column",
+          "settings": {
+            "floating_header": "Floating Title",
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_ExghYk",
+        "column_kD6c8q"
+      ],
+      "settings": {
+        "title": "Trips in {{ metaobject.name.value }}",
+        "heading_size": "h1",
+        "image_width": "third",
+        "image_ratio": "portrait",
+        "columns_desktop": 3,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "Button label",
+        "button_link": "",
+        "color_scheme": "",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "faq_section_8qEd4L": {
+      "type": "FAQSection",
+      "blocks": {
+        "faq_NadqTb": {
+          "type": "faq",
+          "settings": {
+            "question": "Question about California",
+            "answer": "Yes."
+          }
+        }
+      },
+      "block_order": [
+        "faq_NadqTb"
+      ],
+      "settings": {
+        "section_color_scheme": ""
+      }
+    }
+  },
+  "order": [
+    "hero_banner_with_scroll_eYtTbH",
+    "image_with_text_TnXaNJ",
+    "multicolumn_with_floating_YgDNax",
+    "multicolumn_with_floating_QyjxMC",
+    "faq_section_8qEd4L"
+  ]
 }
