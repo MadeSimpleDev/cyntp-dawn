@@ -170,10 +170,13 @@
         "text_7rBfYb",
         "button_9UpbDq"
       ],
+      "custom_css": [
+        ".button {color: white; font-style: italic; font-size: 30px;}"
+      ],
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "",
+        "color_scheme": "scheme-2",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
