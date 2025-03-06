@@ -75,9 +75,8 @@
         {%- if section.settings.blog != blank and section.settings.blog.articles_count > 0 -%}
           {%- for article in section.settings.blog.articles -%}
             {%- if article.metafields.custom.course != blank -%}
-              <h1>Course name:{{ article.metafields.custom.course }}</h1>
-              <h1>Handle name:{{ article.metafields.custom.course.name | handleize }}</h1>
-              {%- assign article_course_handle = article.metafields.custom.course.name | handleize -%}
+              {%- assign article_course = article.metafields.custom.course.value -%}
+              {%- assign article_course_handle = article_course.name | handleize -%}
               {%- if article_course_handle == course_handle -%}
                 <li id="Slide-{{ section.id }}-{{ forloop.index }}" class="blog__post grid__item article slider__slide">
                   {% render 'article-card',
