@@ -44,6 +44,7 @@
     },
     "object_index_BzjYXD": {
       "type": "ObjectIndex",
+      "disabled": true,
       "settings": {
         "title": "",
         "metaobject_type": "course"
