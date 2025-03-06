@@ -73,19 +73,22 @@
           Add logic to filter Articles by metafield
         {% endcomment %}
         {%- if section.settings.blog != blank and section.settings.blog.articles_count > 0 -%}
-          {%- for article in section.settings.blog.articles limit: section.settings.post_limit -%}
-            {%- if article.metafields.custom.course == course_handle -%}
-              <li id="Slide-{{ section.id }}-{{ forloop.index }}" class="blog__post grid__item article slider__slide">
-                {% render 'article-card',
-                  blog: section.settings.blog,
-                  article: article,
-                  media_aspect_ratio: 1.66,
-                  show_image: section.settings.show_image,
-                  show_date: section.settings.show_date,
-                  show_author: section.settings.show_author,
-                  show_excerpt: true
-                %}
-              </li>
+          {%- for article in section.settings.blog.articles -%}
+            {%- if article.metafields.custom.course != blank -%}
+              {%- assign article_course_handle = article.metafields.custom.course.name | handleize -%}
+              {%- if article_course_handle == course_handle -%}
+                <li id="Slide-{{ section.id }}-{{ forloop.index }}" class="blog__post grid__item article slider__slide">
+                  {% render 'article-card',
+                    blog: section.settings.blog,
+                    article: article,
+                    media_aspect_ratio: 1.66,
+                    show_image: section.settings.show_image,
+                    show_date: section.settings.show_date,
+                    show_author: section.settings.show_author,
+                    show_excerpt: true
+                  %}
+                </li>
+              {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
         {%- else -%}
