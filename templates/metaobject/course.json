@@ -48,11 +48,11 @@
     "cyntp_featured_blog_4XzK7y": {
       "type": "CYNTP-featured-blog",
       "settings": {
-        "heading": "Our experience with {{ metaobject.name.value }}",
+        "heading": "Our Experience at{{ metaobject.name.value }}",
         "heading_size": "h1",
         "blog": "feed",
-        "post_limit": 4,
-        "columns_desktop": 1,
+        "post_limit": 3,
+        "columns_desktop": 3,
         "color_scheme": "",
         "show_image": true,
         "show_date": true,
