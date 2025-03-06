@@ -45,41 +45,10 @@
         "color_scheme": "scheme-1"
       }
     },
-    "rich_text_rh7iGk": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_HqKwkX": {
-          "type": "heading",
-          "settings": {
-            "heading": "<em><strong>Course Overview</strong></em>",
-            "heading_size": "h1"
-          }
-        },
-        "text_BXTQHC": {
-          "type": "text",
-          "settings": {
-            "text": "{{ metaobject.description | metafield_tag }}"
-          }
-        }
-      },
-      "block_order": [
-        "heading_HqKwkX",
-        "text_BXTQHC"
-      ],
-      "disabled": true,
-      "settings": {
-        "desktop_content_position": "left",
-        "content_alignment": "left",
-        "color_scheme": "scheme-1",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
-    },
     "cyntp_featured_blog_4XzK7y": {
       "type": "CYNTP-featured-blog",
       "settings": {
-        "heading": "Blog posts",
+        "heading": "Our experience with {{ metaobject.name.value }}",
         "heading_size": "h1",
         "blog": "feed",
         "post_limit": 3,
@@ -228,7 +197,6 @@
   "order": [
     "hero_banner_with_scroll_KNyhem",
     "animated_scoreboard_RdfQQk",
-    "rich_text_rh7iGk",
     "cyntp_featured_blog_4XzK7y",
     "image_with_text_PYNecE",
     "slideshow_Hj3CAG",
