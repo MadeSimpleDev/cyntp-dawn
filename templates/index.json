@@ -63,18 +63,30 @@
             "link_label": "",
             "link": ""
           }
+        },
+        "column_L3Et6P": {
+          "type": "column",
+          "settings": {
+            "floating_header": "Floating Title",
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "link_label": "",
+            "link": ""
+          }
         }
       },
       "block_order": [
         "column_azicE4",
         "column_BJERJE",
-        "column_weNa8m"
+        "column_weNa8m",
+        "column_L3Et6P"
       ],
       "custom_css": [
         ".floating-header h2 {color: #f7f7f7;}",
         "img {border-radius: 15px;}"
       ],
       "settings": {
+        "enable_desktop_slider": true,
         "title": "",
         "heading_size": "h2",
         "image_width": "full",
