@@ -583,3 +583,21 @@
     background: rgba(0, 0, 0, 0.8);
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.getElementById('Slider-{{ section.id }}');
+    const prevButton = document.querySelector('.slider-button--prev');
+    const nextButton = document.querySelector('.slider-button--next');
+
+    let scrollAmount = 300; // Adjust for how much it moves per click
+
+    prevButton.addEventListener('click', () => {
+      slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    nextButton.addEventListener('click', () => {
+      slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  });
+</script>
