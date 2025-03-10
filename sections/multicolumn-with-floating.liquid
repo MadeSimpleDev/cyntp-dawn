@@ -47,6 +47,10 @@
       </div>
     {%- endunless -%}
     <slider-component class="slider-mobile-gutter{% if section.settings.full_width %} slider-component-full-width{% endif %}{% if show_mobile_slider == false %} page-width{% endif %}{% if show_desktop_slider == false and section.settings.full_width == false %} page-width-desktop{% endif %}{% if show_desktop_slider %} slider-component-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <button class="slider-button slider-button--prev" aria-label="Previous slide">
+        <span class="svg-wrapper">←</span>
+        <!-- Replace with an icon if needed -->
+      </button>
       <ul
         class="multicolumn-list contains-content-container grid grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop{% if show_mobile_slider %} slider slider--tablet grid--peek{% endif %}"
         id="Slider-{{ section.id }}"
@@ -156,38 +160,11 @@
           </li>
         {%- endfor -%}
       </ul>
-      {%- if show_mobile_slider or show_desktop_slider -%}
-        <div class="slider-buttons">
-          <button
-            type="button"
-            class="slider-button slider-button--prev"
-            name="previous"
-            aria-label="{{ 'general.slider.previous_slide' | t }}"
-            aria-controls="Slider-{{ section.id }}"
-          >
-            <span class="svg-wrapper">
-              {{- 'icon-caret.svg' | inline_asset_content -}}
-            </span>
-          </button>
-          <div class="slider-counter caption">
-            <span class="slider-counter--current">1</span>
-            <span aria-hidden="true"> / </span>
-            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
-            <span class="slider-counter--total">{{ products_to_display }}</span>
-          </div>
-          <button
-            type="button"
-            class="slider-button slider-button--next"
-            name="next"
-            aria-label="{{ 'general.slider.next_slide' | t }}"
-            aria-controls="Slider-{{ section.id }}"
-          >
-            <span class="svg-wrapper">
-              {{- 'icon-caret.svg' | inline_asset_content -}}
-            </span>
-          </button>
-        </div>
-      {%- endif -%}
+
+      <button class="slider-button slider-button--next" aria-label="Next slide">
+        <span class="svg-wrapper">→</span>
+        <!-- Replace with an icon if needed -->
+      </button>
     </slider-component>
     <div class="center{% if show_mobile_slider %} small-hide medium-hide{% endif %}">
       {%- if section.settings.button_label != blank -%}
@@ -523,6 +500,66 @@
   .multicolumn-list {
     display: flex;
     flex-wrap: nowrap; /* Prevent wrapping */
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    white-space: nowrap;
+    cursor: grab;
+  }
+
+  .multicolumn-list__item {
+    flex: 0 0 auto;
+    width: 300px; /* Adjust as needed */
+    scroll-snap-align: start;
+  }
+
+  @media screen and (min-width: 750px) {
+    .multicolumn-list {
+      overflow-x: auto; /* Ensure scrolling is available */
+      cursor: grab; /* Indicate drag ability */
+    }
+  }
+
+  /* Hide scrollbar */
+  .multicolumn-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .multicolumn-list {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .slider-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 20px;
+    border-radius: 50%;
+  }
+
+  .slider-button--prev {
+    left: 10px;
+  }
+
+  .slider-button--next {
+    right: 10px;
+  }
+
+  .slider-button:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  /* Ensure items do not wrap */
+  .multicolumn-list {
+    display: flex;
+    flex-wrap: nowrap;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
