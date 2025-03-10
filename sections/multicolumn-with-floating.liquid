@@ -533,47 +533,24 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .slider-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    z-index: 10;
-    font-size: 20px;
-    border-radius: 50%;
-  }
-
-  .slider-button--prev {
-    left: 10px;
-  }
-
-  .slider-button--next {
-    right: 10px;
-  }
-
-  .slider-button:hover {
-    background: rgba(0, 0, 0, 0.8);
-  }
 </style>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const slider = document.getElementById('Slider-{{ section.id }}');
-    const prevButton = document.querySelector('.slider-button--prev');
-    const nextButton = document.querySelector('.slider-button--next');
+{% comment %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const slider = document.getElementById('Slider-{{ section.id }}');
+      const prevButton = document.querySelector('.slider-button--prev');
+      const nextButton = document.querySelector('.slider-button--next');
 
-    let scrollAmount = 300; // Adjust for how much it moves per click
+      let scrollAmount = 300; // Adjust for how much it moves per click
 
-    prevButton.addEventListener('click', () => {
-      slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      prevButton.addEventListener('click', () => {
+        slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      });
+
+      nextButton.addEventListener('click', () => {
+        slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      });
     });
-
-    nextButton.addEventListener('click', () => {
-      slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    });
-  });
-</script>
+  </script>
+{% endcomment %}
