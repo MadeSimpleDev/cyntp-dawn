@@ -35,7 +35,7 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/Palm_Springs_trip.png",
-            "floating_header": "Palm <br>Springs",
+            "floating_header": "Palm Springs",
             "title": "Popular Trip",
             "text": "",
             "link_label": "",
@@ -57,7 +57,7 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/Top_of_the_feed.png",
-            "floating_header": "The Sentry World Experience",
+            "floating_header": "The Sentry <br>World Experience",
             "title": "What's New?",
             "text": "",
             "link_label": "",
