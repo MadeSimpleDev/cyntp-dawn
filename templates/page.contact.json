@@ -17,38 +17,20 @@
         "padding_bottom": 36
       }
     },
-    "hero_banner_with_scroll_FCPkWk": {
-      "type": "HeroBannerWithScroll",
-      "custom_css": [
-        "p,h1 {left: 5%; width: 90%; /* Ensures text stays centered */ text-align: left; font-style: oblique; font-weight: bold; color: white; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);}",
-        "h1 {font-size: 4em;}"
-      ],
-      "settings": {
-        "hero_image": "shopify://shop_images/Contact_page_header.png",
-        "enable_scroll_indicator": true,
-        "enable_fade_overlay": false,
-        "logo_width": 200,
-        "heading": "Contact",
-        "subheading": "Courses You Need To Play",
-        "button_link": "",
-        "button_text": "Discover More",
-        "section_color_scheme": ""
-      }
-    },
     "rich_text_zeKMdr": {
       "type": "rich-text",
       "blocks": {
         "heading_hKJiqC": {
           "type": "heading",
           "settings": {
-            "heading": "<em><strong>Who are we?</strong></em>",
+            "heading": "<em><strong>Who is Courses You Need to Play?</strong></em>",
             "heading_size": "h2"
           }
         },
         "text_h6bmVy": {
           "type": "text",
           "settings": {
-            "text": "<p>The honest truth is that we are three normal dudes and lifelong friends (Beau, Noah, and Cameron) that are obsessed with golf. We got together in 2022 and thought it would be fun to start a social media page dedicated to highlighting golf courses around the world that didn’t get enough recognition. Fast forward a few years and we are traveling the country to give our first-hand experience of what it is like to play these awesome courses. <br/><br/>We want our website to be a place where people can come and do research before planning their next golf trip, add their reviews of the courses that they have played, and build a community of golfers that enjoy the game as much as we do. </p>"
+            "text": "<p>The honest truth is that we are three normal dudes and lifelong friends (Beau, Noah, and Cameron) that are obsessed with golf. We got together in 2022 and thought it would be fun to start a social media page dedicated to highlighting golf courses around the world that didn’t get enough recognition. Fast forward a few years and we are traveling the country to give our first-hand experience of what it is like to play these awesome courses. </p>"
           }
         }
       },
@@ -68,9 +50,9 @@
     "image_banner_rhaKVn": {
       "type": "image-banner",
       "settings": {
-        "image": "shopify://shop_images/IMG_5261.jpg",
+        "image": "shopify://shop_images/Work_with_us_697de70a-9ecc-4037-921f-d541fab5fccc.png",
         "image_overlay_opacity": 0,
-        "image_height": "small",
+        "image_height": "adapt",
         "desktop_content_position": "bottom-center",
         "show_text_box": false,
         "desktop_content_alignment": "center",
@@ -79,30 +61,6 @@
         "mobile_content_alignment": "center",
         "stack_images_on_mobile": true,
         "show_text_below": true
-      }
-    },
-    "rich_text_T3pgHp": {
-      "type": "rich-text",
-      "blocks": {
-        "caption_PJdniz": {
-          "type": "caption",
-          "settings": {
-            "caption": "Beau, Cameron, Noah - Pelican Hill 2023",
-            "text_style": "subtitle",
-            "text_size": "small"
-          }
-        }
-      },
-      "block_order": [
-        "caption_PJdniz"
-      ],
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "",
-        "full_width": true,
-        "padding_top": 0,
-        "padding_bottom": 24
       }
     },
     "rich_text_qcK4Fi": {
@@ -226,10 +184,8 @@
   },
   "order": [
     "main",
-    "hero_banner_with_scroll_FCPkWk",
     "rich_text_zeKMdr",
     "image_banner_rhaKVn",
-    "rich_text_T3pgHp",
     "rich_text_qcK4Fi",
     "17387857452d9aa31f",
     "multicolumn_BH3Cr9"
