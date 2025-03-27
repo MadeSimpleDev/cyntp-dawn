@@ -22,7 +22,7 @@
         "button_link": "",
         "button_text": "",
         "section_color_scheme": "",
-        "enable_full_height": false
+        "enable_full_height": true
       }
     },
     "rich_text_TJ6xFF": {
@@ -98,9 +98,10 @@
         "column_L3Et6P": {
           "type": "column",
           "settings": {
+            "image": "shopify://shop_images/14-Celebrity.webp",
             "floating_header": "Floating Title",
             "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "text": "",
             "link_label": "",
             "link": ""
           }
