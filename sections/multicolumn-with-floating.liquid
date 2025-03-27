@@ -1,3 +1,9 @@
+{% comment %}
+  Multicolumn + Float
+  Allows a horizontal scroll (slider) for each column block, with optional floating headers.
+  Reuses a slider approach (similar to a "featured collection") so that it scrolls horizontally on desktop and mobile.
+{% endcomment %}
+
 {{ 'section-multicolumn.css' | asset_url | stylesheet_tag }}
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 
@@ -6,234 +12,214 @@
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
-
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
-{%- endstyle -%}
 
-{%- liquid
-  assign show_mobile_slider = false
-  if section.settings.swipe_on_mobile
-    assign show_mobile_slider = true
-  endif
-
-  assign show_desktop_slider = false
-  if section.settings.enable_desktop_slider
-    assign show_desktop_slider = true
-  endif
--%}
-
-<div class="multicolumn color-{{ section.settings.color_scheme }} gradient{% unless section.settings.background_style == 'none' and settings.text_boxes_border_thickness > 0 or settings.text_boxes_shadow_opacity > 0 %} background-{{ section.settings.background_style }}{% endunless %}{% if section.settings.title == blank %} no-heading{% endif %}">
-  <div
-    class="page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-    {% if settings.animations_reveal_on_scroll %}
-      data-cascade
-    {% endif %}
-  >
-    {%- unless section.settings.title == blank -%}
-      <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin multicolumn__title">
-        <h2 class="title inline-richtext {{ section.settings.heading_size }}">
-          {{ section.settings.title }}
-        </h2>
-        {%- if section.settings.button_label != blank and show_mobile_slider -%}
-          <a href="{{ section.settings.button_link }}" class="link underlined-link large-up-hide">
-            {{- section.settings.button_label | escape -}}
-          </a>
-        {%- endif -%}
-      </div>
-    {%- endunless -%}
-    <slider-component class="slider-mobile-gutter{% if section.settings.full_width %} slider-component-full-width{% endif %}{% if show_mobile_slider == false %} page-width{% endif %}{% if show_desktop_slider == false and section.settings.full_width == false %} page-width-desktop{% endif %}{% if show_desktop_slider %} slider-component-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-      <button class="slider-button slider-button--prev" aria-label="Previous slide">
-        <span class="svg-wrapper">←</span>
-        <!-- Replace with an icon if needed -->
-      </button>
-      <ul
-        class="multicolumn-list contains-content-container grid grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop{% if show_mobile_slider %} slider slider--tablet grid--peek{% endif %}"
-        id="Slider-{{ section.id }}"
-        role="list"
-      >
-        {%- liquid
-          assign highest_ratio = 0
-          for block in section.blocks
-            if block.settings.image.aspect_ratio > highest_ratio
-              assign highest_ratio = block.settings.image.aspect_ratio
-            endif
-          endfor
-        -%}
-        {%- for block in section.blocks -%}
-          {%- assign empty_column = '' -%}
-          {%- if block.settings.image == blank
-            and block.settings.title == blank
-            and block.settings.text == blank
-            and block.settings.link_label == blank
-          -%}
-            {%- assign empty_column = ' multicolumn-list__item--empty' -%}
-          {%- endif -%}
-
-          <li
-            id="Slide-{{ section.id }}-{{ forloop.index }}"
-            class="multicolumn-list__item grid__item{% if section.settings.swipe_on_mobile %} slider__slide{% endif %}{% if section.settings.column_alignment == 'center' %} center{% endif %}{{ empty_column }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-            {{ block.shopify_attributes }}
-            {% if settings.animations_reveal_on_scroll %}
-              data-cascade
-              style="--animation-order: {{ forloop.index }};"
-            {% endif %}
-          >
-            <div class="multicolumn-card content-container">
-              {%- if block.settings.image != blank -%}
-                {% if section.settings.image_ratio == 'adapt' or section.settings.image_ratio == 'circle' %}
-                  {% assign spaced_image = true %}
-                {% endif %}
-                <a
-                  href="{{ block.settings.link }}"
-                  class="multicolumn-card__image-wrapper clickable-image multicolumn-card__image-wrapper--{{ section.settings.image_width }}-width{% if section.settings.image_width != 'full' or spaced_image %} multicolumn-card-spacing{% endif %}"
-                  aria-label="{{ block.settings.title }}"
-                >
-                  <div class="floating-header">
-                    <h2>{{ block.settings.floating_header }}</h2>
-                  </div>
-                  <div
-                    class="media media--transparent media--{{ section.settings.image_ratio }}"
-                    {% if section.settings.image_ratio == 'adapt' %}
-                      style="padding-bottom: {{ 1 | divided_by: highest_ratio | times: 100 }}%;"
-                    {% endif %}
-                  >
-                    {%- liquid
-                      assign number_of_columns = section.settings.columns_desktop
-                      assign number_of_columns_mobile = section.settings.columns_mobile
-                      assign grid_space_desktop = number_of_columns | minus: 1 | times: settings.spacing_grid_horizontal | plus: 100 | append: 'px'
-                      assign grid_space_tablet = number_of_columns_mobile | minus: 1 | times: settings.spacing_grid_horizontal | plus: 100 | append: 'px'
-                      assign grid_space_mobile = number_of_columns_mobile | minus: 1 | times: settings.spacing_grid_horizontal | divided_by: 2 | plus: 30 | append: 'px'
-                      if section.settings.image_width == 'half'
-                        assign image_width = 0.5
-                      elsif section.settings.image_width == 'third'
-                        assign image_width = 0.33
-                      else
-                        assign image_width = 1
-                      endif
-                    -%}
-                    {% capture sizes %}
-                      (min-width: {{ settings.page_width }}px) calc(({{ settings.page_width }}px - {{ grid_space_desktop }}) * {{ image_width }} /  {{ number_of_columns }}),
-                      (min-width: 990px) calc((100vw - {{ grid_space_desktop }}) * {{ image_width }} / {{ number_of_columns }}),
-                      (min-width: 750px) calc((100vw - {{ grid_space_tablet }}) * {{ image_width }} / {{ number_of_columns_mobile }}),
-                      calc((100vw - {{ grid_space_mobile }}) * {{ image_width }} / {{ number_of_columns_mobile }})
-                    {% endcapture %}
-                    {{
-                      block.settings.image
-                      | image_url: width: 3200
-                      | image_tag:
-                        widths: '50, 75, 100, 150, 200, 300, 400, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000, 3200',
-                        sizes: sizes,
-                        class: 'multicolumn-card__image'
-                    }}
-                  </div>
-                </a>
-              {%- endif -%}
-              <div class="multicolumn-card__info">
-                {%- if block.settings.title != blank -%}
-                  <h3 class="inline-richtext">{{ block.settings.title }}</h3>
-                {%- endif -%}
-                {%- if block.settings.text != blank -%}
-                  <div class="rte">{{ block.settings.text }}</div>
-                {%- endif -%}
-                {%- if block.settings.link_label != blank -%}
-                  <a
-                    class="link animate-arrow"
-                    {% if block.settings.link == blank %}
-                      role="link" aria-disabled="true"
-                    {% else %}
-                      href="{{ block.settings.link }}"
-                    {% endif %}
-                  >
-                    {{- block.settings.link_label | escape -}}
-                    <span class="svg-wrapper"
-                      ><span class="icon-wrap">&nbsp;{{ 'icon-arrow.svg' | inline_asset_content }}</span></span
-                    >
-                  </a>
-                {%- endif -%}
-              </div>
-            </div>
-          </li>
-        {%- endfor -%}
-      </ul>
-
-      <button class="slider-button slider-button--next" aria-label="Next slide">
-        <span class="svg-wrapper">→</span>
-        <!-- Replace with an icon if needed -->
-      </button>
-    </slider-component>
-    <div class="center{% if show_mobile_slider %} small-hide medium-hide{% endif %}">
-      {%- if section.settings.button_label != blank -%}
-        <a
-          class="button button--primary"
-          {% if section.settings.button_link == blank %}
-            role="link" aria-disabled="true"
-          {% else %}
-            href="{{ section.settings.button_link }}"
-          {% endif %}
-        >
-          {{ section.settings.button_label | escape }}
-        </a>
-      {%- endif -%}
-    </div>
-  </div>
-</div>
-{% style %}
-  /* 🌟 Floating Header Positioned at Bottom, Left-Aligned */
-  .floating-header {
-    position: absolute;
-    bottom: 10px; /* Moves text to the bottom of the image */
-    left: 10px; /* Aligns text to the left */
-    color: white; /* Ensure readability */
-    text-align: left;
-    z-index: 2;
-    width: 90%;
+  /* Container for entire section */
+  .multicolumn--with-float.color-{{ section.settings.color_scheme }} {
+    position: relative;
   }
 
-  /* 🌟 Ensure Image Wrapper is Positioned Relative */
-  .multicolumn-card__image-wrapper {
+  /* Heading */
+  .multicolumn-with-float__title {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  /* Slider container */
+  .multicolumn-with-float__slider {
+    position: relative;
+    overflow: hidden; /* hide native scrollbar */
+    max-width: var(--page-width);
+    margin: 0 auto;
+  }
+
+  /* Horizontal track holding slides */
+  .multicolumn-with-float__track {
+    display: flex;
+    gap: 16px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 1rem 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .multicolumn-with-float__track::-webkit-scrollbar {
+    display: none;
+  }
+  .multicolumn-with-float__track {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Each slide */
+  .multicolumn-with-float__slide {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    width: 280px; /* Adjust as needed */
+    background: var(--color-background);
     position: relative;
     overflow: hidden;
   }
 
-  /* 🌟 Style h2 Floating Header */
+  /* Floating header for images */
+  .floating-header {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+    text-align: left;
+    z-index: 2;
+    width: 90%;
+  }
   .floating-header h2 {
     margin: 0;
     padding: 0;
-    font-size: 1.5em; /* Twice as big */
-    font-weight: bold; /* Make it bold */
-    font-style: oblique; /* Make it oblique */
+    font-size: 1.3em;
+    font-weight: bold;
+    font-style: oblique;
     line-height: 1.2;
   }
 
-  /* Make entire image wrapper clickable */
-  .clickable-image {
-    display: block;
+  /* Image styling */
+  .multicolumn-with-float__image {
     width: 100%;
-    height: 100%;
-    position: relative;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-  }
-
-  .clickable-image img {
-    display: block;
-    width: 100%;
-    height: auto;
+    height: 200px;
     object-fit: cover;
-    transition: transform 0.3s ease-in-out;
+    border-bottom: 1px solid var(--color-border);
   }
 
-  /* Hover Effect */
-  .clickable-image:hover img {
-    transform: scale(1.05); /* Optional hover effect */
+  /* Slide content */
+  .multicolumn-with-float__content {
+    padding: 1rem;
   }
-{% endstyle %}
+
+  /* Arrows */
+  .multicolumn-with-float__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 1.2rem;
+  }
+  .multicolumn-with-float__arrow--prev {
+    left: 0.5rem;
+  }
+  .multicolumn-with-float__arrow--next {
+    right: 0.5rem;
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign show_mobile_slider = section.settings.swipe_on_mobile
+  assign show_desktop_slider = section.settings.enable_desktop_slider
+-%}
+
+<div
+  class="multicolumn--with-float color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+>
+  {% if section.settings.title != blank %}
+    <h2 class="multicolumn-with-float__title {{ section.settings.heading_size }}">
+      {{ section.settings.title }}
+    </h2>
+  {% endif %}
+
+  <div class="multicolumn-with-float__slider" id="MultiFloatSlider-{{ section.id }}">
+    <!-- Arrow Prev -->
+    <button
+      class="multicolumn-with-float__arrow multicolumn-with-float__arrow--prev"
+      type="button"
+      aria-label="Previous"
+    >
+      &laquo;
+    </button>
+
+    <!-- Track -->
+    <ul class="multicolumn-with-float__track" id="Track-{{ section.id }}">
+      {%- for block in section.blocks -%}
+        <li
+          class="multicolumn-with-float__slide"
+          {{ block.shopify_attributes }}
+        >
+          {% if block.settings.image != blank %}
+            <div style="position: relative; overflow: hidden;">
+              <img
+                src="{{ block.settings.image | image_url: width: 600 }}"
+                alt=""
+                class="multicolumn-with-float__image"
+              >
+              {% if block.settings.floating_header != blank %}
+                <div class="floating-header">
+                  <h2>{{ block.settings.floating_header }}</h2>
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+          <div class="multicolumn-with-float__content">
+            {% if block.settings.title != blank %}
+              <h3>{{ block.settings.title }}</h3>
+            {% endif %}
+            {% if block.settings.text != blank %}
+              <div class="rte">{{ block.settings.text }}</div>
+            {% endif %}
+            {% if block.settings.link_label != blank %}
+              <a href="{{ block.settings.link }}" class="link animate-arrow">
+                {{ block.settings.link_label }}
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    <!-- Arrow Next -->
+    <button
+      class="multicolumn-with-float__arrow multicolumn-with-float__arrow--next"
+      type="button"
+      aria-label="Next"
+    >
+      &raquo;
+    </button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var sectionId = '{{ section.id }}';
+    var slider = document.getElementById('MultiFloatSlider-' + sectionId);
+    if (!slider) return;
+
+    var track = document.getElementById('Track-' + sectionId);
+    var btnPrev = slider.querySelector('.multicolumn-with-float__arrow--prev');
+    var btnNext = slider.querySelector('.multicolumn-with-float__arrow--next');
+
+    var scrollAmount = 300; // distance to scroll per click
+
+    btnPrev.addEventListener('click', function () {
+      track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    btnNext.addEventListener('click', function () {
+      track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  });
+</script>
+
 {% schema %}
 {
   "name": "Multicolumn+Float",
@@ -247,13 +233,19 @@
       "type": "checkbox",
       "id": "enable_desktop_slider",
       "default": false,
-      "label": "Enable swipe on desktop"
+      "label": "Enable horizontal scroll on desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "swipe_on_mobile",
+      "default": false,
+      "label": "Enable swipe on mobile"
     },
     {
       "type": "inline_richtext",
       "id": "title",
-      "default": "t:sections.multicolumn.settings.title.default",
-      "label": "t:sections.multicolumn.settings.title.label"
+      "default": "Multicolumn Floats",
+      "label": "Section Title"
     },
     {
       "type": "select",
@@ -261,159 +253,29 @@
       "options": [
         {
           "value": "h2",
-          "label": "t:sections.all.heading_size.options__1.label"
+          "label": "Regular Heading (H2)"
         },
         {
           "value": "h1",
-          "label": "t:sections.all.heading_size.options__2.label"
+          "label": "Large Heading (H1)"
         },
         {
-          "value": "h0",
-          "label": "t:sections.all.heading_size.options__3.label"
-        },
-        {
-          "value": "hxl",
-          "label": "t:sections.all.heading_size.options__4.label"
-        },
-        {
-          "value": "hxxl",
-          "label": "t:sections.all.heading_size.options__5.label"
+          "value": "h3",
+          "label": "Medium Heading (H3)"
         }
       ],
-      "default": "h1",
-      "label": "t:sections.all.heading_size.label"
-    },
-    {
-      "type": "select",
-      "id": "image_width",
-      "options": [
-        {
-          "value": "third",
-          "label": "t:sections.multicolumn.settings.image_width.options__1.label"
-        },
-        {
-          "value": "half",
-          "label": "t:sections.multicolumn.settings.image_width.options__2.label"
-        },
-        {
-          "value": "full",
-          "label": "t:sections.multicolumn.settings.image_width.options__3.label"
-        }
-      ],
-      "default": "full",
-      "label": "t:sections.multicolumn.settings.image_width.label"
-    },
-    {
-      "type": "select",
-      "id": "image_ratio",
-      "options": [
-        {
-          "value": "adapt",
-          "label": "t:sections.multicolumn.settings.image_ratio.options__1.label"
-        },
-        {
-          "value": "portrait",
-          "label": "t:sections.multicolumn.settings.image_ratio.options__2.label"
-        },
-        {
-          "value": "square",
-          "label": "t:sections.multicolumn.settings.image_ratio.options__3.label"
-        },
-        {
-          "value": "circle",
-          "label": "t:sections.multicolumn.settings.image_ratio.options__4.label"
-        }
-      ],
-      "default": "adapt",
-      "label": "t:sections.multicolumn.settings.image_ratio.label"
-    },
-    {
-      "type": "range",
-      "id": "columns_desktop",
-      "min": 1,
-      "max": 6,
-      "step": 1,
-      "default": 3,
-      "label": "t:sections.multicolumn.settings.columns_desktop.label"
-    },
-    {
-      "type": "select",
-      "id": "column_alignment",
-      "options": [
-        {
-          "value": "left",
-          "label": "t:sections.multicolumn.settings.column_alignment.options__1.label"
-        },
-        {
-          "value": "center",
-          "label": "t:sections.multicolumn.settings.column_alignment.options__2.label"
-        }
-      ],
-      "default": "left",
-      "label": "t:sections.multicolumn.settings.column_alignment.label"
-    },
-    {
-      "type": "select",
-      "id": "background_style",
-      "options": [
-        {
-          "value": "none",
-          "label": "t:sections.multicolumn.settings.background_style.options__1.label"
-        },
-        {
-          "value": "primary",
-          "label": "t:sections.multicolumn.settings.background_style.options__2.label"
-        }
-      ],
-      "default": "primary",
-      "label": "t:sections.multicolumn.settings.background_style.label"
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "default": "t:sections.multicolumn.settings.button_label.default",
-      "label": "t:sections.multicolumn.settings.button_label.label"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "t:sections.multicolumn.settings.button_link.label"
+      "default": "h2",
+      "label": "Heading Size"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
+      "label": "Color Scheme",
       "default": "scheme-1"
     },
     {
       "type": "header",
-      "content": "t:sections.multicolumn.settings.header_mobile.content"
-    },
-    {
-      "type": "select",
-      "id": "columns_mobile",
-      "options": [
-        {
-          "value": "1",
-          "label": "t:sections.multicolumn.settings.columns_mobile.options__1.label"
-        },
-        {
-          "value": "2",
-          "label": "t:sections.multicolumn.settings.columns_mobile.options__2.label"
-        }
-      ],
-      "default": "1",
-      "label": "t:sections.multicolumn.settings.columns_mobile.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "swipe_on_mobile",
-      "default": false,
-      "label": "t:sections.multicolumn.settings.swipe_on_mobile.label"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
+      "content": "Section Padding"
     },
     {
       "type": "range",
@@ -422,7 +284,7 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
+      "label": "Top Padding",
       "default": 36
     },
     {
@@ -432,58 +294,53 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
+      "label": "Bottom Padding",
       "default": 36
     }
   ],
   "blocks": [
     {
       "type": "column",
-      "name": "t:sections.multicolumn.blocks.column.name",
+      "name": "Column",
       "settings": [
         {
           "type": "image_picker",
           "id": "image",
-          "label": "t:sections.multicolumn.blocks.column.settings.image.label"
+          "label": "Image"
         },
         {
           "type": "text",
           "id": "floating_header",
           "label": "Floating Header",
-          "default": "Floating Title"
+          "default": ""
         },
         {
-          "type": "inline_richtext",
+          "type": "text",
           "id": "title",
-          "default": "t:sections.multicolumn.blocks.column.settings.title.default",
-          "label": "t:sections.multicolumn.blocks.column.settings.title.label"
+          "label": "Title"
         },
         {
           "type": "richtext",
           "id": "text",
-          "default": "t:sections.multicolumn.blocks.column.settings.text.default",
-          "label": "t:sections.multicolumn.blocks.column.settings.text.label"
+          "label": "Body Text"
         },
         {
           "type": "text",
           "id": "link_label",
-          "label": "t:sections.multicolumn.blocks.column.settings.link_label.label"
+          "label": "Link Label"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "t:sections.multicolumn.blocks.column.settings.link.label"
+          "label": "Link URL"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Multicolumn+float",
+      "name": "Multicolumn + Float Scroll",
       "blocks": [
-        {
-          "type": "column"
-        },
         {
           "type": "column"
         },
@@ -495,117 +352,3 @@
   ]
 }
 {% endschema %}
-
-<style>
-  .multicolumn-list {
-    display: flex;
-    flex-wrap: nowrap; /* Prevent wrapping */
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 16px;
-    white-space: nowrap;
-    cursor: grab;
-  }
-
-  .multicolumn-list__item {
-    flex: 0 0 auto;
-    width: 300px; /* Adjust as needed */
-    scroll-snap-align: start;
-  }
-
-  @media screen and (min-width: 750px) {
-    .multicolumn-list {
-      overflow-x: auto; /* Ensure scrolling is available */
-      cursor: grab; /* Indicate drag ability */
-    }
-  }
-
-  /* Hide scrollbar */
-  .multicolumn-list::-webkit-scrollbar {
-    display: none;
-  }
-
-  .multicolumn-list {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .slider-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    z-index: 10;
-    font-size: 20px;
-    border-radius: 50%;
-  }
-
-  .slider-button--prev {
-    left: 10px;
-  }
-
-  .slider-button--next {
-    right: 10px;
-  }
-
-  .slider-button:hover {
-    background: rgba(0, 0, 0, 0.8);
-  }
-
-  /* Ensure items do not wrap */
-  .multicolumn-list {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 16px;
-    white-space: nowrap;
-    cursor: grab;
-  }
-
-  .multicolumn-list__item {
-    flex: 0 0 auto;
-    width: 300px; /* Adjust as needed */
-    scroll-snap-align: start;
-  }
-
-  @media screen and (min-width: 750px) {
-    .multicolumn-list {
-      overflow-x: auto; /* Ensure scrolling is available */
-      cursor: grab; /* Indicate drag ability */
-    }
-  }
-
-  /* Hide scrollbar */
-  .multicolumn-list::-webkit-scrollbar {
-    display: none;
-  }
-
-  .multicolumn-list {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-</style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const slider = document.getElementById('Slider-{{ section.id }}');
-    const prevButton = document.querySelector('.slider-button--prev');
-    const nextButton = document.querySelector('.slider-button--next');
-
-    let scrollAmount = 300; // Adjust for how much it moves per click
-
-    prevButton.addEventListener('click', () => {
-      slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-    });
-
-    nextButton.addEventListener('click', () => {
-      slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    });
-  });
-</script>
