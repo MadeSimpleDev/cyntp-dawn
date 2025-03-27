@@ -11,21 +11,18 @@
   "sections": {
     "hero_banner_with_scroll_pLN6nm": {
       "type": "HeroBannerWithScroll",
-      "custom_css": [
-        "p {position: absolute; bottom: 5%; /* Adjust to sit above the scroll indicator */ left: 50%; transform: translateX(-50%); width: 90%; /* Ensures text stays centered */ text-align: center; font-style: oblique; font-weight: bold; font-size: 1.5em;}",
-        ".hero-overlay {height: 100%;}"
-      ],
+      "custom_css": [],
       "settings": {
         "hero_video": "shopify://files/videos/Website Home Page hero video_5de970c5-0e65-4ad3-bf71-26a752edcb51.mp4",
-        "enable_scroll_indicator": true,
-        "enable_fade_overlay": true,
+        "enable_scroll_indicator": false,
+        "enable_fade_overlay": false,
         "logo_width": 50,
         "heading": "",
-        "subheading": "Your next golf trip starts here",
+        "subheading": "",
         "button_link": "",
         "button_text": "",
         "section_color_scheme": "",
-        "enable_full_height": true
+        "enable_full_height": false
       }
     },
     "multicolumn_with_floating_zMM4PV": {
