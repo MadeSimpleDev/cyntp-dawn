@@ -25,6 +25,40 @@
         "enable_full_height": false
       }
     },
+    "rich_text_TJ6xFF": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_kTTAtT": {
+          "type": "heading",
+          "settings": {
+            "heading": "Beyond the Scorecard: Your Inside Look at Golf’s Best",
+            "heading_size": "h2"
+          }
+        },
+        "text_9pnYKx": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We take a different approach here at CYNTP. We explore new courses, value the experience over the score and create content that brings people together to celebrate the game.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_kTTAtT",
+        "text_9pnYKx"
+      ],
+      "custom_css": [
+        "h2 {font-weight: bold; font-style: oblique; text-transform: uppercase; font-size: 1.25em;}",
+        "p {font-style: oblique; font-size: 1em;}"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 16,
+        "padding_bottom": 16
+      }
+    },
     "multicolumn_with_floating_zMM4PV": {
       "type": "multicolumn-with-floating",
       "blocks": {
@@ -302,6 +336,7 @@
   },
   "order": [
     "hero_banner_with_scroll_pLN6nm",
+    "rich_text_TJ6xFF",
     "multicolumn_with_floating_zMM4PV",
     "image_banner_P98y7R",
     "rich_text_DbYDgp",
