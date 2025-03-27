@@ -1,25 +1,6 @@
 {% comment %}
   FeaturedPostsCarousel.liquid
-
-  A new section to display a scrolling carousel of blog articles (featured posts).
-  This example:
-  1. Looks up articles from a chosen blog handle.
-  2. Slices the result to the number of posts you'd like to display.
-  3. Renders them side-by-side with a scrolling slider on both desktop and mobile.
-
-  Settings:
-  - blog_handle: A required Blog handle from which to pull articles.
-  - post_limit: How many articles to display in the carousel.
-  - heading: Section heading text
-  - heading_size: Controls the heading size class (e.g. 'h1', 'h2', etc.)
-  - image_height: The ratio or size for article images if needed
-
-  Dependencies:
-  - Collides with the 'limit' filter not existing. We use the 'slice' filter instead.
-
-  Example usage:
-    In your theme, create a file named 'FeaturedPostsCarousel.liquid' in /sections
-    Then add it to the homepage in the theme editor.
+  This file has been updated to remove the invalid 'default' attribute from the blog setting.
 {% endcomment %}
 
 {% schema %}
@@ -29,8 +10,11 @@
     {
       "type": "blog",
       "id": "blog_handle",
-      "label": "Blog",
-      "default": "news"
+      "label": "Blog"
+      {% comment %}
+        The "default" attribute was removed because it's not allowed
+        for a "blog" type setting in the schema.
+      {% endcomment %}
     },
     {
       "type": "range",
@@ -96,14 +80,12 @@
     margin-bottom: 1rem;
   }
 
-  /* Carousel container */
   .featured-posts-slider {
     position: relative;
     overflow: hidden; /* hide scrollbar */
     margin: 0 auto;
   }
 
-  /* Slide list */
   .featured-posts-slider__track {
     display: flex;
     gap: 1rem;
@@ -115,7 +97,6 @@
     list-style: none;
   }
 
-  /* Hide scrollbar on Webkit */
   .featured-posts-slider__track::-webkit-scrollbar {
     display: none;
   }
@@ -125,17 +106,16 @@
   }
 
   .featured-posts-slider__slide {
-    flex: 0 0 auto; /* no shrink, no growth */
+    flex: 0 0 auto;
     scroll-snap-align: start;
     border: 1px solid var(--color-border);
     border-radius: 8px;
-    width: 300px; /* default card width on desktop */
+    width: 300px;
     background: var(--color-background);
     transition: transform 0.3s ease;
     position: relative;
   }
 
-  /* Basic arrow buttons */
   .featured-posts-carousel__arrow {
     position: absolute;
     top: 50%;
@@ -162,9 +142,6 @@
   class="featured-posts-carousel-wrapper color-{{ section.settings.color_scheme }} gradient"
   data-section-id="{{ section.id }}"
 >
-  {%- comment -%}
-    Heading
-  {%- endcomment -%}
   {% if section.settings.heading != blank %}
     <h2 class="featured-posts-carousel__heading {{ section.settings.heading_size }}">
       {{ section.settings.heading }}
@@ -175,8 +152,8 @@
   {% if the_blog == null %}
     <p style="text-align:center;">Please select a blog in this section's settings.</p>
   {% else %}
-    {%- assign article_count = section.settings.post_limit | default: 4 -%}
-    {%- assign articles_to_show = the_blog.articles | slice: 0, article_count -%}
+    {% assign article_count = section.settings.post_limit | default: 4 %}
+    {% assign articles_to_show = the_blog.articles | slice: 0, article_count %}
     {% if articles_to_show.size == 0 %}
       <p style="text-align:center;">
         No articles found in the <strong>{{ the_blog.title }}</strong> blog.
@@ -194,7 +171,6 @@
         <ul class="featured-posts-slider__track" id="Track-{{ section.id }}">
           {% for article in articles_to_show %}
             <li class="featured-posts-slider__slide">
-              {%- comment -%} Show image if it exists {%- endcomment -%}
               {% if article.image != blank %}
                 <div
                   class="article-image"
@@ -271,12 +247,11 @@
     var track = document.getElementById('Track-' + sectionId);
     var btnPrev = slider.querySelector('.featured-posts-carousel__arrow--prev');
     var btnNext = slider.querySelector('.featured-posts-carousel__arrow--next');
-    var scrollAmount = 300; // px to scroll on click
+    var scrollAmount = 300;
 
     btnPrev.addEventListener('click', function () {
       track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     });
-
     btnNext.addEventListener('click', function () {
       track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     });
