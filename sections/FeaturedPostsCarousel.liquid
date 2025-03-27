@@ -1,6 +1,6 @@
 {% comment %}
   FeaturedPostsCarousel.liquid
-  This file has been updated to remove the invalid 'default' attribute from the blog setting.
+  A horizontal scroll (carousel) of blog articles.
 {% endcomment %}
 
 {% schema %}
@@ -10,11 +10,7 @@
     {
       "type": "blog",
       "id": "blog_handle",
-      "label": "Blog"
-      {% comment %}
-        The "default" attribute was removed because it's not allowed
-        for a "blog" type setting in the schema.
-      {% endcomment %}
+      "label": "Select a blog"
     },
     {
       "type": "range",
@@ -53,6 +49,12 @@
         { "value": "large", "label": "Large" }
       ],
       "default": "medium"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
     }
   ],
   "blocks": [
@@ -114,8 +116,10 @@
     background: var(--color-background);
     transition: transform 0.3s ease;
     position: relative;
+    overflow: hidden;
   }
 
+  /* Arrows */
   .featured-posts-carousel__arrow {
     position: absolute;
     top: 50%;
@@ -173,44 +177,40 @@
             <li class="featured-posts-slider__slide">
               {% if article.image != blank %}
                 <div
-                  class="article-image"
                   style="
                     width: 100%;
-                    height: {% if section.settings.image_height == 'adapt' %}auto{% else %}
+                    {% if section.settings.image_height == 'adapt' %}
+                      height:auto;
+                    {% else %}
                       {% case section.settings.image_height %}
-                        {% when 'small' %}200px
-                        {% when 'medium' %}250px
-                        {% when 'large' %}350px
-                        {% else %}250px
+                        {% when 'small' %}height:200px;
+                        {% when 'medium' %}height:250px;
+                        {% when 'large' %}height:350px;
+                        {% else %}height:250px;
                       {% endcase %}
-                    {% endif %};
-                    overflow: hidden;
-                    border-bottom: 1px solid var(--color-border);
+                    {% endif %}
+                    overflow:hidden; border-bottom:1px solid var(--color-border);
                   "
                 >
                   <img
                     src="{{ article.image.src | image_url: width: 600 }}"
                     alt="{{ article.image.alt | escape }}"
-                    style="width: 100%; height: 100%; object-fit: cover;"
+                    style="width:100%;height:100%;object-fit:cover;"
                   >
                 </div>
               {% endif %}
-
-              <div style="padding: 1rem;">
+              <div style="padding:1rem;">
                 <h3 style="font-size:1.2em; margin:0 0 0.3rem 0;">
-                  <a
-                    href="{{ article.url }}"
-                    style="text-decoration:none; color:inherit;"
-                  >
+                  <a href="{{ article.url }}" style="text-decoration:none; color:inherit;">
                     {{ article.title | escape }}
                   </a>
                 </h3>
-                <p style="font-size:0.9em; margin-bottom:0.5rem; opacity:0.8;">
-                  {% if article.published_at %}
+                {% if article.published_at %}
+                  <p style="font-size:0.9em; margin-bottom:0.5rem; opacity:0.8;">
                     {{ article.published_at | date: '%b %d, %Y' }}
-                  {% endif %}
-                </p>
-                {% if article.excerpt != blank %}
+                  </p>
+                {% endif %}
+                {% if article.excerpt %}
                   <p style="font-size:0.9em; color:rgba(var(--color-foreground), 0.8);">
                     {{ article.excerpt | strip_html | truncatewords: 25 }}
                   </p>
