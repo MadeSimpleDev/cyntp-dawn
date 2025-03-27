@@ -118,7 +118,7 @@
       ],
       "settings": {
         "enable_desktop_slider": true,
-        "title": "",
+        "title": "Featured Posts",
         "heading_size": "h2",
         "image_width": "full",
         "image_ratio": "portrait",
@@ -213,6 +213,7 @@
         "text_7rBfYb",
         "button_9UpbDq"
       ],
+      "disabled": true,
       "custom_css": [
         ".button {color: white; font-style: italic; font-size: 30px;}"
       ],
@@ -227,6 +228,7 @@
     },
     "image_banner_YcJN66": {
       "type": "image-banner",
+      "disabled": true,
       "custom_css": [
         ".banner__content {border-color: black; border-width: 10px;}",
         ".button {color: black; font-style: italic; font-size: 30px;}"
@@ -271,6 +273,7 @@
         "paragraph_bKzwCA",
         "email_form_E8EcKA"
       ],
+      "disabled": true,
       "custom_css": [
         "h2 {font-style: oblique; font-weight: bold;}",
         "ul {font-style: oblique; font-weight: bold; list-style-type: \"- \";}"
@@ -296,6 +299,7 @@
       "block_order": [
         "heading_PtiBT8"
       ],
+      "disabled": true,
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
