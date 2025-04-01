@@ -24,11 +24,57 @@
     position: relative;
   }
 
-  /* Heading */
-  .multicolumn-with-float__title {
+  /*
+   * ==============================
+   * ADDED: Header styling (similar to vertical blog)
+   * ==============================
+   */
+  .multicolumn-float__heading-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    margin-bottom: 1rem;
+    width: 100%;
+    position: relative;
+    padding: 10px 0;
+    margin-bottom: 2rem;
   }
+
+  .multicolumn-float__heading-wrapper::before,
+  .multicolumn-float__heading-wrapper::after {
+    content: '';
+    flex-grow: 1;
+    height: 2px;
+    background-color: #c3996b !important; /* Golden Color */
+    display: block;
+  }
+
+  .multicolumn-float__heading-wrapper::before {
+    margin-right: 15px;
+  }
+
+  .multicolumn-float__heading-wrapper::after {
+    margin-left: 15px;
+  }
+
+  .multicolumn-float__heading {
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #c3996b !important; /* Golden Color */
+    position: relative;
+    background-color: var(--color-background); /* Ensure text visibility */
+    padding: 0 20px;
+    z-index: 2;
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  /*
+   * ==============================
+   * Original styles...
+   * ==============================
+   */
 
   /* Slider container */
   .multicolumn-with-float__slider {
@@ -134,9 +180,12 @@
   class="multicolumn--with-float color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
 >
   {% if section.settings.title != blank %}
-    <h2 class="multicolumn-with-float__title {{ section.settings.heading_size }}">
-      {{ section.settings.title }}
-    </h2>
+    <!-- REPLACED old heading with new heading wrapper -->
+    <div class="multicolumn-float__heading-wrapper">
+      <h2 class="multicolumn-float__heading {{ section.settings.heading_size }}">
+        {{ section.settings.title }}
+      </h2>
+    </div>
   {% endif %}
 
   <div class="multicolumn-with-float__slider" id="MultiFloatSlider-{{ section.id }}">
