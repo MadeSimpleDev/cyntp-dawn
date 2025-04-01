@@ -1,7 +1,7 @@
 {% comment %}
-  Multicolumn + Float
-  Allows a horizontal scroll (slider) for each column block, with optional floating headers.
-  Reuses a slider approach (similar to a "featured collection") so that it scrolls horizontally on desktop and mobile.
+  Multicolumn + Float with optional Course Articles
+  If "Pull from Course Articles" is enabled, we skip the normal blocks and dynamically load articles from a chosen blog
+  that match the current course handle (based on article.metafields.custom.course).
 {% endcomment %}
 
 {{ 'section-multicolumn.css' | asset_url | stylesheet_tag }}
@@ -19,16 +19,13 @@
     }
   }
 
-  /* Container for entire section */
   .multicolumn--with-float.color-{{ section.settings.color_scheme }} {
     position: relative;
   }
 
-  /*
-   * ==============================
-   * ADDED: Header styling (similar to vertical blog)
-   * ==============================
-   */
+  /* ===============================
+   * Added heading style
+   * =============================== */
   .multicolumn-float__heading-wrapper {
     display: flex;
     align-items: center;
@@ -45,14 +42,13 @@
     content: '';
     flex-grow: 1;
     height: 2px;
-    background-color: #c3996b !important; /* Golden Color */
+    background-color: #c3996b !important; /* Golden color */
     display: block;
   }
 
   .multicolumn-float__heading-wrapper::before {
     margin-right: 15px;
   }
-
   .multicolumn-float__heading-wrapper::after {
     margin-left: 15px;
   }
@@ -61,30 +57,25 @@
     font-size: 22px;
     font-weight: bold;
     text-transform: uppercase;
-    color: #c3996b !important; /* Golden Color */
+    color: #c3996b !important; /* Golden color */
     position: relative;
-    background-color: var(--color-background); /* Ensure text visibility */
+    background-color: var(--color-background);
     padding: 0 20px;
     z-index: 2;
     white-space: nowrap;
     margin: 0;
   }
 
-  /*
-   * ==============================
-   * Original styles...
-   * ==============================
-   */
-
-  /* Slider container */
+  /* ===============================
+   * Slider container
+   * =============================== */
   .multicolumn-with-float__slider {
     position: relative;
-    overflow: hidden; /* hide native scrollbar */
+    overflow: hidden;
     max-width: var(--page-width);
     margin: 0 auto;
   }
 
-  /* Horizontal track holding slides */
   .multicolumn-with-float__track {
     display: flex;
     gap: 16px;
@@ -96,7 +87,6 @@
     margin: 0;
     list-style: none;
   }
-
   .multicolumn-with-float__track::-webkit-scrollbar {
     display: none;
   }
@@ -105,13 +95,13 @@
     scrollbar-width: none;
   }
 
-  /* Each slide */
+  /* Slide */
   .multicolumn-with-float__slide {
     flex: 0 0 auto;
     scroll-snap-align: start;
     border: 1px solid var(--color-border);
     border-radius: 8px;
-    width: 280px; /* Adjust as needed */
+    width: 280px;
     background: var(--color-background);
     position: relative;
     overflow: hidden;
@@ -179,17 +169,16 @@
 <div
   class="multicolumn--with-float color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
 >
-  {% if section.settings.title != blank %}
-    <!-- REPLACED old heading with new heading wrapper -->
+  {%- unless section.settings.title == blank -%}
     <div class="multicolumn-float__heading-wrapper">
       <h2 class="multicolumn-float__heading {{ section.settings.heading_size }}">
         {{ section.settings.title }}
       </h2>
     </div>
-  {% endif %}
+  {%- endunless -%}
 
   <div class="multicolumn-with-float__slider" id="MultiFloatSlider-{{ section.id }}">
-    <!-- Arrow Prev -->
+    <!-- Prev Arrow -->
     <button
       class="multicolumn-with-float__arrow multicolumn-with-float__arrow--prev"
       type="button"
@@ -198,45 +187,90 @@
       &laquo;
     </button>
 
-    <!-- Track -->
+    <!-- Slides Track -->
     <ul class="multicolumn-with-float__track" id="Track-{{ section.id }}">
-      {%- for block in section.blocks -%}
-        <li
-          class="multicolumn-with-float__slide"
-          {{ block.shopify_attributes }}
-        >
-          {% if block.settings.image != blank %}
-            <div style="position: relative; overflow: hidden;">
-              <img
-                src="{{ block.settings.image | image_url: width: 600 }}"
-                alt=""
-                class="multicolumn-with-float__image"
-              >
-              {% if block.settings.floating_header != blank %}
-                <div class="floating-header">
-                  <h2>{{ block.settings.floating_header }}</h2>
-                </div>
+      {%- comment %}
+        1) If user toggled "Pull from course articles", then skip normal blocks
+        2) Otherwise, show the default column blocks
+      {%- endcomment %}
+
+      {% if section.settings.enable_course_articles == true and section.settings.articles_blog != blank %}
+        {%- comment %}
+          Grab current course handle from URL
+        {%- endcomment %}
+        {%- assign course_handle = request.path | split: '/' | last -%}
+
+        {%- comment %}
+          Loop through the chosen blog's articles, up to "articles_limit"
+        {%- endcomment %}
+        {%- for article in section.settings.articles_blog.articles limit: section.settings.articles_limit -%}
+          {%- assign article_course = article.metafields.custom.course.value -%}
+          {%- assign article_course_handle = article_course.name | handleize -%}
+
+          {%- if article_course_handle == course_handle -%}
+            <li class="multicolumn-with-float__slide">
+              <div style="position: relative; overflow: hidden;">
+                {%- if article.image -%}
+                  <img
+                    src="{{ article.image.src | image_url: width: 600 }}"
+                    alt="{{ article.title | escape }}"
+                    class="multicolumn-with-float__image"
+                  >
+                {%- endif -%}
+              </div>
+              <div class="multicolumn-with-float__content">
+                <h3>{{ article.title | escape }}</h3>
+                {%- if article.excerpt.size > 0 -%}
+                  <p>{{ article.excerpt | strip_html | truncatewords: 25 }}</p>
+                {%- endif -%}
+
+                <a href="{{ article.url }}" class="link animate-arrow">Read more</a>
+              </div>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      {% else %}
+        {%- comment %}
+          Normal blocks approach
+        {%- endcomment %}
+        {%- for block in section.blocks -%}
+          <li
+            class="multicolumn-with-float__slide"
+            {{ block.shopify_attributes }}
+          >
+            {% if block.settings.image != blank %}
+              <div style="position: relative; overflow: hidden;">
+                <img
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  alt=""
+                  class="multicolumn-with-float__image"
+                >
+                {% if block.settings.floating_header != blank %}
+                  <div class="floating-header">
+                    <h2>{{ block.settings.floating_header }}</h2>
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+            <div class="multicolumn-with-float__content">
+              {% if block.settings.title != blank %}
+                <h3>{{ block.settings.title }}</h3>
+              {% endif %}
+              {% if block.settings.text != blank %}
+                <div class="rte">{{ block.settings.text }}</div>
+              {% endif %}
+              {% if block.settings.link_label != blank %}
+                <a href="{{ block.settings.link }}" class="link animate-arrow">
+                  {{ block.settings.link_label }}
+                </a>
               {% endif %}
             </div>
-          {% endif %}
-          <div class="multicolumn-with-float__content">
-            {% if block.settings.title != blank %}
-              <h3>{{ block.settings.title }}</h3>
-            {% endif %}
-            {% if block.settings.text != blank %}
-              <div class="rte">{{ block.settings.text }}</div>
-            {% endif %}
-            {% if block.settings.link_label != blank %}
-              <a href="{{ block.settings.link }}" class="link animate-arrow">
-                {{ block.settings.link_label }}
-              </a>
-            {% endif %}
-          </div>
-        </li>
-      {%- endfor -%}
+          </li>
+        {%- endfor -%}
+      {% endif %}
     </ul>
 
-    <!-- Arrow Next -->
+    <!-- Next Arrow -->
     <button
       class="multicolumn-with-float__arrow multicolumn-with-float__arrow--next"
       type="button"
@@ -345,6 +379,32 @@
       "unit": "px",
       "label": "Bottom Padding",
       "default": 36
+    },
+
+    {
+      "type": "header",
+      "content": "Pull Articles for Current Course"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_course_articles",
+      "default": false,
+      "label": "Pull from course articles?"
+    },
+    {
+      "type": "blog",
+      "id": "articles_blog",
+      "label": "Select blog",
+      "default": ""
+    },
+    {
+      "type": "range",
+      "id": "articles_limit",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 4,
+      "label": "Number of articles to display"
     }
   ],
   "blocks": [
@@ -361,7 +421,7 @@
           "type": "text",
           "id": "floating_header",
           "label": "Floating Header",
-          "default": "Floating Header"
+          "default": "Header"
         },
         {
           "type": "text",
