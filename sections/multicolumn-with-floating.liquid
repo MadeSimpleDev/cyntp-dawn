@@ -1,7 +1,7 @@
 {% comment %}
-  Multicolumn + Float with optional Course Articles
-  If "Pull from Course Articles" is enabled, we skip the normal blocks and dynamically load articles from a chosen blog
-  that match the current course handle (based on article.metafields.custom.course).
+  Multicolumn + Float
+  Allows a horizontal scroll (slider) for each column block, with optional floating headers.
+  Can also pull blog articles based on a "course" metafield reference.
 {% endcomment %}
 
 {{ 'section-multicolumn.css' | asset_url | stylesheet_tag }}
@@ -23,9 +23,7 @@
     position: relative;
   }
 
-  /* ===============================
-   * Added heading style
-   * =============================== */
+  /* ====== Heading Style ====== */
   .multicolumn-float__heading-wrapper {
     display: flex;
     align-items: center;
@@ -66,16 +64,13 @@
     margin: 0;
   }
 
-  /* ===============================
-   * Slider container
-   * =============================== */
+  /* ====== Slider Container ====== */
   .multicolumn-with-float__slider {
     position: relative;
     overflow: hidden;
     max-width: var(--page-width);
     margin: 0 auto;
   }
-
   .multicolumn-with-float__track {
     display: flex;
     gap: 16px;
@@ -95,7 +90,7 @@
     scrollbar-width: none;
   }
 
-  /* Slide */
+  /* Each Slide */
   .multicolumn-with-float__slide {
     flex: 0 0 auto;
     scroll-snap-align: start;
@@ -112,7 +107,7 @@
     position: absolute;
     bottom: 10px;
     left: 10px;
-    color: white;
+    color: #fff;
     text-align: left;
     z-index: 2;
     width: 90%;
@@ -178,7 +173,7 @@
   {%- endunless -%}
 
   <div class="multicolumn-with-float__slider" id="MultiFloatSlider-{{ section.id }}">
-    <!-- Prev Arrow -->
+    <!-- Arrow Prev -->
     <button
       class="multicolumn-with-float__arrow multicolumn-with-float__arrow--prev"
       type="button"
@@ -187,43 +182,34 @@
       &laquo;
     </button>
 
-    <!-- Slides Track -->
+    <!-- Track -->
     <ul class="multicolumn-with-float__track" id="Track-{{ section.id }}">
-      {%- comment %}
-        1) If user toggled "Pull from course articles", then skip normal blocks
-        2) Otherwise, show the default column blocks
-      {%- endcomment %}
-
       {% if section.settings.enable_course_articles == true and section.settings.articles_blog != blank %}
         {%- comment %}
-          Grab current course handle from URL
+          Grab current course handle from page URL
         {%- endcomment %}
         {%- assign course_handle = request.path | split: '/' | last -%}
 
-        {%- comment %}
-          Loop through the chosen blog's articles, up to "articles_limit"
-        {%- endcomment %}
         {%- for article in section.settings.articles_blog.articles limit: section.settings.articles_limit -%}
           {%- assign article_course = article.metafields.custom.course.value -%}
           {%- assign article_course_handle = article_course.name | handleize -%}
-
           {%- if article_course_handle == course_handle -%}
             <li class="multicolumn-with-float__slide">
               <div style="position: relative; overflow: hidden;">
-                {%- if article.image -%}
+                {% if article.image %}
                   <img
                     src="{{ article.image.src | image_url: width: 600 }}"
                     alt="{{ article.title | escape }}"
                     class="multicolumn-with-float__image"
                   >
-                {%- endif -%}
+                {% endif %}
+                <!-- FLOATING Article Title on the image -->
+                <div class="floating-header">
+                  <h2>{{ article.title | escape }}</h2>
+                </div>
               </div>
+              <!-- No excerpt displayed -->
               <div class="multicolumn-with-float__content">
-                <h3>{{ article.title | escape }}</h3>
-                {%- if article.excerpt.size > 0 -%}
-                  <p>{{ article.excerpt | strip_html | truncatewords: 25 }}</p>
-                {%- endif -%}
-
                 <a href="{{ article.url }}" class="link animate-arrow">Read more</a>
               </div>
             </li>
@@ -234,10 +220,7 @@
           Normal blocks approach
         {%- endcomment %}
         {%- for block in section.blocks -%}
-          <li
-            class="multicolumn-with-float__slide"
-            {{ block.shopify_attributes }}
-          >
+          <li class="multicolumn-with-float__slide" {{ block.shopify_attributes }}>
             {% if block.settings.image != blank %}
               <div style="position: relative; overflow: hidden;">
                 <img
@@ -270,7 +253,7 @@
       {% endif %}
     </ul>
 
-    <!-- Next Arrow -->
+    <!-- Arrow Next -->
     <button
       class="multicolumn-with-float__arrow multicolumn-with-float__arrow--next"
       type="button"
@@ -380,7 +363,6 @@
       "label": "Bottom Padding",
       "default": 36
     },
-
     {
       "type": "header",
       "content": "Pull Articles for Current Course"
