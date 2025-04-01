@@ -34,7 +34,6 @@
     padding: 10px 0;
     margin-bottom: 2rem;
   }
-
   .multicolumn-float__heading-wrapper::before,
   .multicolumn-float__heading-wrapper::after {
     content: '';
@@ -43,14 +42,12 @@
     background-color: #c3996b !important; /* Golden color */
     display: block;
   }
-
   .multicolumn-float__heading-wrapper::before {
     margin-right: 15px;
   }
   .multicolumn-float__heading-wrapper::after {
     margin-left: 15px;
   }
-
   .multicolumn-float__heading {
     font-size: 22px;
     font-weight: bold;
@@ -164,13 +161,13 @@
 <div
   class="multicolumn--with-float color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
 >
-  {%- unless section.settings.title == blank -%}
+  {% unless section.settings.title == blank %}
     <div class="multicolumn-float__heading-wrapper">
       <h2 class="multicolumn-float__heading {{ section.settings.heading_size }}">
         {{ section.settings.title }}
       </h2>
     </div>
-  {%- endunless -%}
+  {% endunless %}
 
   <div class="multicolumn-with-float__slider" id="MultiFloatSlider-{{ section.id }}">
     <!-- Arrow Prev -->
@@ -184,10 +181,11 @@
 
     <!-- Track -->
     <ul class="multicolumn-with-float__track" id="Track-{{ section.id }}">
+      {% comment %}
+        If "enable_course_articles" is TRUE, we skip normal blocks and fetch articles that match the current course.
+        We'll remove the excerpt text and entire "read more" link, making the entire image a clickable link with floating text.
+      {% endcomment %}
       {% if section.settings.enable_course_articles == true and section.settings.articles_blog != blank %}
-        {%- comment %}
-          Grab current course handle from page URL
-        {%- endcomment %}
         {%- assign course_handle = request.path | split: '/' | last -%}
 
         {%- for article in section.settings.articles_blog.articles limit: section.settings.articles_limit -%}
@@ -195,7 +193,8 @@
           {%- assign article_course_handle = article_course.name | handleize -%}
           {%- if article_course_handle == course_handle -%}
             <li class="multicolumn-with-float__slide">
-              <div style="position: relative; overflow: hidden;">
+              <!-- Entire card is clickable -->
+              <a href="{{ article.url }}" style="display: block; position: relative; overflow: hidden;">
                 {% if article.image %}
                   <img
                     src="{{ article.image.src | image_url: width: 600 }}"
@@ -203,21 +202,18 @@
                     class="multicolumn-with-float__image"
                   >
                 {% endif %}
-                <!-- FLOATING Article Title on the image -->
+                <!-- Floating Article Title -->
                 <div class="floating-header">
                   <h2>{{ article.title | escape }}</h2>
                 </div>
-              </div>
-              <!-- No excerpt displayed -->
-              <div class="multicolumn-with-float__content">
-                <a href="{{ article.url }}" class="link animate-arrow">Read more</a>
-              </div>
+              </a>
             </li>
           {%- endif -%}
         {%- endfor -%}
+
       {% else %}
         {%- comment %}
-          Normal blocks approach
+          Normal multi-column block approach
         {%- endcomment %}
         {%- for block in section.blocks -%}
           <li class="multicolumn-with-float__slide" {{ block.shopify_attributes }}>
