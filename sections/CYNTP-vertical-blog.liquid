@@ -1,0 +1,272 @@
+{% comment %}
+  CYNTP: Vertical Blog
+  -------------------
+  This section displays a vertical list of blog articles. Each article is shown in a two-column layout:
+  - Left column: Article Image
+  - Right column: Date, Author, Title, and Preview
+
+  Configuration Options:
+  - Heading & Heading Size
+  - Blog selection
+  - Number of posts to show
+  - Show/hide author, date, and article image
+  - Padding
+{% endcomment %}
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* ============= Vertical Blog Specific ============= */
+  .cyntp-vertical-blog__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* spacing between articles */
+  }
+
+  .cyntp-vertical-blog__article {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(var(--color-background));
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  @media screen and (min-width: 750px) {
+    .cyntp-vertical-blog__article {
+      flex-direction: row;
+      align-items: stretch;
+    }
+  }
+
+  /* Left side: Article Image */
+  .cyntp-vertical-blog__image {
+    position: relative;
+    width: 100%;
+    max-height: 240px;
+    overflow: hidden;
+  }
+  .cyntp-vertical-blog__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media screen and (min-width: 750px) {
+    .cyntp-vertical-blog__image {
+      width: 40%; /* left column width on larger screens */
+      max-height: initial;
+    }
+  }
+
+  /* Right side: Article Info */
+  .cyntp-vertical-blog__content {
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+  .cyntp-vertical-blog__date,
+  .cyntp-vertical-blog__author {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .cyntp-vertical-blog__title {
+    margin: 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  .cyntp-vertical-blog__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .cyntp-vertical-blog__title a:hover {
+    text-decoration: underline;
+  }
+
+  .cyntp-vertical-blog__excerpt {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-top: 0.5rem;
+  }
+
+  /* Simple hover effect for entire row */
+  .cyntp-vertical-blog__article:hover {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign posts_displayed = section.settings.blog.articles_count
+  if section.settings.post_limit < section.settings.blog.articles_count
+    assign posts_displayed = section.settings.post_limit
+  endif
+-%}
+
+<div class="section-{{ section.id }}-padding">
+  {%- unless section.settings.heading == blank -%}
+    <h2 class="cyntp-vertical-blog__heading {{ section.settings.heading_size }}">
+      {{ section.settings.heading }}
+    </h2>
+  {%- endunless -%}
+
+  {% if section.settings.blog != blank and section.settings.blog.articles_count > 0 %}
+    <div class="cyntp-vertical-blog__list">
+      {%- for article in section.settings.blog.articles limit: section.settings.post_limit -%}
+        <article class="cyntp-vertical-blog__article">
+          {%- if article.image and section.settings.show_image -%}
+            <div class="cyntp-vertical-blog__image">
+              <a href="{{ article.url }}" aria-label="View article {{ article.title | escape }}">
+                <img
+                  srcset="
+                    {%- if article.image.src.width >= 165 -%}{{ article.image.src | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if article.image.src.width >= 360 -%}{{ article.image.src | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if article.image.src.width >= 533 -%}{{ article.image.src | image_url: width: 533 }} 533w,{%- endif -%}
+                    {%- if article.image.src.width >= 720 -%}{{ article.image.src | image_url: width: 720 }} 720w,{%- endif -%}
+                    {%- if article.image.src.width >= 1000 -%}{{ article.image.src | image_url: width: 1000 }} 1000w,{%- endif -%}
+                    {%- if article.image.src.width >= 1500 -%}{{ article.image.src | image_url: width: 1500 }} 1500w,{%- endif -%}
+                    {{ article.image.src | image_url }} {{ article.image.src.width }}w
+                  "
+                  sizes="(min-width: 750px) 40vw, 100vw"
+                  alt="{{ article.image.src.alt | escape }}"
+                  loading="lazy"
+                  width="{{ article.image.width }}"
+                  height="{{ article.image.height }}"
+                >
+              </a>
+            </div>
+          {%- endif -%}
+
+          <div class="cyntp-vertical-blog__content">
+            {%- if section.settings.show_date -%}
+              <p class="cyntp-vertical-blog__date">
+                {{ article.published_at | time_tag: format: 'date' }}
+              </p>
+            {%- endif -%}
+
+            {%- if section.settings.show_author and article.author -%}
+              <p class="cyntp-vertical-blog__author">By {{ article.author }}</p>
+            {%- endif -%}
+
+            <h3 class="cyntp-vertical-blog__title">
+              <a href="{{ article.url }}">
+                {{ article.title | escape }}
+              </a>
+            </h3>
+
+            {%- if article.excerpt.size > 0 -%}
+              <p class="cyntp-vertical-blog__excerpt">
+                {{ article.excerpt | strip_html | truncatewords: 30 }}
+              </p>
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  {% else %}
+    <p>No articles found in {{ section.settings.blog.title }}.</p>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "CYNTP: Vertical Blog",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Vertical Blog Layout"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading Size",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Select blog"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 5,
+      "label": "Number of articles to display"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show featured image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show published date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "CYNTP: Vertical Blog"
+    }
+  ]
+}
+{% endschema %}
