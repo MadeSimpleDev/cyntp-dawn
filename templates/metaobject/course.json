@@ -115,20 +115,8 @@
     },
     "multicolumn_with_floating_LaJVnB": {
       "type": "multicolumn-with-floating",
-      "blocks": {
-        "column_HjPF6U": {
-          "type": "column",
-          "settings": {
-            "floating_header": "Floating Header",
-            "title": "",
-            "text": "",
-            "link_label": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "column_HjPF6U"
+      "custom_css": [
+        ".floating-header h2 {color: #f7f7f7;}"
       ],
       "settings": {
         "enable_desktop_slider": false,
