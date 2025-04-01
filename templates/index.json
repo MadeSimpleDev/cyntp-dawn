@@ -135,6 +135,20 @@
         "padding_bottom": 24
       }
     },
+    "cyntp_vertical_blog_kmk36Y": {
+      "type": "CYNTP-vertical-blog",
+      "settings": {
+        "heading": "Recent Posts",
+        "heading_size": "h2",
+        "blog": "news",
+        "post_limit": 5,
+        "show_image": true,
+        "show_date": true,
+        "show_author": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "image_banner_P98y7R": {
       "type": "image-banner",
       "blocks": {
@@ -343,6 +357,7 @@
     "hero_banner_with_scroll_pLN6nm",
     "rich_text_TJ6xFF",
     "multicolumn_with_floating_zMM4PV",
+    "cyntp_vertical_blog_kmk36Y",
     "image_banner_P98y7R",
     "rich_text_DbYDgp",
     "image_banner_YcJN66",
