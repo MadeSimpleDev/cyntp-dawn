@@ -22,7 +22,8 @@
         "button_link": "",
         "button_text": "",
         "section_color_scheme": "",
-        "enable_full_height": true
+        "enable_full_height": true,
+        "enable_navbar_transparency": true
       }
     },
     "rich_text_TJ6xFF": {
@@ -67,7 +68,7 @@
           "settings": {
             "image": "shopify://shop_images/Palm_Springs_trip.png",
             "floating_header": "Palm Springs",
-            "title": "Popular Trip",
+            "title": "",
             "text": "",
             "link_label": "",
             "link": ""
@@ -78,7 +79,7 @@
           "settings": {
             "image": "shopify://shop_images/must-play_course.png",
             "floating_header": "Sequoyah National",
-            "title": "Must-play Course",
+            "title": "",
             "text": "",
             "link_label": "",
             "link": ""
@@ -88,8 +89,8 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/Top_of_the_feed.png",
-            "floating_header": "The Sentry <br>World Experience",
-            "title": "What's New?",
+            "floating_header": "The Sentry World Experience",
+            "title": "",
             "text": "",
             "link_label": "",
             "link": ""
@@ -99,8 +100,8 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/14-Celebrity.webp",
-            "floating_header": "Floating Title",
-            "title": "Column",
+            "floating_header": "Flaoting",
+            "title": "",
             "text": "",
             "link_label": "",
             "link": ""
@@ -124,7 +125,7 @@
         "heading_size": "h2",
         "color_scheme": "scheme-1",
         "padding_top": 36,
-        "padding_bottom": 24,
+        "padding_bottom": 0,
         "enable_course_articles": false,
         "articles_blog": "",
         "articles_limit": 4
