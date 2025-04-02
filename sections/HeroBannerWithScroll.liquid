@@ -75,9 +75,9 @@
     },
     {
       "type": "checkbox",
-      "id": "disable_nav_fade",
-      "label": "Disable Nav Fade on Scroll",
-      "default": false
+      "id": "enable_navbar_transparency",
+      "label": "Enable Navbar Transparency/Fade In?",
+      "default": true
     }
   ],
   "presets": [
@@ -88,10 +88,7 @@
 }
 {% endschema %}
 
-<header
-  class="hero-banner {{ section.settings.section_color_scheme }} {% if section.settings.enable_full_height %}full-height{% endif %}"
-  data-disable-nav-fade="{{ section.settings.disable_nav_fade }}"
->
+<header class="hero-banner {{ section.settings.section_color_scheme }} {% if section.settings.enable_full_height %}full-height{% endif %}">
   <div class="hero-media-wrapper">
     {% if section.settings.hero_video %}
       {{
@@ -141,7 +138,7 @@
   .hero-banner {
     position: relative;
     width: 100%;
-    height: 50vh; /* Default to half height */
+    height: 50vh; /* Default to half-height */
     overflow: hidden;
     background: transparent !important;
   }
@@ -189,8 +186,7 @@
     overflow-wrap: break-word;
     word-break: break-word;
     max-width: 90%;
-    margin: 0 auto 0 auto;
-    display: block;
+    margin: 0 auto;
     text-align: center;
   }
 
@@ -221,66 +217,78 @@
     animation: bounce 1.5s infinite;
     z-index: 2; /* Ensures it remains visible */
   }
-
-  /* 🌟 Hide Scroll Indicator when disabled */
   .scroll-indicator.hidden {
     display: none;
   }
 
-  /* 🌟 Transparent Header Fix (the default fade behavior) */
-  .header-wrapper {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.8) 0%,
-      rgba(0, 0, 0, 0.1) 80%,
-      rgba(0, 0, 0, 0) 100%
-    ) !important;
-    color: white !important;
-    border-bottom: none !important;
-    transition: background 0.3s ease-in-out, color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
-    z-index: 1000;
-  }
+  /* -------- Transparent Navbar Toggle -------- */
+  {% if section.settings.enable_navbar_transparency %}
+    /* 🌟 Transparent Header Fix */
+    .header-wrapper {
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.8) 0%,
+        rgba(0, 0, 0, 0.1) 80%,
+        rgba(0, 0, 0, 0) 100%
+      ) !important;
+      color: white !important;
+      border-bottom: none !important;
+      transition: background 0.3s ease-in-out,
+                  color 0.3s ease-in-out,
+                  border-bottom 0.3s ease-in-out;
+      z-index: 1000;
+    }
 
-  /* When scrolled past, restore background */
-  .scrolled-past-header .header-wrapper {
-    background: var(--gradient-background) !important; /* Ensures correct background */
-    color: var(--color-text) !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  }
+    /* When scrolled past, restore background */
+    .scrolled-past-header .header-wrapper {
+      background: var(--gradient-background) !important;
+      color: var(--color-text) !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
 
-  /* 🌟 Ensure text/logo remains visible */
-  .header-wrapper a,
-  .header-wrapper svg,
-  .header-wrapper .site-logo img {
-    transition: color 0.3s ease-in-out, filter 0.3s ease-in-out;
-  }
+    /* Keep text/logo visible */
+    .header-wrapper a,
+    .header-wrapper svg,
+    .header-wrapper .site-logo img {
+      transition: color 0.3s ease-in-out, filter 0.3s ease-in-out;
+    }
+    :not(.scrolled-past-header) .header-wrapper a,
+    :not(.scrolled-past-header) .header-wrapper svg,
+    :not(.scrolled-past-header) .header-wrapper .site-logo img {
+      color: white !important;
+      filter: brightness(100);
+    }
+    .scrolled-past-header .header-wrapper a,
+    .scrolled-past-header .header-wrapper svg,
+    .scrolled-past-header .header-wrapper .site-logo img {
+      color: var(--color-text) !important;
+      text-shadow: none;
+    }
 
-  /* 🌟 Improve text visibility on transparent nav */
-  :not(.scrolled-past-header) .header-wrapper a,
-  :not(.scrolled-past-header) .header-wrapper svg,
-  :not(.scrolled-past-header) .header-wrapper .site-logo img {
-    color: white !important;
-    filter: brightness(100);
-  }
-
-  /* When scrolled past, remove text shadow and restore normal colors */
-  .scrolled-past-header .header-wrapper a,
-  .scrolled-past-header .header-wrapper svg,
-  .scrolled-past-header .header-wrapper .site-logo img {
-    color: var(--color-text) !important;
-    text-shadow: none;
-  }
-
-  /* 🌟 When menu is open, force background */
-  .menu-open header.header--has-menu {
-    background: var(--gradient-background) !important;
-    color: var(--color-text) !important;
-    border-bottom: 1px solid var(--color-border);
-  }
+    /* Menu open = forced background */
+    .menu-open header.header--has-menu {
+      background: var(--gradient-background) !important;
+      color: var(--color-text) !important;
+      border-bottom: 1px solid var(--color-border);
+    }
+  {% else %}
+    /* If transparency is disabled, fallback */
+    .header-wrapper {
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--gradient-background) !important;
+      color: var(--color-text) !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+      z-index: 1000;
+    }
+  {% endif %}
+  /* ------------------------------------------ */
 
   .hero-media-wrapper {
     position: relative;
@@ -291,36 +299,14 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 150px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    height: 150px; /* Increase this if you want a taller gradient */
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 100%
+    );
     pointer-events: none;
     z-index: 2;
     display: block !important;
   }
-
-  /* ➜ If "disable_nav_fade" is true, use .no-fade to override the transparent design */
-  .no-fade .header-wrapper {
-    background: var(--gradient-background) !important;
-    color: var(--color-text) !important;
-    border-bottom: 1px solid var(--color-border) !important;
-  }
-  .no-fade .header-wrapper a,
-  .no-fade .header-wrapper svg,
-  .no-fade .header-wrapper .site-logo img {
-    color: var(--color-text) !important;
-    filter: none !important;
-  }
 </style>
-
-{%- comment -%}
-  ➜ JavaScript Implementation:
-
-  // 1. On load, read the data-disable-nav-fade attribute
-  // 2. If it's 'true', add 'no-fade' to <body> to override nav fade.
-{%- endcomment -%}
-
-document.addEventListener('DOMContentLoaded', () => { const heroBanner = document.querySelector('.hero-banner'); if
-(heroBanner && heroBanner.dataset.disableNavFade === 'true') { document.body.classList.add('no-fade'); } else { // If
-fade is allowed, set up your scroll event: window.addEventListener('scroll', () => { if (window.scrollY > 50) {
-document.body.classList.add('scrolled-past-header'); } else { document.body.classList.remove('scrolled-past-header'); }
-}); } });
