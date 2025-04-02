@@ -227,7 +227,7 @@
     display: none;
   }
 
-  /* 🌟 Transparent Header Fix */
+  /* 🌟 Transparent Header Fix (the default fade behavior) */
   .header-wrapper {
     position: fixed !important;
     top: 0;
@@ -297,17 +297,40 @@
     z-index: 2;
     display: block !important;
   }
+
+  /* ➜ If "disable_nav_fade" is true, use .no-fade to override the transparent design */
+  .no-fade .header-wrapper {
+    background: var(--gradient-background) !important;
+    color: var(--color-text) !important;
+    border-bottom: 1px solid var(--color-border) !important;
+  }
+  .no-fade .header-wrapper a,
+  .no-fade .header-wrapper svg,
+  .no-fade .header-wrapper .site-logo img {
+    color: var(--color-text) !important;
+    filter: none !important;
+  }
 </style>
 
-<script>
-  const heroBanner = document.querySelector('.hero-banner');
-  if (heroBanner && heroBanner.dataset.disableNavFade !== 'true') {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        document.body.classList.add('scrolled-past-header');
-      } else {
-        document.body.classList.remove('scrolled-past-header');
-      }
-    });
-  }
-</script>
+{%- comment -%}
+  ➜ JavaScript Implementation:
+
+  // 1. On load, read the data-disable-nav-fade attribute
+  // 2. If it's 'true', add 'no-fade' to <body> to override nav fade.
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const heroBanner = document.querySelector('.hero-banner');
+    if (heroBanner && heroBanner.dataset.disableNavFade === 'true') {
+      document.body.classList.add('no-fade');
+    } else {
+      // If fade is allowed, set up your scroll event:
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+          document.body.classList.add('scrolled-past-header');
+        } else {
+          document.body.classList.remove('scrolled-past-header');
+        }
+      });
+    }
+  });
+{%- endcomment -%}
