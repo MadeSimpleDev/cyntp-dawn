@@ -119,20 +119,15 @@
       ],
       "settings": {
         "enable_desktop_slider": true,
+        "swipe_on_mobile": true,
         "title": "Featured Posts",
         "heading_size": "h2",
-        "image_width": "full",
-        "image_ratio": "portrait",
-        "columns_desktop": 3,
-        "column_alignment": "center",
-        "background_style": "none",
-        "button_label": "",
-        "button_link": "",
         "color_scheme": "scheme-1",
-        "columns_mobile": "1",
-        "swipe_on_mobile": true,
         "padding_top": 36,
-        "padding_bottom": 24
+        "padding_bottom": 24,
+        "enable_course_articles": false,
+        "articles_blog": "",
+        "articles_limit": 4
       }
     },
     "cyntp_vertical_blog_kmk36Y": {
@@ -175,6 +170,7 @@
         "buttons_WQYbtV",
         "heading_LPLKHd"
       ],
+      "disabled": true,
       "custom_css": [
         ".banner__content {border-color: white; border-width: 10px;}",
         ".button {color: white; font-style: italic; font-size: 30px;}"
