@@ -33,7 +33,8 @@
         "button_link": "",
         "button_text": "",
         "section_color_scheme": "",
-        "enable_full_height": false
+        "enable_full_height": false,
+        "disable_nav_fade": true
       }
     },
     "courses_by_state_Rrj8GU": {
