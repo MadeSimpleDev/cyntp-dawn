@@ -11,6 +11,7 @@
   "sections": {
     "hero_banner_with_scroll_A3VxQt": {
       "type": "HeroBannerWithScroll",
+      "disabled": true,
       "custom_css": [
         "h1 {font-size: 4em; font-weight: bold; font-style: oblique;}",
         "p {font-weight: bold; font-style: oblique;}"
@@ -25,7 +26,8 @@
         "button_link": "",
         "button_text": "Discover More",
         "section_color_scheme": "scheme-1",
-        "enable_full_height": false
+        "enable_full_height": false,
+        "enable_navbar_transparency": true
       }
     },
     "newsletter_qBhkMT": {
@@ -88,7 +90,9 @@
     },
     "main": {
       "type": "main-blog",
-      "custom_css": [],
+      "custom_css": [
+        "h1 {display: none;}"
+      ],
       "settings": {
         "layout": "collage",
         "show_image": true,
