@@ -144,30 +144,39 @@
     border-bottom: 1px solid var(--color-border);
   }
 
-  /* Slide content */
-  .multicolumn-with-float__content {
-    padding: 1rem;
-  }
-
   /* Arrows */
   .multicolumn-with-float__arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: #fff;
     border: none;
     border-radius: 50%;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem;
     cursor: pointer;
     z-index: 10;
     font-size: 1.2rem;
+    display: none; /* Hide by default, shown via JS */
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+  }
+  .multicolumn-with-float__arrow svg {
+    width: 20px;
+    height: 20px;
   }
   .multicolumn-with-float__arrow--prev {
     left: 0.5rem;
   }
   .multicolumn-with-float__arrow--next {
     right: 0.5rem;
+  }
+
+  /* Slide content */
+  .multicolumn-with-float__content {
+    padding: 1rem;
   }
 {%- endstyle -%}
 
@@ -194,7 +203,13 @@
       type="button"
       aria-label="Previous"
     >
-      &laquo;
+      <!-- Left Chevron SVG -->
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          d="M15.5 3.87a1 1 0 0 1 1.39 1.44L10.41 12l6.48 6.69a1 1 0 0 1-1.44 1.38l-7.18-7.42a1 1 0 0 1 0-1.38z"
+          fill="currentColor"
+        />
+      </svg>
     </button>
 
     <!-- Track -->
@@ -231,9 +246,7 @@
           {%- endif -%}
         {%- endfor -%}
       {% else %}
-        {%- comment %}
-          Normal multi-column block approach
-        {%- endcomment %}
+        {%- comment %} Normal multi-column block approach {%- endcomment %}
         {%- for block in section.blocks -%}
           <li class="multicolumn-with-float__slide" {{ block.shopify_attributes }}>
             {% if block.settings.image != blank %}
@@ -274,7 +287,13 @@
       type="button"
       aria-label="Next"
     >
-      &raquo;
+      <!-- Right Chevron SVG -->
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          d="M8.5 20.13a1 1 0 0 1-1.39-1.44L13.59 12l-6.48-6.69A1 1 0 0 1 8.55 3.93l7.18 7.42a1 1 0 0 1 0 1.38z"
+          fill="currentColor"
+        />
+      </svg>
     </button>
   </div>
 </div>
@@ -291,13 +310,68 @@
 
     var scrollAmount = 300; // distance to scroll per click
 
+    // Scroll by +/-300px on click
     btnPrev.addEventListener('click', function () {
       track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     });
-
     btnNext.addEventListener('click', function () {
       track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     });
+
+    // Show/hide arrows based on scroll position & overflow
+    function updateArrowsVisibility() {
+      var maxScrollLeft = track.scrollWidth - track.clientWidth;
+
+      // If there's no overflow, hide both
+      if (maxScrollLeft <= 0) {
+        btnPrev.style.display = 'none';
+        btnNext.style.display = 'none';
+        return;
+      }
+
+      // Check if we can scroll to the left
+      if (track.scrollLeft > 0) {
+        btnPrev.style.display = 'flex';
+      } else {
+        btnPrev.style.display = 'none';
+      }
+
+      // Check if we can scroll to the right
+      if (track.scrollLeft < maxScrollLeft) {
+        btnNext.style.display = 'flex';
+      } else {
+        btnNext.style.display = 'none';
+      }
+    }
+
+    // Listen to scroll + resize
+    track.addEventListener('scroll', updateArrowsVisibility);
+    window.addEventListener('resize', updateArrowsVisibility);
+
+    // Initial check once images load
+    var imgs = slider.querySelectorAll('img');
+    var imgCount = imgs.length;
+    var loadedCount = 0;
+
+    function imgLoaded() {
+      loadedCount++;
+      if (loadedCount === imgCount) {
+        updateArrowsVisibility();
+      }
+    }
+    imgs.forEach(function (img) {
+      if (img.complete) {
+        imgLoaded();
+      } else {
+        img.addEventListener('load', imgLoaded);
+        img.addEventListener('error', imgLoaded);
+      }
+    });
+
+    // If no images or everything loads instantly, fallback:
+    if (imgCount === 0) {
+      updateArrowsVisibility();
+    }
   });
 </script>
 
