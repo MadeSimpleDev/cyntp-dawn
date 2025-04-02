@@ -18,49 +18,58 @@
 {% endschema %}
 
 <section class="golf-courses-section color-{{ section.settings.color_scheme }}">
-  <!-- USA Golf Courses by State -->
+  <!-- 1) Gather All Courses -->
+  {% assign all_courses = shop.metaobjects.courses.values %}
+
+  <!-- 2) Build a Unique List of States -->
+  {% assign states_csv = '' %}
+  {% for course in all_courses %}
+    {% if course.state and course.state.value != blank %}
+      {% unless states_csv contains course.state.value %}
+        {% assign states_csv = states_csv | append: course.state.value | append: ',' %}
+      {% endunless %}
+    {% endif %}
+  {% endfor %}
+  {% assign states_array = states_csv | split: ',' | uniq %}
+
+  <!-- 3) Section Header -->
   <div class="golf-courses-container">
     <div class="section-header">
       <h2 class="section-title">Golf Courses by State</h2>
     </div>
+
+    <!-- 4) Loop Through Each State & Show Its Courses -->
     <div class="golf-courses-grid">
-      {% for location in shop.metaobjects.locations.values %}
-        {% assign has_courses = false %}
-        {% assign has_trips = false %}
-
-        {% if location.courses.value and location.courses.value != blank %}
-          {% assign has_courses = true %}
-        {% endif %}
-
-        {% if location.trips.value and location.trips.value != blank %}
-          {% assign has_trips = true %}
-        {% endif %}
-
-        {% if has_courses or has_trips %}
-          <a href="/pages/locations/{{ location.system.handle }}" class="golf-course-link">{{ location.name }}</a>
+      {% for st in states_array %}
+        {% if st != blank %}
+          <div class="golf-course-state">
+            <h3>{{ st }}</h3>
+            <ul class="courses-list">
+              {% for course in all_courses %}
+                {% if course.state and course.state.value == st %}
+                  <li>
+                    <a
+                      href="/pages/courses/{{ course.system.handle }}"
+                      class="golf-course-link"
+                    >
+                      {{ course.title }}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
         {% endif %}
       {% endfor %}
     </div>
   </div>
 
-  <!-- USA Featured Golf Destinations -->
+  <!-- (Optional) 5) Featured Destinations -->
   {% assign has_featured_destinations = false %}
-  {% for location in shop.metaobjects.locations.values %}
-    {% assign has_courses = false %}
-    {% assign has_trips = false %}
-
-    {% if location.courses.value and location.courses.value != blank %}
-      {% assign has_courses = true %}
-    {% endif %}
-
-    {% if location.trips.value and location.trips.value != blank %}
-      {% assign has_trips = true %}
-    {% endif %}
-
-    {% if has_courses or has_trips %}
-      {% if location.featured_destination == true %}
-        {% assign has_featured_destinations = true %}
-      {% endif %}
+  {% for course in all_courses %}
+    {% if course.featured_destination == true %}
+      {% assign has_featured_destinations = true %}
+      {% break %}
     {% endif %}
   {% endfor %}
 
@@ -70,22 +79,34 @@
         <h2 class="section-title">USA Featured Golf Destinations</h2>
       </div>
       <div class="golf-courses-grid">
-        {% for location in shop.metaobjects.locations.values %}
-          {% assign has_courses = false %}
-          {% assign has_trips = false %}
-
-          {% if location.courses.value and location.courses.value != blank %}
-            {% assign has_courses = true %}
-          {% endif %}
-
-          {% if location.trips.value and location.trips.value != blank %}
-            {% assign has_trips = true %}
-          {% endif %}
-
-          {% if has_courses or has_trips %}
-            {% if location.featured_destination == true %}
-              <a href="/pages/locations/{{ location.system.handle }}" class="golf-course-link">{{ location.name }}</a>
+        {% for st in states_array %}
+          <!-- Only print states that contain a featured course -->
+          {% assign has_featured_in_state = false %}
+          {% for course in all_courses %}
+            {% if course.featured_destination == true and course.state and course.state.value == st %}
+              {% assign has_featured_in_state = true %}
+              {% break %}
             {% endif %}
+          {% endfor %}
+
+          {% if has_featured_in_state %}
+            <div class="golf-course-state">
+              <h3>{{ st }}</h3>
+              <ul class="courses-list">
+                {% for course in all_courses %}
+                  {% if course.featured_destination == true and course.state and course.state.value == st %}
+                    <li>
+                      <a
+                        href="/pages/courses/{{ course.system.handle }}"
+                        class="golf-course-link"
+                      >
+                        {{ course.title }}
+                      </a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
           {% endif %}
         {% endfor %}
       </div>
@@ -125,7 +146,7 @@
     text-transform: uppercase;
     color: #c3996b !important; /* Golden Color */
     position: relative;
-    background-color: var(--color-background); /* Ensures text visibility */
+    background-color: var(--color-background);
     padding: 0 20px;
     z-index: 2;
     white-space: nowrap;
@@ -137,15 +158,12 @@
     content: '';
     flex-grow: 1;
     height: 2px;
-    background-color: #c3996b !important; /* Force Golden Bar */
+    background-color: #c3996b !important;
     display: block;
   }
-
-  /* 🌟 Ensure Bars Extend Fully */
   .golf-courses-section .section-header::before {
     margin-right: 15px;
   }
-
   .golf-courses-section .section-header::after {
     margin-left: 15px;
   }
@@ -157,17 +175,38 @@
     gap: 15px;
     max-width: 900px;
     margin: 0 auto;
+    text-align: left;
+  }
+
+  /* 🌟 Each "State" Card */
+  .golf-course-state {
+    padding: 10px;
+    background: var(--color-card-background, #fff);
+    border-radius: 4px;
+  }
+
+  .golf-course-state h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--color-heading, #333);
+  }
+
+  .courses-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .courses-list li {
+    margin: 4px 0;
   }
 
   /* 🌟 Scoped Links */
   .golf-courses-section .golf-course-link {
-    display: block;
     text-decoration: none;
     color: var(--color-text);
     font-size: 16px;
     transition: color 0.2s ease-in-out;
   }
-
   .golf-courses-section .golf-course-link:hover {
     color: var(--color-accent);
     text-decoration: underline;
@@ -179,7 +218,6 @@
       grid-template-columns: repeat(3, 1fr);
     }
   }
-
   @media (max-width: 768px) {
     .golf-courses-section .golf-courses-grid {
       grid-template-columns: repeat(2, 1fr);
