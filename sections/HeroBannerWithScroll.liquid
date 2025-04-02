@@ -299,11 +299,7 @@
   }
 </style>
 
-{%- comment -%}
-  ➜ JavaScript Implementation Tips:
-
-  Inside your theme.js (or equivalent), you can do something like:
-
+<script>
   const heroBanner = document.querySelector('.hero-banner');
   if (heroBanner && heroBanner.dataset.disableNavFade !== 'true') {
     window.addEventListener('scroll', () => {
@@ -314,6 +310,4 @@
       }
     });
   }
-
-  This will only add scrolled-past-header if disable_nav_fade is false.
-{%- endcomment -%}
+</script>
