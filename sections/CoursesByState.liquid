@@ -18,15 +18,15 @@
 {% endschema %}
 
 <section class="golf-courses-section color-{{ section.settings.color_scheme }}">
-  <!-- 1) Gather All Courses -->
+  <!-- 1) Gather All Courses from the "course" Metaobject Definition -->
   {% assign all_courses = shop.metaobjects.course.values %}
 
   <!-- 2) Build a Unique List of States -->
   {% assign states_csv = '' %}
-  {% for course in all_courses %}
-    {% if course.state and course.state.value != blank %}
-      {% unless states_csv contains course.state.value %}
-        {% assign states_csv = states_csv | append: course.state.value | append: ',' %}
+  {% for c in all_courses %}
+    {% if c.state and c.state.value != blank %}
+      {% unless states_csv contains c.state.value %}
+        {% assign states_csv = states_csv | append: c.state.value | append: ',' %}
       {% endunless %}
     {% endif %}
   {% endfor %}
@@ -161,6 +161,7 @@
     background-color: #c3996b !important;
     display: block;
   }
+
   .golf-courses-section .section-header::before {
     margin-right: 15px;
   }
@@ -207,6 +208,7 @@
     font-size: 16px;
     transition: color 0.2s ease-in-out;
   }
+
   .golf-courses-section .golf-course-link:hover {
     color: var(--color-accent);
     text-decoration: underline;
@@ -218,6 +220,7 @@
       grid-template-columns: repeat(3, 1fr);
     }
   }
+
   @media (max-width: 768px) {
     .golf-courses-section .golf-courses-grid {
       grid-template-columns: repeat(2, 1fr);
