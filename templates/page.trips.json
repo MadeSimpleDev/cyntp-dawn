@@ -19,26 +19,25 @@
     },
     "hero_banner_with_scroll_8aXYfH": {
       "type": "HeroBannerWithScroll",
-      "custom_css": [
-        "p,h1 {left: 5%; width: 90%; /* Ensures text stays centered */ text-align: left; font-style: oblique; font-weight: bold; color: white; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);}",
-        "h1 {font-size: 4em;}"
-      ],
+      "custom_css": [],
       "settings": {
-        "hero_image": "shopify://shop_images/Trips_Page_Header.png",
-        "enable_scroll_indicator": true,
+        "enable_scroll_indicator": false,
         "enable_fade_overlay": false,
+        "overlay_logo": "shopify://shop_images/CYNTP_Character_Full_Color.png",
         "logo_width": 200,
-        "heading": "Trips",
-        "subheading": "CYNTP Certified Trips perfect for your next outing.",
+        "heading": "",
+        "subheading": "",
         "button_link": "",
         "button_text": "",
-        "section_color_scheme": ""
+        "section_color_scheme": "",
+        "enable_full_height": false,
+        "enable_navbar_transparency": false
       }
     },
     "object_index_BzjYXD": {
       "type": "ObjectIndex",
       "settings": {
-        "title": "",
+        "title": "Our Favorite Trips",
         "metaobject_type": "trips"
       }
     }
