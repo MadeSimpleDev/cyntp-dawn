@@ -30,7 +30,8 @@
       {% endunless %}
     {% endif %}
   {% endfor %}
-  {% assign states_array = states_csv | split: ',' | uniq %}
+  <!-- Split, remove duplicates, then sort alphabetically -->
+  {% assign states_array = states_csv | split: ',' | uniq | sort %}
 
   <!-- 3) Section Header -->
   <div class="golf-courses-container">
@@ -141,7 +142,7 @@
     padding: 10px 0;
   }
 
-  /* 🌟 Scoped Section Titles */
+  /* 🌟 Section Titles */
   .golf-courses-section .section-title {
     font-size: 22px;
     font-weight: bold;
@@ -154,7 +155,7 @@
     white-space: nowrap;
   }
 
-  /* 🌟 Force Title Bars to Show */
+  /* 🌟 Title Bars */
   .golf-courses-section .section-header::before,
   .golf-courses-section .section-header::after {
     content: '';
@@ -170,7 +171,7 @@
     margin-left: 15px;
   }
 
-  /* 🌟 Scoped Grid Layout */
+  /* 🌟 Grid Layout */
   .golf-courses-section .golf-courses-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -183,15 +184,17 @@
   /* 🌟 Each "State" Card */
   .golf-course-state {
     padding: 10px;
-    background: transparent; /* Remove white background */
+    background: transparent;
     border-radius: 4px;
-    border: none; /* Remove border if undesired */
+    border: none;
   }
 
+  /* Larger & Centered State Names */
   .golf-course-state h3 {
-    font-size: 18px;
+    font-size: 22px; /* Increase the size from 18px */
     margin-bottom: 8px;
     color: var(--color-heading, #333);
+    text-align: center; /* Center the state name */
   }
 
   .courses-list {
@@ -203,7 +206,7 @@
     margin: 4px 0;
   }
 
-  /* 🌟 Scoped Links */
+  /* 🌟 Course Links */
   .golf-courses-section .golf-course-link {
     text-decoration: none;
     color: var(--color-text);
@@ -215,7 +218,7 @@
     text-decoration: underline;
   }
 
-  /* 🌟 Responsive Adjustments */
+  /* 🌟 Responsive Breakpoints */
   @media (max-width: 1024px) {
     .golf-courses-section .golf-courses-grid {
       grid-template-columns: repeat(3, 1fr);
