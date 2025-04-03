@@ -1,33 +1,42 @@
 {%- comment -%}
-  CYNTP Blog Pattern:
-  - First article: large hero image with overlay text
-  - Remaining articles in groups of 5:
-      => 4 small-post items (image left, text on right)
-      => 1 big-post item (large image with text below)
-  - Includes paginate block (10 articles per page)
+  CYNTP Blog Pattern (Debug Mode):
+  - First article => hero style
+  - Next articles => groups of 5
+    => 4 small-post items
+    => 1 big-post item
+  - Paginate by 10 articles
+  - Prints debug info for each article
 {%- endcomment -%}
 
 {%- paginate blog.articles by 10 -%}
-  <!--
-    Debug Info: If you're seeing zero or missing values here,
-    check that your blog actually has published articles
-    and that this template is assigned to that blog.
-  -->
-  <div class="debug-info" style="background: #f9f0c7; padding: 10px; margin-bottom: 1rem; color: #333;">
-    <p><strong>Debug:</strong></p>
-    <p>Blog handle: {{ blog.handle }}</p>
-    <p>Number of articles: {{ blog.articles_count }}</p>
+  <!-- Basic debug info about the blog -->
+  <div style="background:#f9f0c7; padding:10px; margin-bottom:1rem; border:1px solid #ccc; color:#333;">
+    <strong>Debug Info</strong>
+    <p>
+      Blog handle: <strong>{{ blog.handle }}</strong>
+    </p>
+    <p>
+      blog.articles_count: <strong>{{ blog.articles_count }}</strong>
+    </p>
+    <p>
+      paginate.items.size: <strong>{{ paginate.items.size }}</strong>
+    </p>
   </div>
 
   <div class="blog-custom-pattern">
-    {% if blog.articles.size == 0 %}
-      <p>No articles found in this blog.</p>
-    {% else %}
+    {%- if blog.articles.size == 0 -%}
+      <p>No articles found for this blog.</p>
+    {%- else -%}
       {%- assign articles = paginate.items -%}
       {%- assign first_article = articles | first -%}
 
       <!-- ========== 1) HERO ARTICLE ========== -->
       {% if first_article %}
+        <div style="background:#eef; padding:10px; margin-bottom:1rem;">
+          <p style="margin:0;">
+            <strong>Hero Article Debug:</strong> {{ first_article.title }} | {{ first_article.id }}
+          </p>
+        </div>
         <div class="hero-article">
           <a href="{{ first_article.url }}" class="hero-article__image-link">
             {% if first_article.image %}
@@ -51,12 +60,32 @@
         </div>
       {% endif %}
 
-      <!-- ========== 2) LOOP REMAINING ARTICLES IN GROUPS OF 5 ========== -->
+      <!-- ========== 2) REMAINING ARTICLES ========== -->
+      {% comment %}
+        We'll iterate over all articles except the first.
+        index_in_group => forloop.index0 modulo 5
+          => 0..3 => small-post
+          => 4 => big-post
+      {% endcomment %}
       {% for article in articles offset: 1 %}
-        {% assign index_in_group = forloop.index0 | modulo: 5 %}
+        <!-- Debug block for each article -->
+        <div style="background:#ffe; padding:10px; margin-bottom:.5rem; border:1px dashed #ccc;">
+          <strong>Article Debug:</strong>
+          <p style="margin:0;">
+            Title: {{ article.title }}
+            <br>
+            Author: {{ article.author }}
+            <br>
+            ID: {{ article.id }}
+            <br>
+            Published: {{ article.published_at | time_tag: format: 'date' -}}
+            <br>
+          </p>
+        </div>
 
+        {% assign index_in_group = forloop.index0 | modulo: 5 %}
         {% if index_in_group < 4 %}
-          <!-- SMALL POST (Articles 1..4 in each 5-article group) -->
+          <!-- SMALL POST (Articles 1..4 in each group) -->
           <div class="small-post">
             <div class="small-post__image-wrap">
               {% if article.image %}
@@ -84,9 +113,8 @@
               {% endif %}
             </div>
           </div>
-
         {% else %}
-          <!-- BIG POST (the 5th article in each 5-article group) -->
+          <!-- BIG POST (The 5th article in each group) -->
           <div class="big-post">
             <div class="big-post__image-wrap">
               {% if article.image %}
@@ -123,7 +151,7 @@
           {%- render 'pagination', paginate: paginate -%}
         </div>
       {% endif %}
-    {% endif %}
+    {%- endif -%}
   </div>
 {%- endpaginate %}
 
@@ -136,7 +164,6 @@
   }
   .hero-article__image-link {
     display: block;
-    position: relative;
     text-decoration: none;
     color: inherit;
   }
