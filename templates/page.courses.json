@@ -56,6 +56,32 @@
       "disabled": true,
       "settings": {}
     },
+    "rich_text_z4nYEX": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_GHhUFB": {
+          "type": "heading",
+          "settings": {
+            "heading": "Find a golf course",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_GHhUFB"
+      ],
+      "custom_css": [
+        "h2 {font-style: oblique; font-weight: bold;}"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
     "custom_search_bar_dMRtHq": {
       "type": "custom-search-bar",
       "settings": {
@@ -71,6 +97,7 @@
     "courses_by_state_Rrj8GU",
     "object_index_BzjYXD",
     "cyntp_comments_dqNX4D",
+    "rich_text_z4nYEX",
     "custom_search_bar_dMRtHq"
   ]
 }
