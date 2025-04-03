@@ -55,6 +55,14 @@
       "type": "cyntp-comments",
       "disabled": true,
       "settings": {}
+    },
+    "custom_search_bar_dMRtHq": {
+      "type": "custom-search-bar",
+      "settings": {
+        "enable_predictive_search": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -62,6 +70,7 @@
     "hero_banner_with_scroll_8aXYfH",
     "courses_by_state_Rrj8GU",
     "object_index_BzjYXD",
-    "cyntp_comments_dqNX4D"
+    "cyntp_comments_dqNX4D",
+    "custom_search_bar_dMRtHq"
   ]
 }
