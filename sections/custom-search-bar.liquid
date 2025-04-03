@@ -61,6 +61,7 @@
   .custom-search-bar__icon {
     width: 1.2rem;
     height: 1.2rem;
+    display: inline-block;
     fill: currentColor;
   }
 {%- endstyle -%}
@@ -85,14 +86,20 @@
           class="custom-search-bar__reset hidden"
           aria-label="{{ 'general.search.reset' | t }}"
         >
-          {{ 'icon-reset.svg' | inline_asset_content: class: 'custom-search-bar__icon' }}
+          <!-- Wrap the reset icon in a span with a class -->
+          <span class="custom-search-bar__icon">
+            {{ 'icon-reset.svg' | inline_asset_content }}
+          </span>
         </button>
         <button
           type="submit"
           class="custom-search-bar__button"
           aria-label="{{ 'general.search.search' | t }}"
         >
-          {{ 'icon-search.svg' | inline_asset_content: class: 'custom-search-bar__icon' }}
+          <!-- Wrap the search icon in a span with a class -->
+          <span class="custom-search-bar__icon">
+            {{ 'icon-search.svg' | inline_asset_content }}
+          </span>
         </button>
       </div>
       <input type="hidden" name="options[prefix]" value="last">
