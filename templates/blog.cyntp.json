@@ -1,12 +1,11 @@
 {
-    "sections": {
-      "main": {
-        "type": "cyntp-blog",
-        "settings": {}
-      }
-    },
-    "order": [
-      "main"
-    ]
-  }
-  
+  "sections": {
+    "main": {
+      "type": "cyntp-blog",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
