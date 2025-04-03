@@ -1,77 +1,25 @@
-{%- comment -%}
-  Minimal Debug Section:
-  - Prints high-level info about the blog
-  - Lists each article via blog.articles
-  - Lists each article via paginate.items
-  - No hero/big/small logic
-{%- endcomment -%}
-
 {%- paginate blog.articles by 10 -%}
-  <div style="background:#f9f0c7; padding:10px; margin-bottom:1rem; border:1px solid #ccc;">
-    <h2>Minimal Debug</h2>
-    <p><strong>Blog handle:</strong> {{ blog.handle }}</p>
-    <p><strong>blog.articles_count:</strong> {{ blog.articles_count }}</p>
-    <p><strong>paginate.items.size:</strong> {{ paginate.items.size }}</p>
-    <p><strong>paginate.current_page:</strong> {{ paginate.current_page }}</p>
-    <p><strong>paginate.pages:</strong> {{ paginate.pages }}</p>
-  </div>
+  {% assign articles = paginate.items %}
+  {% assign first_article = articles | first %}
 
-  {% comment %}
-    1) Directly loop over blog.articles
-  {% endcomment %}
-  <div style="background:#efe; padding:10px; margin-bottom:1rem; border:1px solid #ccc;">
-    <h3>Loop #1: blog.articles (all posts in this blog)</h3>
-    {% if blog.articles.size == 0 %}
-      <p>No blog.articles found</p>
-    {% else %}
-      {% for article in blog.articles %}
-        <div style="margin-bottom:.5rem; border:1px dashed #aaa; padding:5px;">
-          <strong>blog.articles Loop</strong><br>
-          Title: {{ article.title -}}
-          <br>
-          Author: {{ article.author -}}
-          <br>
-          Published: {{ article.published_at | time_tag: format: 'date' -}}
-          <br>
-          ID: {{ article.id }}
-        </div>
-      {% endfor %}
+  {% if blog.articles_count == 0 %}
+    <p>No articles found in {{ blog.handle }}.</p>
+  {% else %}
+    <!-- Hero (article #1) -->
+    {% if first_article %}
+      <div class="hero-article">
+        <!-- your hero code -->
+      </div>
     {% endif %}
-  </div>
 
-  {% comment %}
-    2) Loop over the paginated collection of items
-  {% endcomment %}
-  <div style="background:#eef; padding:10px; margin-bottom:1rem; border:1px solid #ccc;">
-    <h3>Loop #2: paginate.items</h3>
-    {% assign items = paginate.items %}
-    {% if items.size == 0 %}
-      <p>No paginate.items found</p>
-    {% else %}
-      {% for article in items %}
-        <div style="margin-bottom:.5rem; border:1px dashed #aaa; padding:5px;">
-          <strong>paginate Loop</strong><br>
-          Title: {{ article.title -}}
-          <br>
-          Author: {{ article.author -}}
-          <br>
-          Published: {{ article.published_at | time_tag: format: 'date' -}}
-          <br>
-          ID: {{ article.id }}
-        </div>
-      {% endfor %}
-    {% endif %}
-  </div>
-
-  {% comment %}
-    3) If there's more than one page, show the pagination
-  {% endcomment %}
-  {% if paginate.pages > 1 %}
-    <div style="background:#ffe; padding:5px; border:1px dashed #999;">
-      <strong>Pagination</strong><br>
-      {%- render 'pagination', paginate: paginate -%}
-    </div>
+    <!-- Next articles in groups of 5 -->
+    {% for article in articles offset: 1 %}
+      {% assign index_in_group = forloop.index0 | modulo: 5 %}
+      {% if index_in_group < 4 %}
+        <!-- Small post (4 in each group) -->
+      {% else %}
+        <!-- Big post (the 5th in each group) -->
+      {% endif %}
+    {% endfor %}
   {% endif %}
 {%- endpaginate %}
-
-<!-- No fancy styling, just raw data -->
