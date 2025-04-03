@@ -34,10 +34,11 @@
 
   .custom-search-bar__input {
     width: 100%;
-    padding: 1rem 4rem 1rem 1rem; /* room for reset & search icons to the right */
+    /* Increase vertical padding for a taller search bar and round the borders */
+    padding: 1.2rem 4rem 1.2rem 1rem;
     font-size: 1rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 30px;
   }
 
   .custom-search-bar__button,
@@ -45,24 +46,24 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
     border: none;
     cursor: pointer;
   }
 
   .custom-search-bar__reset {
     right: 3rem;
+    background: none;
   }
 
   .custom-search-bar__button {
     right: 1rem;
-  }
-
-  .custom-search-bar__icon {
-    width: 1.2rem;
-    height: 1.2rem;
-    display: inline-block;
-    fill: currentColor;
+    /* Style the button as a green oval */
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50px;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    font-weight: bold;
   }
 {%- endstyle -%}
 
@@ -91,16 +92,10 @@
             {{ 'icon-reset.svg' | inline_asset_content }}
           </span>
         </button>
-        <button
-          type="submit"
-          class="custom-search-bar__button"
-          aria-label="{{ 'general.search.search' | t }}"
-        >
-          <!-- Wrap the search icon in a span with a class -->
-          <span class="custom-search-bar__icon">
-            {{ 'icon-search.svg' | inline_asset_content }}
-          </span>
-        </button>
+        <button type="submit" class="custom-search-bar__button" aria-label="{{ 'general.search.search' | t }}">
+            Search
+          </button>
+          
       </div>
       <input type="hidden" name="options[prefix]" value="last">
     </form>
