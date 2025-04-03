@@ -1,0 +1,164 @@
+{% comment %}
+  Custom Search Bar Section
+  This section provides a simple search form that integrates with Shopify's search endpoint.
+  Add it via the Theme Editor to place a search bar anywhere you like.
+
+  Usage:
+  1. Upload this file to 'sections/custom-search-bar.liquid'
+  2. In the Shopify Theme Editor, add the "Custom Search Bar" section
+  3. Configure as desired (e.g. enable predictive search, adjust spacing, etc.)
+
+  Note:
+  - This uses Shopify's built-in search route (routes.search_url).
+  - For predictive search, the Dawn theme's `predictive-search.js` + `search-form.js` must be present and loaded.
+{% endcomment %}
+
+{%- style -%}
+  .custom-search-bar {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    max-width: 60rem;
+    margin: 0 auto;
+  }
+
+  @media screen and (min-width: 750px) {
+    .custom-search-bar {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .custom-search-bar__field {
+    position: relative;
+  }
+
+  .custom-search-bar__input {
+    width: 100%;
+    padding: 1rem 4rem 1rem 1rem; /* room for reset & search icons to the right */
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .custom-search-bar__button,
+  .custom-search-bar__reset {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .custom-search-bar__reset {
+    right: 3rem;
+  }
+
+  .custom-search-bar__button {
+    right: 1rem;
+  }
+
+  .custom-search-bar__icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    fill: currentColor;
+  }
+{%- endstyle -%}
+
+<div class="custom-search-bar">
+  {% capture search_form %}
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+      <div class="custom-search-bar__field">
+        <input
+          class="custom-search-bar__input"
+          id="{{ section.id }}-search-input"
+          type="search"
+          name="q"
+          placeholder="{{ 'general.search.search' | t }}"
+          autocorrect="off"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+        >
+        <button
+          type="reset"
+          class="custom-search-bar__reset hidden"
+          aria-label="{{ 'general.search.reset' | t }}"
+        >
+          {{ 'icon-reset.svg' | inline_asset_content: class: 'custom-search-bar__icon' }}
+        </button>
+        <button
+          type="submit"
+          class="custom-search-bar__button"
+          aria-label="{{ 'general.search.search' | t }}"
+        >
+          {{ 'icon-search.svg' | inline_asset_content: class: 'custom-search-bar__icon' }}
+        </button>
+      </div>
+      <input type="hidden" name="options[prefix]" value="last">
+    </form>
+  {% endcapture %}
+
+  {% if section.settings.enable_predictive_search %}
+    {%- comment -%}
+      If you want predictive search, your theme must have:
+      - predictive-search.js
+      - search-form.js
+      - <predictive-search> custom element usage
+    {%- endcomment -%}
+    <predictive-search data-loading-text="{{ 'accessibility.loading' | t }}">
+      {{ search_form }}
+      <div class="predictive-search predictive-search--header" tabindex="-1" data-predictive-search>
+        {%- render 'loading-spinner', class: 'predictive-search__loading-state' -%}
+      </div>
+      <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+    </predictive-search>
+  {% else %}
+    {%- comment -%}
+      Basic non-predictive search form usage
+      Still uses `search-form.js` for the reset button toggle, etc.
+    {%- endcomment -%}
+    <search-form>
+      {{ search_form }}
+    </search-form>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Custom Search Bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_predictive_search",
+      "label": "Enable predictive search",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Search Bar"
+    }
+  ]
+}
+{% endschema %}
