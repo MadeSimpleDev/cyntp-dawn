@@ -1,25 +1,145 @@
+{%- comment -%}
+  CYNTP Hero/Big/Small Pattern with Debug
+  - First article = Hero
+  - Next articles in sets of 5:
+      => 4 are "small-post"
+      => 1 is "big-post"
+  - Paginate by 10
+{%- endcomment -%}
+
 {%- paginate blog.articles by 10 -%}
+  <!-- Debug block to confirm we see the blog and its articles -->
+  <div style="background:#f9f0c7; padding:10px; margin-bottom:1rem; color:#333;">
+    <p><strong>Debug Info:</strong></p>
+    <p>
+      blog.handle: <strong>{{ blog.handle }}</strong>
+    </p>
+    <p>
+      blog.articles_count: <strong>{{ blog.articles_count }}</strong>
+    </p>
+    <p>
+      paginate.items.size: <strong>{{ paginate.items.size }}</strong>
+    </p>
+  </div>
+
   {% assign articles = paginate.items %}
   {% assign first_article = articles | first %}
 
-  {% if blog.articles_count == 0 %}
-    <p>No articles found in {{ blog.handle }}.</p>
+  {% if articles.size == 0 %}
+    <!-- If truly no articles in the "slice," show this. -->
+    <p>No articles in this page slice.</p>
   {% else %}
-    <!-- Hero (article #1) -->
+    <!-- 1) Hero article (#1) -->
+    <div style="background:#d5efff; padding:8px; margin-bottom:8px;">
+      <strong>[Hero Debug]</strong>
+      <p>First article: {{ first_article.title }} — ID: {{ first_article.id }}</p>
+    </div>
+
     {% if first_article %}
       <div class="hero-article">
-        <!-- your hero code -->
+        <!-- Show the hero image + overlay if there's an image -->
+        <a href="{{ first_article.url }}" class="hero-article__image-link">
+          {% if first_article.image %}
+            <img
+              class="hero-article__image"
+              src="{{ first_article.image.src | image_url: width: 1600 }}"
+              alt="{{ first_article.image.src.alt | escape }}"
+            >
+          {% endif %}
+          <div class="hero-article__overlay">
+            <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
+            <p class="hero-article__meta">
+              {{ first_article.published_at | time_tag: format: 'date' }}
+              {% if first_article.author %} | By {{ first_article.author }}{% endif %}
+            </p>
+            {% if first_article.excerpt %}
+              <p class="hero-article__excerpt">{{ first_article.excerpt | strip_html | truncatewords: 30 }}</p>
+            {% endif %}
+          </div>
+        </a>
       </div>
     {% endif %}
 
-    <!-- Next articles in groups of 5 -->
+    <!-- 2) Next articles in groups of 5 -->
+    {% comment %}
+      We'll loop from the 2nd item (offset:1):
+      - index_in_group = forloop.index0 % 5
+        => 0..3 => small-post
+        => 4 => big-post
+    {% endcomment %}
     {% for article in articles offset: 1 %}
       {% assign index_in_group = forloop.index0 | modulo: 5 %}
+
+      <div style="background:#dfffd7; padding:8px; margin-bottom:8px;">
+        <strong>[Loop Debug]</strong>
+        <p>Article #{{ forloop.index }} in the offset loop => index_in_group = {{ index_in_group }}</p>
+        <p>Title: {{ article.title }} — ID: {{ article.id }}</p>
+      </div>
+
       {% if index_in_group < 4 %}
-        <!-- Small post (4 in each group) -->
+        <!-- Small-Post -->
+        <div class="small-post">
+          <div class="small-post__image-wrap">
+            {% if article.image %}
+              <a href="{{ article.url }}">
+                <img
+                  class="small-post__image"
+                  src="{{ article.image.src | image_url: width: 400 }}"
+                  alt="{{ article.image.src.alt | escape }}"
+                >
+              </a>
+            {% endif %}
+          </div>
+          <div class="small-post__content">
+            <h3 class="small-post__title">
+              <a href="{{ article.url }}">{{ article.title | escape }}</a>
+            </h3>
+            <p class="small-post__meta">
+              {{ article.published_at | time_tag: format: 'date' }}
+              {% if article.author %} | By {{ article.author }}{% endif %}
+            </p>
+            {% if article.excerpt %}
+              <p class="small-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 20 }}</p>
+            {% endif %}
+          </div>
+        </div>
       {% else %}
-        <!-- Big post (the 5th in each group) -->
+        <!-- Big-Post (the 5th in each set of 5) -->
+        <div class="big-post">
+          <div class="big-post__image-wrap">
+            {% if article.image %}
+              <a href="{{ article.url }}">
+                <img
+                  class="big-post__image"
+                  src="{{ article.image.src | image_url: width: 1200 }}"
+                  alt="{{ article.image.src.alt | escape }}"
+                >
+              </a>
+            {% endif %}
+          </div>
+          <div class="big-post__content">
+            <h3 class="big-post__title">
+              <a href="{{ article.url }}">{{ article.title | escape }}</a>
+            </h3>
+            <p class="big-post__meta">
+              {{ article.published_at | time_tag: format: 'date' }}
+              {% if article.author %} | By {{ article.author }}{% endif %}
+            </p>
+            {% if article.excerpt %}
+              <p class="big-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 25 }}</p>
+            {% endif %}
+          </div>
+        </div>
       {% endif %}
     {% endfor %}
+
+    <!-- 3) Pagination if more than 1 page -->
+    {% if paginate.pages > 1 %}
+      <div class="pagination">
+        {%- render 'pagination', paginate: paginate -%}
+      </div>
+    {% endif %}
   {% endif %}
 {%- endpaginate %}
+
+<!-- Minimal styling for hero/big/small is optional, but can be added below. -->
