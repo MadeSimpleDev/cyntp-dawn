@@ -1,6 +1,7 @@
 {%- style -%}
   .custom-search-bar {
-    position: relative; /* ensures absolute children are positioned relative to this container */
+    /* Make the parent relatively positioned so we can absolutely position the dropdown */
+    position: relative;
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
     max-width: 60rem;
@@ -40,9 +41,10 @@
     background: none;
   }
 
+  /* ▼ Button color updated to #282F25 ▼ */
   .custom-search-bar__button {
     right: 1rem;
-    background-color: #28a745;
+    background-color: #282F25;
     color: #fff;
     border-radius: 50px;
     padding: 0.6rem 1.2rem;
@@ -50,19 +52,14 @@
     font-weight: bold;
   }
 
-  /* ▼ Key override: place the predictive-search dropdown under the custom search bar ▼ */
-  /* This targets the same class Dawn uses (predictive-search--header) and repositions it */
+  /* ▼ Override so results appear above the input (instead of below) ▼ */
   .custom-search-bar predictive-search .predictive-search--header {
     position: absolute;
-    top: calc(100% + 0.2rem);
+    bottom: calc(100% + 0.2rem); /* Renders dropdown above the bar */
     left: 0;
-    right: auto; /* or 0 if you want it full-width */
+    right: 0;
     width: 100%;
-  }
-
-  /* Optionally adjust z-index if it appears behind other elements */
-  .custom-search-bar predictive-search .predictive-search--header {
-    z-index: 9999;
+    z-index: 9999; /* Ensure the dropdown is on top */
   }
 {%- endstyle -%}
 
