@@ -1,31 +1,23 @@
 {%- comment -%}
-  RAW JSON PAGINATION TEST
-  This snippet:
-    - Calls: paginate blog.articles by 10
-    - Loops over each item in paginate.items
-    - Prints the entire object in JSON form
-  If these items are NOT real articles, they'll appear as empty objects or placeholders.
+  NON-PAGINATED LOOP TEST
+  - Directly loops over blog.articles
+  - Prints each as JSON
+  - Bypasses any weird pagination or placeholders
 {%- endcomment -%}
 
-{%- paginate blog.articles by 10 -%}
-  <h2>Raw JSON Pagination Test</h2>
-  <p>blog.handle: {{ blog.handle }}</p>
-  <p>blog.articles_count: {{ blog.articles_count }}</p>
-  <p>paginate.items.size: {{ paginate.items.size }}</p>
+<h2>Non-Paginated Loop Test</h2>
+<p>blog.handle: {{ blog.handle }}</p>
+<p>blog.articles_count: {{ blog.articles_count }}</p>
 
-  <!-- For each item in paginate.items, print JSON -->
-  <div style="background:#eef; padding:10px;">
-    {% for item in paginate.items %}
+{% if blog.articles.size == 0 %}
+  <p>No articles found in blog.articles</p>
+{% else %}
+  <p>Looping over blog.articles directly ({{ blog.articles.size }} articles):</p>
+  <div style="background:#eaf2ff; padding:10px;">
+    {% for a in blog.articles %}
       <pre style="margin-bottom:1rem; border:1px dashed #aaa; padding:10px; white-space:pre-wrap;">
-        {{ item | json }}
+        {{ a | json }}
       </pre>
     {% endfor %}
   </div>
-
-  <!-- Optional: show pagination if multiple pages -->
-  {% if paginate.pages > 1 %}
-    <div style="margin-top:1rem;">
-      {%- render 'pagination', paginate: paginate -%}
-    </div>
-  {% endif %}
-{%- endpaginate -%}
+{% endif %}
