@@ -1,20 +1,10 @@
 {%- comment -%}
   Hero / 4 Small / 1 Big pattern
-  + "Load More" button for the leftover groups
-  + Entire card is clickable, not just the title
-  + No Liquid paginate
+  + "Load More" button for leftover groups
+  + Entire card clickable
+  + No Liquid paginate (all articles loaded at once)
+  + Fix for Liquid math syntax error by calculating group_count in multiple steps
 {%- endcomment -%}
-
-<!--
-  Liquid steps:
-  1) Gather all articles: blog.articles
-  2) The first is hero.
-  3) The rest are chunked in sets of 5:
-     - first 4 => "small-post"
-     - 5th => "big-post"
-  4) We initially show only the FIRST group of leftover articles, plus the hero.
-  5) A "Load More" button in JS reveals each next group if any.
--->
 
 {% assign all_articles = blog.articles %}
 {% assign first_article = all_articles | first %}
@@ -36,7 +26,6 @@
   {% endif %}
 </div>
 
-<!-- If no articles exist, we just say so. -->
 {% if all_articles.size == 0 %}
   <p>No articles found.</p>
 {% else %}
@@ -47,7 +36,6 @@
   -->
   {% if first_article %}
     <div class="hero-article">
-      <!-- Entire hero card is clickable -->
       <a href="{{ first_article.url }}" class="hero-article__link">
         {% if first_article.image %}
           <img
@@ -72,139 +60,126 @@
 
   <!--
     =========================
-    2) LEFTOVER ARTICLES
-      in sets of 5
+    2) LEFTOVER ARTICLES IN GROUPS
     =========================
   -->
   {% assign leftover_articles = all_articles | slice: 1, all_articles.size | default: 0 %}
-  <!-- slice(1..) means skip first, i.e. leftover -->
+  {% assign leftover_count = leftover_articles.size %}
+  {% if leftover_count > 0 %}
+    {# We need to figure out how many groups of 5 we have #}
+    {% assign group_count = leftover_count | divided_by: 5 %}
+    {% assign remainder = leftover_count | modulo: 5 %}
+    {% if remainder > 0 %}
+      {% assign group_count = group_count | plus: 1 %}
+    {% endif %}
+    {# group_count is total sets. We'll do (0..group_count-1) #}
 
-  {% if leftover_articles.size > 0 %}
-    <!-- We'll build groups (array-of-arrays) in Liquid. Each sub-array is up to 5 articles. -->
-    {% assign groups = '' | split: ',' %} {# an empty array #}
-    {% for i in (0..ceiling(leftover_articles.size/5) - 1) %}
-      {% capture groupSlice %}
-        {{ leftover_articles | slice: i*5, 5 | json }}
-      {% endcapture %}
-      {% assign groups = groups | push: groupSlice %}
+    {# Build the array-of-JSON slices #}
+    {% assign groups = '' | split: ',' %}
+    {% for i in (0.. group_count | minus:1) %}
+      {% capture startIndex %}{{ i | times:5 }}{% endcapture %}
+      {% assign groupSlice = leftover_articles | slice: startIndex | slice: 0, 5 %}
+      {% capture groupJson %}{{ groupSlice | json }}{% endcapture %}
+      {% assign groups = groups | push: groupJson %}
     {% endfor %}
 
-    <!-- Render the FIRST group by default. Keep the rest hidden until "Load More" is clicked. -->
-    <div id="LeftoverArticleContainer" class="leftover-articles-container">
-      <!-- We will fill this with the first group via JavaScript, and any subsequent groups on "Load More" -->
-    </div>
+    <div id="LeftoverArticleContainer" class="leftover-articles-container"></div>
 
-    {% if groups.size > 1 %}
-      <!-- If there's more than 1 leftover group, show the "Load More" button. -->
+    {% if group_count > 1 %}
+      <!-- If there's more than 1 group leftover, show "Load More" -->
       <div class="load-more-wrapper center">
         <button id="LoadMoreBtn" class="load-more-button">Load more posts</button>
       </div>
     {% endif %}
 
-    <!-- We'll embed the leftover groups as JSON to parse in JS. -->
+    <!-- We'll embed leftover groups in JSON -->
     <script type="application/json" id="LeftoverGroupsData">
       {{ groups | json }}
     </script>
 
+    <!-- JavaScript for "Load More" -->
     <script>
-    (function(){
-      // We'll chunk leftover articles in "groups" each up to 5 items
-      // 'LeftoverGroupsData' is an array of JSON-strings, each representing up to 5 articles.
+      (function () {
+        var dataEl = document.getElementById('LeftoverGroupsData');
+        if (!dataEl) return;
 
-      var groupsDataEl = document.getElementById('LeftoverGroupsData');
-      if(!groupsDataEl) return;
+        var leftoverGroups = JSON.parse(dataEl.textContent);
+        // leftoverGroups is an array of JSON strings, each string is an array of up to 5 articles
+        var currentIndex = 0;
+        var containerEl = document.getElementById('LeftoverArticleContainer');
+        var loadMoreBtn = document.getElementById('LoadMoreBtn');
 
-      var leftoverGroups = JSON.parse(groupsDataEl.textContent); // array of stringified article-lists
-      // leftoverGroups[i] is a JSON string of up to 5 article objects
-      // e.g. "[ {id:...,title:...}, ... ]"
+        function renderGroup(groupJson) {
+          var groupArticles = JSON.parse(groupJson); // up to 5 articles
+          var groupHTML = '';
+          for (var i = 0; i < groupArticles.length; i++) {
+            var art = groupArticles[i];
+            var indexInGroup = i; // 0..4 => first 4 "small-post", 5th "big-post"
+            var cardClass = indexInGroup < 4 ? 'small-post' : 'big-post';
+            var widthVal = indexInGroup < 4 ? 500 : 1200;
 
-      // We'll track which group index we last displayed
-      var currentIndex = 0;
-      var containerEl = document.getElementById('LeftoverArticleContainer');
-      var loadMoreBtn = document.getElementById('LoadMoreBtn');
+            var imageHTML = '';
+            if (art.image) {
+              imageHTML = `
+              <div class="${cardClass}__image-wrap">
+                <img class="${cardClass}__image"
+                     src="${art.image.src}?width=${widthVal}"
+                     alt="${art.image.alt ? art.image.alt : ''}"
+                />
+              </div>`;
+            }
 
-      // Function to render a single group
-      function renderGroup(groupJson) {
-        var groupArticles = JSON.parse(groupJson); 
-        // For each article in groupArticles:
-        //   - 0..3 => "small-post"
-        //   - 4 => "big-post"
-        // We'll produce HTML and append.
-
-        var groupHTML = '';
-        for(var i=0; i<groupArticles.length; i++){
-          var art = groupArticles[i];
-          var indexInGroup = i; // 0..4
-          // entire card clickable
-          var cardClass = (indexInGroup < 4) ? 'small-post' : 'big-post';
-          var widthVal  = (indexInGroup < 4) ? 500 : 1200; // small vs big width
-
-          // Build a block
-          var postHTML = `
+            var postHTML = `
             <a class="${cardClass} clickable-card" href="${art.url}">
-              ${
-                art.image
-                  ? `<div class="${cardClass}__image-wrap">
-                      <img class="${cardClass}__image" 
-                           src="${art.image.src | replace: '"', '%22'}?width=${widthVal}"
-                           alt="${ art.image.alt ? art.image.alt : '' }" />
-                    </div>`
-                  : ''
-              }
+              ${imageHTML}
               <div class="${cardClass}__content">
-                <h3 class="${cardClass}__title" style="margin:0 0 .3rem; font-size: 1.25rem; font-weight: bold;">
+                <h3 class="${cardClass}__title" style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
                   ${art.title}
                 </h3>
                 <p class="${cardClass}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
-                  ${art.published_at}
-                  ${
-                    art.author 
-                      ? ' | By ' + art.author
-                      : ''
-                  }
+                  ${art.published_at} 
+                  ${art.author ? ' | By ' + art.author : ''}
                 </p>
                 ${
                   art.summary_html
-                  ? `<p class="${cardClass}__excerpt" style="font-size:.9rem; line-height:1.4;">
-                      ${art.summary_html}
-                     </p>`
-                  : ''
+                    ? `<p class="${cardClass}__excerpt" style="font-size:.9rem; line-height:1.4;">
+                         ${art.summary_html}
+                       </p>`
+                    : ''
                 }
               </div>
             </a>
           `;
-          groupHTML += postHTML;
-        }
-        // Append to container
-        var wrapper = document.createElement('div');
-        wrapper.innerHTML = groupHTML;
-        containerEl.appendChild(wrapper);
-      }
-
-      // Render the 1st group immediately
-      if(leftoverGroups.length > 0){
-        renderGroup(leftoverGroups[currentIndex]);
-      }
-
-      // "Load More" button
-      if(loadMoreBtn){
-        // If there's only 1 leftover group, hide the button
-        if(leftoverGroups.length <= 1){
-          loadMoreBtn.style.display = 'none';
-        }
-
-        loadMoreBtn.addEventListener('click', function(){
-          currentIndex++;
-          if(currentIndex < leftoverGroups.length){
-            renderGroup(leftoverGroups[currentIndex]);
+            groupHTML += postHTML;
           }
-          if(currentIndex >= leftoverGroups.length -1){
-            // no more groups left
+          var wrapper = document.createElement('div');
+          wrapper.innerHTML = groupHTML;
+          containerEl.appendChild(wrapper);
+        }
+
+        // Render the first group immediately
+        if (leftoverGroups.length > 0) {
+          renderGroup(leftoverGroups[currentIndex]);
+        }
+
+        if (loadMoreBtn) {
+          // if there's only 1 group, hide the button
+          if (leftoverGroups.length <= 1) {
             loadMoreBtn.style.display = 'none';
           }
-        });
-      }
-    })();
+
+          loadMoreBtn.addEventListener('click', function () {
+            currentIndex++;
+            if (currentIndex < leftoverGroups.length) {
+              renderGroup(leftoverGroups[currentIndex]);
+            }
+            // if we just rendered the last group, hide button
+            if (currentIndex >= leftoverGroups.length - 1) {
+              loadMoreBtn.style.display = 'none';
+            }
+          });
+        }
+      })();
     </script>
   {% endif %}
 {% endif %}
@@ -215,14 +190,7 @@
   =========================
 -->
 <style>
-  /* 
-  1) Large (Hero) Image 
-     - Title: white, bold, italic
-     - Desktop: text on left w/ black overlay
-     - Mobile: text at bottom, tall image
-*/
-
-  /* Hero container & image link for the entire clickable area */
+  /* Hero container & entire clickable area */
   .hero-article {
     position: relative;
     margin-bottom: 2rem;
@@ -235,16 +203,12 @@
     position: relative;
   }
 
-  /* Make the hero image "taller" in general. 
-   We'll use min-height in a ratio approach or fixed viewport approach. 
-   This is one approach; tweak as needed. */
+  /* Make the hero image taller on mobile, overlay on desktop vs mobile */
   .hero-article__image {
     width: 100%;
     display: block;
     object-fit: cover;
   }
-
-  /* The overlay with text. We'll handle desktop vs mobile in media queries. */
   .hero-article__overlay {
     position: absolute;
     top: 0;
@@ -255,10 +219,9 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    background: rgba(0, 0, 0, 0); /* We'll set different background in desktop. */
+    background: rgba(0, 0, 0, 0);
   }
-
-  /* White, bold, italic for hero title. */
+  /* White, bold, italic for the hero title */
   .hero-article__title {
     margin: 0 0 0.5rem;
     color: #fff;
@@ -268,28 +231,18 @@
     line-height: 1.1;
   }
 
-  /* 
-  2) Desktop vs Mobile 
-*/
   @media screen and (min-width: 750px) {
-    /* Desktop: 
-     - text on left side 
-     - partial black background 
-  */
+    /* Desktop overlay: left side with black background for text */
     .hero-article__overlay {
       align-items: flex-start;
       width: 40%;
-      background: rgba(0, 0, 0, 0.4); /* Transparent black for contrast */
+      background: rgba(0, 0, 0, 0.4);
     }
   }
   @media screen and (max-width: 749px) {
-    /* Mobile: 
-     - text at bottom
-     - image is taller 
-     - overlay covers bottom 
-  */
+    /* Mobile: text at bottom, tall image */
     .hero-article__image {
-      min-height: 60vh; /* make it taller on mobile */
+      min-height: 60vh;
     }
     .hero-article__overlay {
       justify-content: flex-end;
@@ -298,10 +251,7 @@
     }
   }
 
-  /*
-  3) Entire Card Clickable For All "Small" or "Big" Posts
-     We'll unify them as .clickable-card
-*/
+  /* All leftover cards fully clickable */
   .clickable-card {
     display: block;
     text-decoration: none;
@@ -316,10 +266,7 @@
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
   }
 
-  /* 
-  4) small-post style 
-     Titles are standard <h3>, no anchor 
-*/
+  /* SMALL POST */
   .small-post {
     display: flex;
     gap: 1rem;
@@ -348,8 +295,8 @@
     font-weight: bold;
     margin-bottom: 0.3rem;
   }
-  /* If you want italic or bold styling, you can add it here. */
 
+  /* BIG POST */
   .big-post {
     margin-bottom: 2rem;
     background: #fff;
@@ -372,11 +319,10 @@
     font-weight: bold;
   }
 
-  /* 
-  5) "Load More" button styling
-*/
+  /* "Load More" button */
   .load-more-wrapper {
     margin-top: 2rem;
+    text-align: center;
   }
   .load-more-button {
     padding: 0.75rem 1.5rem;
