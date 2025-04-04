@@ -1,23 +1,87 @@
 {%- comment -%}
-  NON-PAGINATED LOOP TEST
-  - Directly loops over blog.articles
-  - Prints each as JSON
-  - Bypasses any weird pagination or placeholders
+  Hero / Big / Small Pattern WITHOUT Pagination
+  - If you only have 4 total articles, you see: 1 hero + 3 small
+  - If you had e.g. 10 articles, you'd still see the hero + leftover groups of 5
 {%- endcomment -%}
 
-<h2>Non-Paginated Loop Test 2</h2>
-<p>blog.handle: {{ blog.handle }}</p>
-<p>blog.articles_count: {{ blog.articles_count }}</p>
+{% assign all_articles = blog.articles %}
+{% assign first_article = all_articles | first %}
 
-{% if blog.articles.size == 0 %}
-  <p>No articles found in blog.articles</p>
+<!-- Debug box to confirm how many articles we see -->
+<div style="background:#f9f0c7; padding:10px; margin-bottom:1rem; color:#333; border:1px solid #ccc;">
+  <h2>No-Pagination Hero/Big/Small Test</h2>
+  <p>blog.handle: {{ blog.handle }}</p>
+  <p>blog.articles_count: {{ blog.articles_count }}</p>
+  <p>all_articles.size: {{ all_articles.size }}</p>
+  {% if first_article %}
+    <p>First article title: {{ first_article.title }}</p>
+  {% else %}
+    <p>No first_article found!</p>
+  {% endif %}
+</div>
+
+{% if all_articles.size == 0 %}
+  <p>No articles found for this blog.</p>
 {% else %}
-  <p>Looping over blog.articles directly ({{ blog.articles.size }} articles):</p>
-  <div style="background:#eaf2ff; padding:10px;">
-    {% for a in blog.articles %}
-      <pre style="margin-bottom:1rem; border:1px dashed #aaa; padding:10px; white-space:pre-wrap;">
-        {{ a | json }}
-      </pre>
-    {% endfor %}
+  <!-- HERO: The 1st article -->
+  <div class="hero-article-placeholder">
+    <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
+    <p class="hero-article__meta">
+      {{ first_article.published_at | time_tag: format: 'date' }}
+      {% if first_article.author %} | By {{ first_article.author }}{% endif %}
+    </p>
+    {% if first_article.excerpt %}
+      <p class="hero-article__excerpt">{{ first_article.excerpt | strip_html | truncatewords: 30 }}</p>
+    {% endif %}
   </div>
+
+  <!-- LOOP leftover articles, in sets of 5 -->
+  {% for article in all_articles offset: 1 %}
+    {% assign index_in_group = forloop.index0 | modulo: 5 %}
+
+    {% if index_in_group < 4 %}
+      <!-- SMALL-POST (the first 4 in each leftover group of 5) -->
+      <div class="small-post-placeholder">
+        <h3 class="small-post__title">{{ article.title | escape }}</h3>
+        <p class="small-post__meta">
+          {{ article.published_at | time_tag: format: 'date' }}
+          {% if article.author %} | By {{ article.author }}{% endif %}
+        </p>
+        {% if article.excerpt %}
+          <p class="small-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 20 }}</p>
+        {% endif %}
+      </div>
+    {% else %}
+      <!-- BIG-POST (the 5th leftover in each group) -->
+      <div class="big-post-placeholder">
+        <h3 class="big-post__title">{{ article.title | escape }}</h3>
+        <p class="big-post__meta">
+          {{ article.published_at | time_tag: format: 'date' }}
+          {% if article.author %} | By {{ article.author }}{% endif %}
+        </p>
+        {% if article.excerpt %}
+          <p class="big-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 25 }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endfor %}
 {% endif %}
+
+<!-- Simple placeholder styling -->
+<style>
+  .hero-article-placeholder {
+    background: #ffd5d5;
+    padding: 1rem;
+    margin-bottom: 2rem;
+  }
+  .small-post-placeholder {
+    background: #d5ffd5;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .big-post-placeholder {
+    background: #d5f1ff;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+</style>
