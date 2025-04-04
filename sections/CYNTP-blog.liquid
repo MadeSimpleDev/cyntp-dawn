@@ -1,15 +1,16 @@
 {%- comment -%}
-  Hero / Big / Small Pattern WITHOUT Pagination
-  - If you only have 4 total articles, you see: 1 hero + 3 small
-  - If you had e.g. 10 articles, you'd still see the hero + leftover groups of 5
+  Hero + Big/Small Layout (No Pagination)
+  - 1st article => hero (with image)
+  - leftover => sets of 5: 4 small + 1 big
+  - If you only have 4 total, you see 1 hero + 3 small (no big).
 {%- endcomment -%}
 
 {% assign all_articles = blog.articles %}
 {% assign first_article = all_articles | first %}
 
-<!-- Debug box to confirm how many articles we see -->
-<div style="background:#f9f0c7; padding:10px; margin-bottom:1rem; color:#333; border:1px solid #ccc;">
-  <h2>No-Pagination Hero/Big/Small Test</h2>
+<!-- Debug Box -->
+<div style="background:#f9f0c7; padding:10px; margin-bottom:1rem; border:1px solid #ccc;">
+  <strong>Debug (No-Pagination Hero/Big/Small):</strong>
   <p>blog.handle: {{ blog.handle }}</p>
   <p>blog.articles_count: {{ blog.articles_count }}</p>
   <p>all_articles.size: {{ all_articles.size }}</p>
@@ -23,65 +24,172 @@
 {% if all_articles.size == 0 %}
   <p>No articles found for this blog.</p>
 {% else %}
-  <!-- HERO: The 1st article -->
-  <div class="hero-article-placeholder">
-    <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
-    <p class="hero-article__meta">
-      {{ first_article.published_at | time_tag: format: 'date' }}
-      {% if first_article.author %} | By {{ first_article.author }}{% endif %}
-    </p>
-    {% if first_article.excerpt %}
-      <p class="hero-article__excerpt">{{ first_article.excerpt | strip_html | truncatewords: 30 }}</p>
-    {% endif %}
-  </div>
+  <!-- HERO Article -->
+  {% if first_article %}
+    <div class="hero-article">
+      <a href="{{ first_article.url }}" class="hero-article__image-link">
+        {% if first_article.image %}
+          <img
+            class="hero-article__image"
+            src="{{ first_article.image.src | image_url: width: 1600 }}"
+            alt="{{ first_article.image.src.alt | escape }}"
+          >
+        {% endif %}
+        <div class="hero-article__overlay">
+          <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
+          <p class="hero-article__meta">
+            {{ first_article.published_at | time_tag: format: 'date' }}
+            {% if first_article.author %} | By {{ first_article.author }}{% endif %}
+          </p>
+          {% if first_article.excerpt %}
+            <p class="hero-article__excerpt">{{ first_article.excerpt | strip_html | truncatewords: 30 }}</p>
+          {% endif %}
+        </div>
+      </a>
+    </div>
+  {% endif %}
 
-  <!-- LOOP leftover articles, in sets of 5 -->
+  <!-- Leftover Articles in Groups of 5 -->
   {% for article in all_articles offset: 1 %}
     {% assign index_in_group = forloop.index0 | modulo: 5 %}
 
     {% if index_in_group < 4 %}
-      <!-- SMALL-POST (the first 4 in each leftover group of 5) -->
-      <div class="small-post-placeholder">
-        <h3 class="small-post__title">{{ article.title | escape }}</h3>
-        <p class="small-post__meta">
-          {{ article.published_at | time_tag: format: 'date' }}
-          {% if article.author %} | By {{ article.author }}{% endif %}
-        </p>
-        {% if article.excerpt %}
-          <p class="small-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 20 }}</p>
-        {% endif %}
+      <!-- SMALL POST -->
+      <div class="small-post">
+        <div class="small-post__image-wrap">
+          {% if article.image %}
+            <a href="{{ article.url }}">
+              <img
+                class="small-post__image"
+                src="{{ article.image.src | image_url: width: 500 }}"
+                alt="{{ article.image.src.alt | escape }}"
+              >
+            </a>
+          {% endif %}
+        </div>
+        <div class="small-post__content">
+          <h3 class="small-post__title">
+            <a href="{{ article.url }}">{{ article.title | escape }}</a>
+          </h3>
+          <p class="small-post__meta">
+            {{ article.published_at | time_tag: format: 'date' }}
+            {% if article.author %} | By {{ article.author }}{% endif %}
+          </p>
+          {% if article.excerpt %}
+            <p class="small-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 20 }}</p>
+          {% endif %}
+        </div>
       </div>
     {% else %}
-      <!-- BIG-POST (the 5th leftover in each group) -->
-      <div class="big-post-placeholder">
-        <h3 class="big-post__title">{{ article.title | escape }}</h3>
-        <p class="big-post__meta">
-          {{ article.published_at | time_tag: format: 'date' }}
-          {% if article.author %} | By {{ article.author }}{% endif %}
-        </p>
-        {% if article.excerpt %}
-          <p class="big-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 25 }}</p>
-        {% endif %}
+      <!-- BIG POST (the 5th leftover) -->
+      <div class="big-post">
+        <div class="big-post__image-wrap">
+          {% if article.image %}
+            <a href="{{ article.url }}">
+              <img
+                class="big-post__image"
+                src="{{ article.image.src | image_url: width: 1200 }}"
+                alt="{{ article.image.src.alt | escape }}"
+              >
+            </a>
+          {% endif %}
+        </div>
+        <div class="big-post__content">
+          <h3 class="big-post__title">
+            <a href="{{ article.url }}">{{ article.title | escape }}</a>
+          </h3>
+          <p class="big-post__meta">
+            {{ article.published_at | time_tag: format: 'date' }}
+            {% if article.author %} | By {{ article.author }}{% endif %}
+          </p>
+          {% if article.excerpt %}
+            <p class="big-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 25 }}</p>
+          {% endif %}
+        </div>
       </div>
     {% endif %}
   {% endfor %}
 {% endif %}
 
-<!-- Simple placeholder styling -->
+<!-- Minimal styling for hero, small, big -->
 <style>
-  .hero-article-placeholder {
-    background: #ffd5d5;
-    padding: 1rem;
+  .hero-article {
+    position: relative;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+  .hero-article__image-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .hero-article__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+  .hero-article__overlay {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 1.5rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+    color: #fff;
+  }
+  .hero-article__title {
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1.1;
+  }
+
+  .small-post {
+    display: flex;
+    gap: 1rem;
     margin-bottom: 2rem;
   }
-  .small-post-placeholder {
-    background: #d5ffd5;
-    padding: 1rem;
-    margin-bottom: 1rem;
+  .small-post__image-wrap {
+    flex: 0 0 200px;
+    overflow: hidden;
   }
-  .big-post-placeholder {
-    background: #d5f1ff;
-    padding: 1rem;
-    margin-bottom: 1rem;
+  .small-post__image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  .small-post__content {
+    flex: 1;
+  }
+  .small-post__title {
+    margin: 0 0 0.3rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  .big-post {
+    margin-bottom: 2rem;
+  }
+  .big-post__image-wrap {
+    margin-bottom: 0.5rem;
+  }
+  .big-post__image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  .big-post__title {
+    margin: 0 0 0.3rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+
+  .hero-article__meta,
+  .small-post__meta,
+  .big-post__meta {
+    font-size: 0.875rem;
+    opacity: 0.8;
+    margin-bottom: 0.5rem;
   }
 </style>
