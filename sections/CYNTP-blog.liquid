@@ -1,101 +1,62 @@
 {%- comment -%}
-  Final "Hero / Big / Small" Blog Section
-  - First article = Hero
-  - Remaining in groups of 5: 4 small-post, then 1 big-post
+  Placeholder Hero / Big / Small Pattern
+  WITHOUT article images
+  - First article => "Hero"
+  - Remainder => Groups of 5:
+      => 4 "small-post"
+      => 1 "big-post"
   - Paginate by 10
 {%- endcomment -%}
 
 {%- paginate blog.articles by 10 -%}
-  {%- assign articles = paginate.items -%}
-  {%- assign first_article = articles | first -%}
+  {% assign articles = paginate.items %}
+  {% assign first_article = articles | first %}
 
   {% if articles.size == 0 %}
-    <!-- If no articles in this pagination slice, just say so -->
-    <p>No articles found.</p>
+    <p>No articles found in this pagination slice.</p>
   {% else %}
-    <!-- HERO: The very first article -->
+    <!-- Hero: The very first article only -->
     {% if first_article %}
-      <div class="hero-article">
-        <a href="{{ first_article.url }}" class="hero-article__image-link">
-          {% if first_article.image %}
-            <img
-              class="hero-article__image"
-              src="{{ first_article.image.src | image_url: width: 1600 }}"
-              alt="{{ first_article.image.src.alt | escape }}"
-            >
-          {% endif %}
-          <div class="hero-article__overlay">
-            <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
-            <p class="hero-article__meta">
-              {{ first_article.published_at | time_tag: format: 'date' }}
-              {% if first_article.author %} &nbsp;|&nbsp; By {{ first_article.author }}{% endif %}
-            </p>
-            {% if first_article.excerpt %}
-              <p class="hero-article__excerpt">{{ first_article.excerpt | strip_html | truncatewords: 30 }}</p>
-            {% endif %}
-          </div>
-        </a>
+      <div class="hero-article-placeholder">
+        <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
+        <p class="hero-article__meta">
+          {{ first_article.published_at | time_tag: format: 'date' }}
+          {% if first_article.author %} | By {{ first_article.author }}{% endif %}
+        </p>
+        {% if first_article.excerpt %}
+          <p class="hero-article__excerpt">{{ first_article.excerpt | strip_html | truncatewords: 30 }}</p>
+        {% endif %}
       </div>
     {% endif %}
 
-    <!-- NEXT ARTICLES: offset=1, grouped by 5 (4 small + 1 big) -->
+    <!-- Loop leftover articles, in sets of 5 -->
     {% for article in articles offset: 1 %}
       {% assign index_in_group = forloop.index0 | modulo: 5 %}
 
       {% if index_in_group < 4 %}
-        <!-- SMALL-POST (first 4 in each group of 5) -->
-        <div class="small-post">
-          <div class="small-post__image-wrap">
-            {% if article.image %}
-              <a href="{{ article.url }}">
-                <img
-                  class="small-post__image"
-                  src="{{ article.image.src | image_url: width: 500 }}"
-                  alt="{{ article.image.src.alt | escape }}"
-                >
-              </a>
-            {% endif %}
-          </div>
-          <div class="small-post__content">
-            <h3 class="small-post__title">
-              <a href="{{ article.url }}">{{ article.title | escape }}</a>
-            </h3>
-            <p class="small-post__meta">
-              {{ article.published_at | time_tag: format: 'date' }}
-              {% if article.author %} &nbsp;|&nbsp; By {{ article.author }}{% endif %}
-            </p>
-            {% if article.excerpt %}
-              <p class="small-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 20 }}</p>
-            {% endif %}
-          </div>
+        <!-- SMALL-POST (the first 4 in each set of 5) -->
+        <div class="small-post-placeholder">
+          <h3 class="small-post__title">{{ article.title | escape }}</h3>
+          <p class="small-post__meta">
+            {{ article.published_at | time_tag: format: 'date' }}
+            {% if article.author %} | By {{ article.author }}{% endif %}
+          </p>
+          {% if article.excerpt %}
+            <p class="small-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 20 }}</p>
+          {% endif %}
         </div>
 
       {% else %}
-        <!-- BIG-POST (the 5th in each group of 5) -->
-        <div class="big-post">
-          <div class="big-post__image-wrap">
-            {% if article.image %}
-              <a href="{{ article.url }}">
-                <img
-                  class="big-post__image"
-                  src="{{ article.image.src | image_url: width: 1200 }}"
-                  alt="{{ article.image.src.alt | escape }}"
-                >
-              </a>
-            {% endif %}
-          </div>
-          <div class="big-post__content">
-            <h3 class="big-post__title">
-              <a href="{{ article.url }}">{{ article.title | escape }}</a>
-            </h3>
-            <p class="big-post__meta">
-              {{ article.published_at | time_tag: format: 'date' }}
-              {% if article.author %} &nbsp;|&nbsp; By {{ article.author }}{% endif %}
-            </p>
-            {% if article.excerpt %}
-              <p class="big-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 25 }}</p>
-            {% endif %}
-          </div>
+        <!-- BIG-POST (the 5th leftover in each group) -->
+        <div class="big-post-placeholder">
+          <h3 class="big-post__title">{{ article.title | escape }}</h3>
+          <p class="big-post__meta">
+            {{ article.published_at | time_tag: format: 'date' }}
+            {% if article.author %} | By {{ article.author }}{% endif %}
+          </p>
+          {% if article.excerpt %}
+            <p class="big-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 25 }}</p>
+          {% endif %}
         </div>
       {% endif %}
     {% endfor %}
@@ -109,89 +70,45 @@
   {% endif %}
 {%- endpaginate %}
 
-<!-- Minimal sample styling -->
 <style>
-  .hero-article {
-    position: relative;
+  /* Simple placeholders to confirm each block is rendered */
+
+  .hero-article-placeholder {
+    background: #ffd5d5;
+    padding: 1rem;
     margin-bottom: 2rem;
-    overflow: hidden;
-  }
-  .hero-article__image-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-  .hero-article__image {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover;
-  }
-  .hero-article__overlay {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    padding: 1.5rem;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
-    color: #fff;
   }
   .hero-article__title {
     margin: 0 0 0.5rem;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
-    line-height: 1.1;
   }
   .hero-article__meta {
-    font-size: 0.875rem;
-    opacity: 0.9;
-    margin-bottom: 0.5rem;
-  }
-  .hero-article__excerpt {
-    font-size: 1rem;
-    line-height: 1.4;
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 0.4rem;
   }
 
-  .small-post {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  .small-post__image-wrap {
-    flex: 0 0 200px;
-    overflow: hidden;
-  }
-  .small-post__image {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    display: block;
-  }
-  .small-post__content {
-    flex: 1;
+  .small-post-placeholder {
+    background: #d5ffd5;
+    padding: 1rem;
+    margin-bottom: 1rem;
   }
   .small-post__title {
     margin: 0 0 0.3rem;
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: bold;
   }
   .small-post__meta {
-    font-size: 0.875rem;
-    opacity: 0.8;
-    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    color: #333;
+    margin-bottom: 0.4rem;
   }
 
-  .big-post {
-    margin-bottom: 2rem;
-  }
-  .big-post__image-wrap {
-    margin-bottom: 0.5rem;
-  }
-  .big-post__image {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    display: block;
+  .big-post-placeholder {
+    background: #d5f1ff;
+    padding: 1rem;
+    margin-bottom: 1rem;
   }
   .big-post__title {
     margin: 0 0 0.3rem;
@@ -199,9 +116,9 @@
     font-weight: bold;
   }
   .big-post__meta {
-    font-size: 0.875rem;
-    opacity: 0.8;
-    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    color: #333;
+    margin-bottom: 0.4rem;
   }
 
   .pagination {
