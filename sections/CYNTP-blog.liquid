@@ -1,7 +1,95 @@
 {%- comment -%}
-  Ultimate do-nothing test snippet
-  If you see the message below in your final HTML,
-  you KNOW this snippet is actually being used.
+  Hero + Big/Small Pattern WITH placeholders (no images)
+  - Show "Hero" for first article
+  - Then in groups of 5 leftover:
+    => 4 "small-post" placeholders
+    => 1 "big-post" placeholder
+  - Paginate by 10
 {%- endcomment -%}
 
-<p style="background: #ffe5e5; padding: 20px; color: #333;">Hello from CYNTP-blog.liquid test snippet!</p>
+{%- paginate blog.articles by 10 -%}
+  {% assign articles = paginate.items %}
+  {% assign first_article = articles | first %}
+
+  <div style="padding:10px; background:#FFF7E7; margin-bottom:1rem; border:1px solid #ccc;">
+    <strong>Debug:</strong><br>
+    <p>Article count (this page slice): {{ articles.size }}</p>
+    <p>First article title: {{ first_article.title }}</p>
+  </div>
+
+  {% if articles.size == 0 %}
+    <p>No articles found in this pagination slice.</p>
+  {% else %}
+    <!-- 1) HERO: The very first article (if any) -->
+    {% if first_article %}
+      <div class="hero-article-placeholder">
+        <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
+        <p class="hero-article__meta">
+          {{ first_article.published_at | time_tag: format: 'date' }}
+          {% if first_article.author %} | By {{ first_article.author }}{% endif %}
+        </p>
+        {% if first_article.excerpt %}
+          <p class="hero-article__excerpt">{{ first_article.excerpt | strip_html | truncatewords: 30 }}</p>
+        {% endif %}
+      </div>
+    {% else %}
+      <p style="background:#fcc; padding:10px;">No first_article found?!</p>
+    {% endif %}
+
+    <!-- 2) LOOP leftover articles in sets of 5 -->
+    {% for article in articles offset: 1 %}
+      {% assign index_in_group = forloop.index0 | modulo: 5 %}
+      {% if index_in_group < 4 %}
+        <!-- SMALL POST -->
+        <div class="small-post-placeholder">
+          <h3 class="small-post__title">{{ article.title | escape }}</h3>
+          <p class="small-post__meta">
+            {{ article.published_at | time_tag: format: 'date' }}
+            {% if article.author %} | By {{ article.author }}{% endif %}
+          </p>
+          {% if article.excerpt %}
+            <p class="small-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 20 }}</p>
+          {% endif %}
+        </div>
+      {% else %}
+        <!-- BIG POST (the 5th leftover in each group) -->
+        <div class="big-post-placeholder">
+          <h3 class="big-post__title">{{ article.title | escape }}</h3>
+          <p class="big-post__meta">
+            {{ article.published_at | time_tag: format: 'date' }}
+            {% if article.author %} | By {{ article.author }}{% endif %}
+          </p>
+          {% if article.excerpt %}
+            <p class="big-post__excerpt">{{ article.excerpt | strip_html | truncatewords: 25 }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    <!-- PAGINATION if multiple pages -->
+    {% if paginate.pages > 1 %}
+      <div class="pagination">
+        {%- render 'pagination', paginate: paginate -%}
+      </div>
+    {% endif %}
+  {% endif %}
+{%- endpaginate %}
+
+<style>
+  /* Just simple background colors to confirm each block is there */
+  .hero-article-placeholder {
+    background: #ffd5d5;
+    padding: 1rem;
+    margin-bottom: 2rem;
+  }
+  .small-post-placeholder {
+    background: #d5ffd5;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .big-post-placeholder {
+    background: #d5f1ff;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+</style>
