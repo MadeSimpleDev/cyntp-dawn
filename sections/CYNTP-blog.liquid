@@ -1,18 +1,10 @@
-{%- comment -%}
-  Final Hero + Big/Small leftover with "Load More" button
-  - No debug block
-  - No Liquid pagination
-  - If leftover_count <= 5, you’ll see them all immediately.
-  - If leftover_count > 5, you can load subsequent groups in increments of 5.
-{%- endcomment -%}
-
 {% assign all_articles = blog.articles %}
 {% assign first_article = all_articles | first %}
 
 {% if all_articles.size == 0 %}
   <p>No articles found.</p>
 {% else %}
-  <!-- 1) HERO ARTICLE -->
+  <!-- HERO (Article #1) -->
   {% if first_article %}
     <div class="hero-article">
       <a href="{{ first_article.url }}" class="hero-article__link">
@@ -24,7 +16,6 @@
           >
         {% endif %}
         <div class="hero-article__overlay">
-          <!-- Title is white, bold, italic -->
           <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
           <p class="hero-article__meta">
             {{ first_article.published_at | time_tag: format: 'date' }}
@@ -38,12 +29,11 @@
     </div>
   {% endif %}
 
-  <!-- 2) LEFTOVER ARTICLES IN GROUPS OF 5 -->
+  <!-- LEFTOVER ARTICLES -->
   {% assign leftover_articles = all_articles | slice: 1, all_articles.size %}
   {% assign leftover_count = leftover_articles.size %}
 
   {% if leftover_count > 0 %}
-    {# Compute how many leftover groups we have #}
     {% assign group_count = leftover_count | divided_by: 5 %}
     {% assign remainder = leftover_count | modulo: 5 %}
     {% if remainder > 0 %}
@@ -51,7 +41,6 @@
     {% endif %}
     {% assign group_count_minus1 = group_count | minus: 1 %}
 
-    {# Build an array "groups" to hold each group as JSON #}
     {% assign groups = '' | split: ',' %}
     {% for i in (0..group_count_minus1) %}
       {% assign startIndex = i | times: 5 %}
@@ -60,17 +49,14 @@
       {% assign groups = groups | push: groupJson %}
     {% endfor %}
 
-    <!-- Container for leftover articles -->
     <div id="LeftoverArticleContainer"></div>
 
-    <!-- If more than 1 group, show the "Load More" button -->
     {% if group_count > 1 %}
       <div class="load-more-wrapper">
         <button id="LoadMoreBtn" class="load-more-button">Load more posts</button>
       </div>
     {% endif %}
 
-    <!-- We'll embed leftover groups in JSON for JS to parse -->
     <script type="application/json" id="LeftoverGroupsData">
       {{ groups | json }}
     </script>
@@ -78,39 +64,35 @@
     <script>
       (function () {
         var dataEl = document.getElementById('LeftoverGroupsData');
-        if (!dataEl) return; // no leftover
+        if (!dataEl) return;
         var leftoverGroups = JSON.parse(dataEl.textContent);
-        // leftoverGroups is an array of JSON-strings, each string is up to 5 articles
         var containerEl = document.getElementById('LeftoverArticleContainer');
         var loadMoreBtn = document.getElementById('LoadMoreBtn');
         var currentIndex = 0;
 
         function renderGroup(groupJson) {
-          var groupArticles = JSON.parse(groupJson);
-          var groupHTML = '';
+          var arr = JSON.parse(groupJson);
+          var html = '';
+          for (var i = 0; i < arr.length; i++) {
+            var art = arr[i];
+            var idx = i;
+            var cardClass = idx < 4 ? 'small-post' : 'big-post';
+            var widthVal = idx < 4 ? 500 : 1200;
 
-          for (var i = 0; i < groupArticles.length; i++) {
-            var art = groupArticles[i];
-            var indexInGroup = i; // 0..4
-            var cardClass = indexInGroup < 4 ? 'small-post' : 'big-post';
-            var widthVal = indexInGroup < 4 ? 500 : 1200;
-
-            var imageHTML = '';
+            var imgHtml = '';
             if (art.image) {
-              imageHTML = `
+              imgHtml = `
               <div class="${cardClass}__image-wrap">
                 <img class="${cardClass}__image"
                      src="${art.image.src}?width=${widthVal}"
-                     alt="${art.image.alt ? art.image.alt : ''}"
-                />
+                     alt="${art.image.alt ? art.image.alt : ''}" />
               </div>
             `;
             }
 
-            // entire card is clickable
-            var postHTML = `
+            html += `
             <a class="${cardClass} clickable-card" href="${art.url}">
-              ${imageHTML}
+              ${imgHtml}
               <div class="${cardClass}__content">
                 <h3 class="${cardClass}__title" style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
                   ${art.title}
@@ -127,20 +109,17 @@
               </div>
             </a>
           `;
-            groupHTML += postHTML;
           }
           var wrapper = document.createElement('div');
-          wrapper.innerHTML = groupHTML;
+          wrapper.innerHTML = html;
           containerEl.appendChild(wrapper);
         }
 
-        // Render the 1st group immediately (if any)
         if (leftoverGroups.length > 0) {
           renderGroup(leftoverGroups[currentIndex]);
         }
 
         if (loadMoreBtn) {
-          // If only 1 group, hide the button
           if (leftoverGroups.length <= 1) {
             loadMoreBtn.style.display = 'none';
           }
@@ -159,9 +138,7 @@
   {% endif %}
 {% endif %}
 
-<!-- Minimal styling -->
 <style>
-  /* Hero Container */
   .hero-article {
     position: relative;
     margin-bottom: 2rem;
@@ -215,7 +192,7 @@
       padding-bottom: 2rem;
     }
   }
-  /* Entire leftover card clickable */
+
   .clickable-card {
     display: block;
     text-decoration: none;
@@ -232,7 +209,7 @@
     transform: scale(1.01);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
   }
-  /* SMALL POST */
+
   .small-post {
     display: flex;
     gap: 1rem;
@@ -244,6 +221,7 @@
   .small-post__image {
     width: 100%;
     height: auto;
+    display: block;
     object-fit: cover;
   }
   .small-post__content {
@@ -251,16 +229,9 @@
     display: flex;
     flex-direction: column;
   }
-  /* BIG POST */
-  .big-post .big-post__image-wrap {
+  .big-post__image-wrap {
     margin-bottom: 0.5rem;
     overflow: hidden;
-  }
-  .big-post__image {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    display: block;
   }
   .load-more-wrapper {
     margin-top: 2rem;
