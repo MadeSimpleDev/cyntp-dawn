@@ -61,7 +61,6 @@
     {% if remainder > 0 %}
       {% assign group_count = group_count | plus: 1 %}
     {% endif %}
-    {# We can't do "(0..group_count|minus:1)", so we do: #}
     {% assign group_count_minus1 = group_count | minus: 1 %}
 
     {% assign groups = '' | split: ',' %}
