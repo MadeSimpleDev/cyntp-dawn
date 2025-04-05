@@ -1,28 +1,13 @@
 {%- comment -%}
-  Hero + 4 Small + 1 Big pattern
-  + "Load More" for leftover groups (no Liquid paginate)
-  + Fix: we compute group_count_minus1 in a separate step
+  Final Hero + Big/Small leftover with "Load More" button
+  - No debug block
+  - No Liquid pagination
+  - If leftover_count <= 5, you’ll see them all immediately.
+  - If leftover_count > 5, you can load subsequent groups in increments of 5.
 {%- endcomment -%}
 
 {% assign all_articles = blog.articles %}
 {% assign first_article = all_articles | first %}
-
-<!-- Debug Info (optional) -->
-<div style="background:#f9f0c7; padding:10px; margin-bottom:1rem; border:1px solid #ccc;">
-  <strong>Debug Info:</strong><br>
-  blog.handle: {{ blog.handle -}}
-  <br>
-  blog.articles_count: {{ blog.articles_count -}}
-  <br>
-  all_articles.size: {{ all_articles.size -}}
-  <br>
-  {% if first_article %}
-    first_article.title: {{ first_article.title -}}
-    <br>
-  {% else %}
-    No first_article found
-  {% endif %}
-</div>
 
 {% if all_articles.size == 0 %}
   <p>No articles found.</p>
@@ -39,6 +24,7 @@
           >
         {% endif %}
         <div class="hero-article__overlay">
+          <!-- Title is white, bold, italic -->
           <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
           <p class="hero-article__meta">
             {{ first_article.published_at | time_tag: format: 'date' }}
@@ -52,10 +38,12 @@
     </div>
   {% endif %}
 
-  <!-- 2) LEFTOVER ARTICLES in groups of 5 -->
+  <!-- 2) LEFTOVER ARTICLES IN GROUPS OF 5 -->
   {% assign leftover_articles = all_articles | slice: 1, all_articles.size %}
   {% assign leftover_count = leftover_articles.size %}
+
   {% if leftover_count > 0 %}
+    {# Compute how many leftover groups we have #}
     {% assign group_count = leftover_count | divided_by: 5 %}
     {% assign remainder = leftover_count | modulo: 5 %}
     {% if remainder > 0 %}
@@ -63,8 +51,8 @@
     {% endif %}
     {% assign group_count_minus1 = group_count | minus: 1 %}
 
+    {# Build an array "groups" to hold each group as JSON #}
     {% assign groups = '' | split: ',' %}
-
     {% for i in (0..group_count_minus1) %}
       {% assign startIndex = i | times: 5 %}
       {% assign groupSlice = leftover_articles | slice: startIndex | slice: 0, 5 %}
@@ -72,14 +60,17 @@
       {% assign groups = groups | push: groupJson %}
     {% endfor %}
 
-    <div id="LeftoverArticleContainer" class="leftover-articles-container"></div>
+    <!-- Container for leftover articles -->
+    <div id="LeftoverArticleContainer"></div>
 
+    <!-- If more than 1 group, show the "Load More" button -->
     {% if group_count > 1 %}
-      <div class="load-more-wrapper center">
+      <div class="load-more-wrapper">
         <button id="LoadMoreBtn" class="load-more-button">Load more posts</button>
       </div>
     {% endif %}
 
+    <!-- We'll embed leftover groups in JSON for JS to parse -->
     <script type="application/json" id="LeftoverGroupsData">
       {{ groups | json }}
     </script>
@@ -87,19 +78,20 @@
     <script>
       (function () {
         var dataEl = document.getElementById('LeftoverGroupsData');
-        if (!dataEl) return;
-
+        if (!dataEl) return; // no leftover
         var leftoverGroups = JSON.parse(dataEl.textContent);
-        var currentIndex = 0;
+        // leftoverGroups is an array of JSON-strings, each string is up to 5 articles
         var containerEl = document.getElementById('LeftoverArticleContainer');
         var loadMoreBtn = document.getElementById('LoadMoreBtn');
+        var currentIndex = 0;
 
         function renderGroup(groupJson) {
           var groupArticles = JSON.parse(groupJson);
           var groupHTML = '';
+
           for (var i = 0; i < groupArticles.length; i++) {
             var art = groupArticles[i];
-            var indexInGroup = i;
+            var indexInGroup = i; // 0..4
             var cardClass = indexInGroup < 4 ? 'small-post' : 'big-post';
             var widthVal = indexInGroup < 4 ? 500 : 1200;
 
@@ -115,6 +107,7 @@
             `;
             }
 
+            // entire card is clickable
             var postHTML = `
             <a class="${cardClass} clickable-card" href="${art.url}">
               ${imageHTML}
@@ -128,9 +121,7 @@
                 </p>
                 ${
                   art.summary_html
-                    ? `<p class="${cardClass}__excerpt" style="font-size:.9rem; line-height:1.4;">
-                         ${art.summary_html}
-                       </p>`
+                    ? `<p class="${cardClass}__excerpt" style="font-size:.9rem; line-height:1.4;">${art.summary_html}</p>`
                     : ''
                 }
               </div>
@@ -143,16 +134,16 @@
           containerEl.appendChild(wrapper);
         }
 
-        // render the first group right away (if any)
+        // Render the 1st group immediately (if any)
         if (leftoverGroups.length > 0) {
           renderGroup(leftoverGroups[currentIndex]);
         }
 
         if (loadMoreBtn) {
+          // If only 1 group, hide the button
           if (leftoverGroups.length <= 1) {
             loadMoreBtn.style.display = 'none';
           }
-
           loadMoreBtn.addEventListener('click', function () {
             currentIndex++;
             if (currentIndex < leftoverGroups.length) {
@@ -168,12 +159,9 @@
   {% endif %}
 {% endif %}
 
-<!--
-  =========================
-  CSS
-  =========================
--->
+<!-- Minimal styling -->
 <style>
+  /* Hero Container */
   .hero-article {
     position: relative;
     margin-bottom: 2rem;
@@ -187,8 +175,8 @@
   }
   .hero-article__image {
     width: 100%;
-    object-fit: cover;
     display: block;
+    object-fit: cover;
   }
   .hero-article__overlay {
     position: absolute;
@@ -199,8 +187,8 @@
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     background: rgba(0, 0, 0, 0);
+    justify-content: flex-start;
   }
   .hero-article__title {
     margin: 0 0 0.5rem;
@@ -212,9 +200,9 @@
   }
   @media screen and (min-width: 750px) {
     .hero-article__overlay {
-      align-items: flex-start;
       width: 40%;
       background: rgba(0, 0, 0, 0.4);
+      align-items: flex-start;
     }
   }
   @media screen and (max-width: 749px) {
@@ -227,15 +215,18 @@
       padding-bottom: 2rem;
     }
   }
-  /* clickable-card for leftover articles */
+  /* Entire leftover card clickable */
   .clickable-card {
     display: block;
     text-decoration: none;
     color: inherit;
-    position: relative;
     border-radius: 4px;
     overflow: hidden;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 2rem;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 1rem;
   }
   .clickable-card:hover {
     transform: scale(1.01);
@@ -245,10 +236,6 @@
   .small-post {
     display: flex;
     gap: 1rem;
-    margin-bottom: 2rem;
-    background: #fff;
-    border: 1px solid #ddd;
-    padding: 1rem;
   }
   .small-post__image-wrap {
     flex: 0 0 200px;
@@ -258,24 +245,14 @@
     width: 100%;
     height: auto;
     object-fit: cover;
-    display: block;
   }
   .small-post__content {
     flex: 1;
     display: flex;
     flex-direction: column;
   }
-  .small-post__title {
-    margin-bottom: 0.3rem;
-  }
   /* BIG POST */
-  .big-post {
-    margin-bottom: 2rem;
-    background: #fff;
-    border: 1px solid #ddd;
-    padding: 1rem;
-  }
-  .big-post__image-wrap {
+  .big-post .big-post__image-wrap {
     margin-bottom: 0.5rem;
     overflow: hidden;
   }
@@ -285,12 +262,6 @@
     object-fit: cover;
     display: block;
   }
-  .big-post__title {
-    margin: 0 0 0.3rem;
-    font-size: 1.3rem;
-    font-weight: bold;
-  }
-  /* Load More */
   .load-more-wrapper {
     margin-top: 2rem;
     text-align: center;
