@@ -5,12 +5,12 @@
   <p>No articles found.</p>
 {% else %}
   <!-- =====================
-       1) LARGE (Hero) Post
+       1) HERO ("Large") 
        ===================== -->
   {% if first_article %}
     <div class="hero-article">
-      <!-- Entire Hero card clickable -->
-      <a href="{{ first_article.url }}" class="hero-article__link">
+      <!-- Thin gray border on top for "large" card -->
+      <a href="{{ first_article.url }}" class="hero-article__link" style="border-top:1px solid #ccc;">
         {% if first_article.image %}
           <img
             class="hero-article__image"
@@ -19,16 +19,14 @@
           >
         {% endif %}
         <div class="hero-article__overlay">
-          <!-- All text white -->
-          <h2 class="hero-article__title" style="color: #fff;">
-            {{ first_article.title | escape }}
-          </h2>
-          <p class="hero-article__meta" style="color: #fff;">
+          <!-- Title is white, bold, italic -->
+          <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
+          <p class="hero-article__meta">
             {{ first_article.published_at | time_tag: format: 'date' }}
             {% if first_article.author %} | By {{ first_article.author }}{% endif %}
           </p>
           {% if first_article.excerpt %}
-            <p class="hero-article__excerpt" style="color: #fff;">
+            <p class="hero-article__excerpt">
               {{ first_article.excerpt | strip_html | truncatewords: 30 }}
             </p>
           {% endif %}
@@ -51,7 +49,11 @@
     {% endif %}
     {% assign group_count_minus1 = group_count | minus: 1 %}
 
-    <!-- Each group up to 5 leftover articles -->
+    <!-- 
+      Each group = up to 5 leftover articles.
+      The 1st chunk is displayed, the rest hidden.
+      "Load More" will unhide each subsequent chunk.
+    -->
     {% for i in (0..group_count_minus1) %}
       {% assign startIndex = i | times: 5 %}
       {% assign chunkArticles = leftover_articles | slice: startIndex, 5 %}
@@ -61,17 +63,18 @@
       {% else %}
         <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: none;">
       {% endif %}
+        <!-- Loop each article in this chunk -->
         {% for article in chunkArticles %}
           {% assign indexInGroup = forloop.index0 %}
+
           {% if indexInGroup < 4 %}
             {% assign cardClass = "small-post" %}
-            {% assign widthVal = 1200 %}  <!-- ~20% bigger than 1000 -->
+            {% assign widthVal = 1000 %} <!-- Twice as large as 500 -->
           {% else %}
             {% assign cardClass = "medium-post" %}
-            {% assign widthVal = 1400 %}
+            {% assign widthVal = 1200 %}
           {% endif %}
 
-          <!-- Entire leftover card clickable -->
           <a class="{{ cardClass }} clickable-card" href="{{ article.url }}">
             {% if article.image %}
               <div class="{{ cardClass }}__image-wrap">
@@ -81,54 +84,42 @@
                 >
               </div>
             {% endif %}
-            <!-- 
-              Thin gray top border.
-              We do it for both small & medium. 
-            -->
             <div class="{{ cardClass }}__content"
-                 style="border-top:1px solid #ccc; position:relative;"
+                 {% if cardClass == "medium-post" %}
+                   style="border-top:1px solid #ccc;" <!-- thin gray border for "medium" -->
+                 {% endif %}
             >
-              <!-- Centered on the image? We'll overlay the text.
-                   We'll make the .__content itself an overlay with absolute positioning.
-                   Then the image-wrap is relative.
-               -->
-              {% if cardClass == "small-post" %}
-                <!-- date only, no time -->
-                {% assign dateValue = article.published_at | date: "%B %d, %Y" %}
-              {% else %}
-                <!-- medium => original time_tag date, or you can do date only if you prefer -->
-                {% assign dateValue = article.published_at | time_tag: format: 'date' %}
-              {% endif %}
-
-              <!-- We'll wrap the text in a sub-element with absolute overlay + text-align center -->
-              <div class="{{ cardClass }}__overlay-text">
-                <h3 class="{{ cardClass }}__title" style="font-size:1.25rem; font-weight:bold; margin-bottom:.3rem; color:#fff;">
-                  {{ article.title }}
-                </h3>
-                <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.9; margin-bottom:.5rem; color:#fff;">
-                  {{ dateValue }}
-                  {% if article.author %} | By {{ article.author }}{% endif %}
-                </p>
-                {% if article.summary_html %}
-                  <!-- Show excerpt from article -->
-                  <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4; color:#fff;">
-                    {{ article.summary_html | strip_html | truncatewords: 25 }}
-                  </p>
+              <h3 class="{{ cardClass }}__title"
+                  style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
+                {{ article.title }}
+              </h3>
+              <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
+                {% if cardClass == "small-post" %}
+                  <!-- small => show date only, no time -->
+                  {{ article.published_at | date: "%B %d, %Y" }}
+                {% else %}
+                  <!-- medium => keep original time or date? If you also want date only, do the same line. -->
+                  {{ article.published_at | time_tag: format: 'date' }}
                 {% endif %}
-              </div>
+                {% if article.author %} | By {{ article.author }}{% endif %}
+              </p>
+              <!-- Shorter excerpt on leftover -->
+              {% if article.summary_html %}
+                <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
+                  {{ article.summary_html | strip_html | truncatewords: 10 }}
+                </p>
+              {% endif %}
             </div>
           </a>
         {% endfor %}
       </div>
     {% endfor %}
 
-    <!-- If multiple groups, show "Load More" button -->
     {% if group_count > 1 %}
       <div class="load-more-wrapper" style="margin-top:2rem; text-align:center;">
         <button id="LoadMoreBtn" class="load-more-button"
-          style="padding:.75rem 1.5rem; background:#333; color:#fff; border:none; 
-                 cursor:pointer; border-radius:4px;"
-        >
+                style="padding:.75rem 1.5rem; background:#333; color:#fff; border:none; 
+                       cursor:pointer; border-radius:4px;">
           Load more posts
         </button>
       </div>
@@ -142,7 +133,7 @@
           var nextIndex = currentIndex + 1;
           var nextChunk = document.querySelector('.leftover-chunk-' + nextIndex);
           if(nextChunk){
-            nextChunk.style.display = 'block';
+            nextChunk.style.display='block';
             currentIndex = nextIndex;
           }
           if(currentIndex >= totalGroups -1){
@@ -156,7 +147,6 @@
 {% endif %}
 
 <style>
-/* 1) Large/Hero Post */
 .hero-article {
   position: relative;
   margin-bottom: 2rem;
@@ -167,13 +157,11 @@
   text-decoration: none;
   color: inherit;
   position: relative;
-  /* half as tall, or a bit bigger => let's do ~ 400 max-height */
-  border-top:1px solid #ccc; /* thin gray border on top if you prefer */
 }
 .hero-article__image {
   width: 100%;
-  max-height: 400px;
   object-fit: cover;
+  max-height: 300px; /* half as tall as before */
   display: block;
 }
 .hero-article__overlay {
@@ -185,17 +173,24 @@
   background: rgba(0,0,0,0);
   justify-content: flex-start;
 }
-@media screen and (min-width:750px){
+.hero-article__title {
+  margin: 0 0 .5rem;
+  color: #fff;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 2rem;
+  line-height:1.1;
+}
+@media screen and (min-width: 750px){
   .hero-article__overlay {
     width:40%;
     background: rgba(0,0,0,0.4);
     align-items:flex-start;
   }
 }
-@media screen and (max-width:749px){
-  /* or min-height: 40vh if you want bigger on mobile */
+@media screen and (max-width: 749px){
   .hero-article__image {
-    min-height:30vh;
+    min-height:30vh; /* half of 60vh */
   }
   .hero-article__overlay {
     justify-content:flex-end;
@@ -203,98 +198,45 @@
     padding-bottom:2rem;
   }
 }
-/* 2) Leftover Cards */
 .clickable-card {
   display: block;
   text-decoration: none;
   color: inherit;
+  /* Remove background color / border from leftover */
   background: none;
   border: none;
   border-radius: 0;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-bottom: 2rem; 
-  /* We do padding inside the .__content or .__image-wrap if needed */
+  margin-bottom: 2rem;
+  padding: 1rem;
 }
 .clickable-card:hover {
   transform: scale(1.01);
   box-shadow: 0 3px 6px rgba(0,0,0,.15);
 }
-/* 2A) Small Post */
 .small-post {
-  position: relative; /* we'll place text overlay over the image */
+  display: flex;
+  gap: 1rem;
 }
 .small-post__image-wrap {
-  position: relative;
+  flex: 0 0 200px;
+  overflow: hidden;
 }
 .small-post__image {
-  width:100%;
-  height:auto;
+  width: 100%;
+  height: auto;
   object-fit: cover;
-  display:block;
-  /* if you want half as tall => max-height:300px */
-}
-/* text overlay => we center text on the image */
-.small-post__content {
-  position: relative; /* we do the overlay inside .__overlay-text */
-  min-height: 250px; /* ensure some vertical space */
-}
-/* overlay text absolute center */
-.small-post__overlay-text {
-  position: absolute;
-  top:0; left:0; right:0; bottom:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  background: rgba(0,0,0,0.4);
-}
-/* 2B) Medium Post */
-.medium-post {
-  position: relative;
+  display: block;
 }
 .medium-post__image-wrap {
-  position: relative;
+  margin-bottom: .5rem;
+  overflow: hidden;
 }
 .medium-post__image {
-  width:100%;
-  height:auto;
-  display:block;
-  max-height:300px; /* half as tall */
+  max-height: 300px; /* half as tall as before */
+  width: 100%;
   object-fit: cover;
-}
-.medium-post__content {
-  position: relative;
-  min-height: 250px;
-}
-.medium-post__overlay-text {
-  position:absolute;
-  top:0; left:0; right:0; bottom:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  background: rgba(0,0,0,0.4);
-  color:#fff;
-}
-/* 
-  3) "Load More" button 
-*/
-.load-more-wrapper {
-  margin-top:2rem;
-  text-align:center;
-}
-.load-more-button {
-  padding:.75rem 1.5rem;
-  background:#333;
-  color:#fff;
-  border:none;
-  cursor:pointer;
-  border-radius:4px;
-}
-.load-more-button:hover {
-  opacity:.9;
+  display: block;
 }
 </style>
