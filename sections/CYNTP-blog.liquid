@@ -4,7 +4,9 @@
 {% if all_articles.size == 0 %}
   <p>No articles found.</p>
 {% else %}
-  <!-- HERO (Article #1) -->
+  <!-- =========================
+       1) HERO ARTICLE
+       ========================= -->
   {% if first_article %}
     <div class="hero-article">
       <a href="{{ first_article.url }}" class="hero-article__link">
@@ -22,19 +24,26 @@
             {% if first_article.author %} | By {{ first_article.author }}{% endif %}
           </p>
           {% if first_article.excerpt %}
-            <p class="hero-article__excerpt">{{ first_article.excerpt | strip_html | truncatewords: 30 }}</p>
+            <p class="hero-article__excerpt">
+              {{ first_article.excerpt | strip_html | truncatewords: 30 }}
+            </p>
           {% endif %}
         </div>
       </a>
     </div>
   {% endif %}
 
-  <!-- LEFTOVER ARTICLES -->
-  {% assign leftover_articles = all_articles | slice:1, all_articles.size %}
+  <!-- =========================
+       2) LEFTOVER ARTICLES
+       ========================= -->
+  {% assign leftover_articles = all_articles | slice: 1, all_articles.size %}
   {% assign leftover_count = leftover_articles.size %}
 
   {% if leftover_count > 0 %}
-    <!-- Compute how many leftover chunks (each up to 5 articles) -->
+    <!-- 
+      Compute how many "groups" of up to 5 leftover items:
+      e.g., if leftover_count=12 => group_count=3
+    -->
     {% assign group_count = leftover_count | divided_by: 5 %}
     {% assign remainder = leftover_count | modulo: 5 %}
     {% if remainder > 0 %}
@@ -42,63 +51,68 @@
     {% endif %}
     {% assign group_count_minus1 = group_count | minus: 1 %}
 
-    <!-- For each chunk, we'll show the 1st, hide the rest. 
-         The "Load More" button will unhide subsequent chunks. -->
+    <!--
+      We loop from 0..(group_count-1).
+      For each chunk i:
+        - slice the leftover array from i*5 to (i*5+4)
+        - wrap them in a <div> leftover-chunk
+    -->
     {% for i in (0..group_count_minus1) %}
       {% assign startIndex = i | times: 5 %}
-      {% assign chunkArticles = leftover_articles | slice: startIndex | slice: 0,5 %}
+      {% assign chunkArticles = leftover_articles | slice: startIndex, 5 %}
 
       {% if forloop.first %}
-        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display:block;">
+        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: block;">
       {% else %}
-        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display:none;">
+        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: none;">
       {% endif %}
 
-      <!-- Loop each article in this chunk -->
-      {% for article in chunkArticles %}
-        {% assign indexInGroup = forloop.index0 %}
-        <!-- leftover index: {{ indexInGroup }} -->
-        {% if indexInGroup < 4 %}
-          {% assign cardClass = "small-post" %}
-          {% assign widthVal = 500 %}
-        {% else %}
-          {% assign cardClass = "big-post" %}
-          {% assign widthVal = 1200 %}
-        {% endif %}
-
-        <a class="{{ cardClass }} clickable-card" href="{{ article.url }}">
-          {% if article.image %}
-            <div class="{{ cardClass }}__image-wrap">
-              <img class="{{ cardClass }}__image"
-                   src="{{ article.image.src }}?width={{ widthVal }}"
-                   alt="{{ article.image.alt | default: '' }}">
-            </div>
+        <!-- Each article in this chunk -->
+        {% for article in chunkArticles %}
+          {% assign indexInGroup = forloop.index0 %}
+          {% if indexInGroup < 4 %}
+            {% assign cardClass = "small-post" %}
+            {% assign widthVal = 500 %}
+          {% else %}
+            {% assign cardClass = "big-post" %}
+            {% assign widthVal = 1200 %}
           {% endif %}
-          <div class="{{ cardClass }}__content">
-            <h3 class="{{ cardClass }}__title" style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
-              {{ article.title }}
-            </h3>
-            <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
-              {{ article.published_at }}
-              {% if article.author %} | By {{ article.author }}{% endif %}
-            </p>
-            {% if article.summary_html %}
-              <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
-                {{ article.summary_html }}
-              </p>
+
+          <a class="{{ cardClass }} clickable-card" href="{{ article.url }}">
+            {% if article.image %}
+              <div class="{{ cardClass }}__image-wrap">
+                <img class="{{ cardClass }}__image"
+                     src="{{ article.image.src }}?width={{ widthVal }}"
+                     alt="{{ article.image.alt | default: '' }}">
+              </div>
             {% endif %}
-          </div>
-        </a>
-      {% endfor %}
+            <div class="{{ cardClass }}__content">
+              <h3 class="{{ cardClass }}__title"
+                  style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
+                {{ article.title }}
+              </h3>
+              <p class="{{ cardClass }}__meta"
+                 style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
+                {{ article.published_at }}
+                {% if article.author %} | By {{ article.author }}{% endif %}
+              </p>
+              {% if article.summary_html %}
+                <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
+                  {{ article.summary_html }}
+                </p>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
       </div>
     {% endfor %}
 
-    <!-- If more than 1 chunk, show the Load More button -->
+    <!-- If multiple groups, show "Load More" button -->
     {% if group_count > 1 %}
       <div class="load-more-wrapper" style="margin-top:2rem; text-align:center;">
         <button id="LoadMoreBtn" class="load-more-button"
-          style="padding:.75rem 1.5rem; background:#333; color:#fff; border:none; cursor:pointer; border-radius:4px;"
-        >
+                style="padding:.75rem 1.5rem; background:#333; color:#fff;
+                       border:none; cursor:pointer; border-radius:4px;">
           Load more posts
         </button>
       </div>
@@ -106,17 +120,17 @@
       <script>
       (function(){
         var totalGroups = {{ group_count }};
-        var currentIndex = 0;
+        var currentIndex = 0; 
         var loadMoreBtn = document.getElementById('LoadMoreBtn');
 
         loadMoreBtn.addEventListener('click', function(){
-          var nextIndex = currentIndex + 1;
+          var nextIndex = currentIndex + 1; 
           var nextChunk = document.querySelector('.leftover-chunk-' + nextIndex);
           if(nextChunk){
             nextChunk.style.display = 'block';
             currentIndex = nextIndex;
           }
-          if(currentIndex >= totalGroups - 1){
+          if(currentIndex >= totalGroups -1){
             loadMoreBtn.style.display='none';
           }
         });
@@ -126,6 +140,8 @@
   {% endif %}
 {% endif %}
 
+
+<!-- Minimal CSS -->
 <style>
 .hero-article {
   position: relative;
@@ -173,7 +189,7 @@
   }
   .hero-article__overlay {
     justify-content:flex-end;
-    background: linear-gradient(to top, rgba(0,0,0,.5), transparent);
+    background:linear-gradient(to top, rgba(0,0,0,.5), transparent);
     padding-bottom:2rem;
   }
 }
