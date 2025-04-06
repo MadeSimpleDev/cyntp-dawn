@@ -29,7 +29,7 @@
     </div>
   {% endif %}
 
-  <!-- LEFTOVER ARTICLES -->
+  <!-- LEFTOVER ARTICLES IN SETS OF 5 -->
   {% assign leftover_articles = all_articles | slice: 1, all_articles.size %}
   {% assign leftover_count = leftover_articles.size %}
 
@@ -60,65 +60,79 @@
     <script type="application/json" id="LeftoverGroupsData">
       {{ groups | json }}
     </script>
-
     <script>
       (function () {
         var dataEl = document.getElementById('LeftoverGroupsData');
         if (!dataEl) return;
+
         var leftoverGroups = JSON.parse(dataEl.textContent);
         var containerEl = document.getElementById('LeftoverArticleContainer');
         var loadMoreBtn = document.getElementById('LoadMoreBtn');
         var currentIndex = 0;
 
-        function renderGroup(groupJson) {
-          var arr = JSON.parse(groupJson);
-          var html = '';
-          for (var i = 0; i < arr.length; i++) {
-            var art = arr[i];
+        function renderGroup(jsonString) {
+          var articlesInGroup = JSON.parse(jsonString);
+          var htmlOutput = '';
+          for (var i = 0; i < articlesInGroup.length; i++) {
+            var art = articlesInGroup[i];
             var idx = i;
             var cardClass = idx < 4 ? 'small-post' : 'big-post';
             var widthVal = idx < 4 ? 500 : 1200;
 
-            var imgHtml = '';
+            var imageBlock = '';
             if (art.image) {
-              imgHtml = `
-              <div class="${cardClass}__image-wrap">
-                <img class="${cardClass}__image"
-                     src="${art.image.src}?width=${widthVal}"
-                     alt="${art.image.alt ? art.image.alt : ''}" />
-              </div>
-            `;
+              imageBlock = [
+                '<div class="' + cardClass + '__image-wrap">',
+                '<img class="' +
+                  cardClass +
+                  '__image" src="' +
+                  art.image.src +
+                  '?width=' +
+                  widthVal +
+                  '" alt="' +
+                  (art.image.alt ? art.image.alt : '') +
+                  '"/>',
+                '</div>',
+              ].join('');
             }
 
-            html += `
-            <a class="${cardClass} clickable-card" href="${art.url}">
-              ${imgHtml}
-              <div class="${cardClass}__content">
-                <h3 class="${cardClass}__title" style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
-                  ${art.title}
-                </h3>
-                <p class="${cardClass}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
-                  ${art.published_at}
-                  ${art.author ? ' | By ' + art.author : ''}
-                </p>
-                ${
-                  art.summary_html
-                    ? `<p class="${cardClass}__excerpt" style="font-size:.9rem; line-height:1.4;">${art.summary_html}</p>`
-                    : ''
-                }
-              </div>
-            </a>
-          `;
+            htmlOutput += [
+              '<a class="' + cardClass + ' clickable-card" href="' + art.url + '">',
+              imageBlock,
+              '<div class="' + cardClass + '__content">',
+              '<h3 class="' +
+                cardClass +
+                '__title" style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">' +
+                art.title +
+                '</h3>',
+              '<p class="' +
+                cardClass +
+                '__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">' +
+                art.published_at +
+                (art.author ? ' | By ' + art.author : '') +
+                '</p>',
+              art.summary_html
+                ? '<p class="' +
+                  cardClass +
+                  '__excerpt" style="font-size:.9rem; line-height:1.4;">' +
+                  art.summary_html +
+                  '</p>'
+                : '',
+              '</div>',
+              '</a>',
+            ].join('');
           }
           var wrapper = document.createElement('div');
-          wrapper.innerHTML = html;
+          wrapper.innerHTML = htmlOutput;
           containerEl.appendChild(wrapper);
         }
 
+        // Render the first group immediately
         if (leftoverGroups.length > 0) {
           renderGroup(leftoverGroups[currentIndex]);
         }
 
+        // "Load More" logic
         if (loadMoreBtn) {
           if (leftoverGroups.length <= 1) {
             loadMoreBtn.style.display = 'none';
@@ -164,8 +178,8 @@
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    background: rgba(0, 0, 0, 0);
     justify-content: flex-start;
+    background: rgba(0, 0, 0, 0);
   }
   .hero-article__title {
     margin: 0 0 0.5rem;
@@ -209,7 +223,6 @@
     transform: scale(1.01);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
   }
-
   .small-post {
     display: flex;
     gap: 1rem;
@@ -221,13 +234,8 @@
   .small-post__image {
     width: 100%;
     height: auto;
-    display: block;
     object-fit: cover;
-  }
-  .small-post__content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    display: block;
   }
   .big-post__image-wrap {
     margin-bottom: 0.5rem;
