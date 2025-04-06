@@ -13,8 +13,8 @@
         {% if first_article.image %}
           <img
             class="hero-article__image"
-            src="{{ first_article.image.src | image_url: width: 1600 }}"
-            alt="{{ first_article.image.src.alt | escape }}"
+            src="{{ first_article.image | image_url: width: 1600 }}"
+            alt="{{ first_article.image.alt | default: '' }}"
           >
         {% endif %}
         <div class="hero-article__overlay">
@@ -40,10 +40,6 @@
   {% assign leftover_count = leftover_articles.size %}
 
   {% if leftover_count > 0 %}
-    <!-- 
-      Compute how many "groups" of up to 5 leftover items:
-      e.g., if leftover_count=12 => group_count=3
-    -->
     {% assign group_count = leftover_count | divided_by: 5 %}
     {% assign remainder = leftover_count | modulo: 5 %}
     {% if remainder > 0 %}
@@ -51,12 +47,6 @@
     {% endif %}
     {% assign group_count_minus1 = group_count | minus: 1 %}
 
-    <!--
-      We loop from 0..(group_count-1).
-      For each chunk i:
-        - slice the leftover array from i*5 to (i*5+4)
-        - wrap them in a <div> leftover-chunk
-    -->
     {% for i in (0..group_count_minus1) %}
       {% assign startIndex = i | times: 5 %}
       {% assign chunkArticles = leftover_articles | slice: startIndex, 5 %}
@@ -66,8 +56,6 @@
       {% else %}
         <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: none;">
       {% endif %}
-
-        <!-- Each article in this chunk -->
         {% for article in chunkArticles %}
           {% assign indexInGroup = forloop.index0 %}
           {% if indexInGroup < 4 %}
@@ -81,9 +69,11 @@
           <a class="{{ cardClass }} clickable-card" href="{{ article.url }}">
             {% if article.image %}
               <div class="{{ cardClass }}__image-wrap">
+                <!-- IMPORTANT: Use Liquid filter to size the image -->
                 <img class="{{ cardClass }}__image"
-                     src="{{ article.image.src }}?width={{ widthVal }}"
-                     alt="{{ article.image.alt | default: '' }}">
+                     src="{{ article.image | image_url: width: widthVal }}"
+                     alt="{{ article.image.alt | default: '' }}"
+                >
               </div>
             {% endif %}
             <div class="{{ cardClass }}__content">
@@ -107,7 +97,6 @@
       </div>
     {% endfor %}
 
-    <!-- If multiple groups, show "Load More" button -->
     {% if group_count > 1 %}
       <div class="load-more-wrapper" style="margin-top:2rem; text-align:center;">
         <button id="LoadMoreBtn" class="load-more-button"
@@ -116,22 +105,21 @@
           Load more posts
         </button>
       </div>
-
       <script>
       (function(){
         var totalGroups = {{ group_count }};
-        var currentIndex = 0; 
+        var currentIndex = 0;
         var loadMoreBtn = document.getElementById('LoadMoreBtn');
 
         loadMoreBtn.addEventListener('click', function(){
-          var nextIndex = currentIndex + 1; 
+          var nextIndex = currentIndex + 1;
           var nextChunk = document.querySelector('.leftover-chunk-' + nextIndex);
           if(nextChunk){
             nextChunk.style.display = 'block';
             currentIndex = nextIndex;
           }
-          if(currentIndex >= totalGroups -1){
-            loadMoreBtn.style.display='none';
+          if(currentIndex >= totalGroups - 1){
+            loadMoreBtn.style.display = 'none';
           }
         });
       })();
@@ -140,8 +128,6 @@
   {% endif %}
 {% endif %}
 
-
-<!-- Minimal CSS -->
 <style>
 .hero-article {
   position: relative;
@@ -220,8 +206,8 @@
 .small-post__image {
   width: 100%;
   height: auto;
-  object-fit: cover;
   display: block;
+  object-fit: cover;
 }
 .big-post__image-wrap {
   margin-bottom: .5rem;
