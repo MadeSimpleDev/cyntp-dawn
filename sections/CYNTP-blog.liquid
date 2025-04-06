@@ -2,12 +2,9 @@
 {% assign first_article = all_articles | first %}
 
 {% if all_articles.size == 0 %}
-  <!-- No blog articles at all -->
   <p>No articles found.</p>
 {% else %}
-  <!-- ====================
-       1) HERO ARTICLE 
-       ==================== -->
+  <!-- HERO (Article #1) -->
   {% if first_article %}
     <div class="hero-article">
       <a href="{{ first_article.url }}" class="hero-article__link">
@@ -19,31 +16,25 @@
           >
         {% endif %}
         <div class="hero-article__overlay">
-          <!-- White, Bold, Italic Title -->
           <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
           <p class="hero-article__meta">
             {{ first_article.published_at | time_tag: format: 'date' }}
             {% if first_article.author %} | By {{ first_article.author }}{% endif %}
           </p>
           {% if first_article.excerpt %}
-            <p class="hero-article__excerpt">
-              {{ first_article.excerpt | strip_html | truncatewords: 30 }}
-            </p>
+            <p class="hero-article__excerpt">{{ first_article.excerpt | strip_html | truncatewords: 30 }}</p>
           {% endif %}
         </div>
       </a>
     </div>
   {% endif %}
 
-  <!-- ====================
-       2) LEFTOVER ARTICLES
-         in Groups of 5
-       ==================== -->
+  <!-- LEFTOVER ARTICLES -->
   {% assign leftover_articles = all_articles | slice:1, all_articles.size %}
   {% assign leftover_count = leftover_articles.size %}
 
   {% if leftover_count > 0 %}
-    <!-- Figure out how many groups of 5 we need -->
+    <!-- Compute how many leftover chunks (each up to 5 articles) -->
     {% assign group_count = leftover_count | divided_by: 5 %}
     {% assign remainder = leftover_count | modulo: 5 %}
     {% if remainder > 0 %}
@@ -51,23 +42,22 @@
     {% endif %}
     {% assign group_count_minus1 = group_count | minus: 1 %}
 
-    <!-- We'll create each group as a separate <div>, 
-         each hidden except the first. 
-         "Load More" will unhide the next group. -->
+    <!-- For each chunk, we'll show the 1st, hide the rest. 
+         The "Load More" button will unhide subsequent chunks. -->
     {% for i in (0..group_count_minus1) %}
       {% assign startIndex = i | times: 5 %}
       {% assign chunkArticles = leftover_articles | slice: startIndex | slice: 0,5 %}
 
-      <!-- Show the first group, hide subsequent groups -->
       {% if forloop.first %}
-        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: block;">
+        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display:block;">
       {% else %}
-        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: none;">
+        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display:none;">
       {% endif %}
 
-      <!-- Loop over these up to 5 articles -->
+      <!-- Loop each article in this chunk -->
       {% for article in chunkArticles %}
         {% assign indexInGroup = forloop.index0 %}
+        <!-- leftover index: {{ indexInGroup }} -->
         {% if indexInGroup < 4 %}
           {% assign cardClass = "small-post" %}
           {% assign widthVal = 500 %}
@@ -89,7 +79,8 @@
               {{ article.title }}
             </h3>
             <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
-              {{ article.published_at }}{% if article.author %} | By {{ article.author }}{% endif %}
+              {{ article.published_at }}
+              {% if article.author %} | By {{ article.author }}{% endif %}
             </p>
             {% if article.summary_html %}
               <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
@@ -102,7 +93,7 @@
       </div>
     {% endfor %}
 
-    <!-- If there's more than 1 group, show "Load More" button -->
+    <!-- If more than 1 chunk, show the Load More button -->
     {% if group_count > 1 %}
       <div class="load-more-wrapper" style="margin-top:2rem; text-align:center;">
         <button id="LoadMoreBtn" class="load-more-button"
@@ -119,16 +110,14 @@
         var loadMoreBtn = document.getElementById('LoadMoreBtn');
 
         loadMoreBtn.addEventListener('click', function(){
-          // Hide current group, show next group
           var nextIndex = currentIndex + 1;
           var nextChunk = document.querySelector('.leftover-chunk-' + nextIndex);
           if(nextChunk){
             nextChunk.style.display = 'block';
             currentIndex = nextIndex;
           }
-          // if we're at the last group, hide the button
           if(currentIndex >= totalGroups - 1){
-            loadMoreBtn.style.display = 'none';
+            loadMoreBtn.style.display='none';
           }
         });
       })();
@@ -137,7 +126,6 @@
   {% endif %}
 {% endif %}
 
-<!-- Minimal CSS for hero, small, big -->
 <style>
 .hero-article {
   position: relative;
@@ -161,8 +149,8 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   background: rgba(0,0,0,0);
+  justify-content: flex-start;
 }
 .hero-article__title {
   margin: 0 0 .5rem;
@@ -217,6 +205,7 @@
   width: 100%;
   height: auto;
   object-fit: cover;
+  display: block;
 }
 .big-post__image-wrap {
   margin-bottom: .5rem;
