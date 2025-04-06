@@ -2,9 +2,12 @@
 {% assign first_article = all_articles | first %}
 
 {% if all_articles.size == 0 %}
+  <!-- No blog articles at all -->
   <p>No articles found.</p>
 {% else %}
-  <!-- HERO (Article #1) -->
+  <!-- ====================
+       1) HERO ARTICLE 
+       ==================== -->
   {% if first_article %}
     <div class="hero-article">
       <a href="{{ first_article.url }}" class="hero-article__link">
@@ -16,24 +19,31 @@
           >
         {% endif %}
         <div class="hero-article__overlay">
+          <!-- White, Bold, Italic Title -->
           <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
           <p class="hero-article__meta">
             {{ first_article.published_at | time_tag: format: 'date' }}
             {% if first_article.author %} | By {{ first_article.author }}{% endif %}
           </p>
           {% if first_article.excerpt %}
-            <p class="hero-article__excerpt">{{ first_article.excerpt | strip_html | truncatewords: 30 }}</p>
+            <p class="hero-article__excerpt">
+              {{ first_article.excerpt | strip_html | truncatewords: 30 }}
+            </p>
           {% endif %}
         </div>
       </a>
     </div>
   {% endif %}
 
-  <!-- LEFTOVER ARTICLES IN SETS OF 5 -->
-  {% assign leftover_articles = all_articles | slice: 1, all_articles.size %}
+  <!-- ====================
+       2) LEFTOVER ARTICLES
+         in Groups of 5
+       ==================== -->
+  {% assign leftover_articles = all_articles | slice:1, all_articles.size %}
   {% assign leftover_count = leftover_articles.size %}
 
   {% if leftover_count > 0 %}
+    <!-- Figure out how many groups of 5 we need -->
     {% assign group_count = leftover_count | divided_by: 5 %}
     {% assign remainder = leftover_count | modulo: 5 %}
     {% if remainder > 0 %}
@@ -41,219 +51,175 @@
     {% endif %}
     {% assign group_count_minus1 = group_count | minus: 1 %}
 
-    {% assign groups = '' | split: ',' %}
+    <!-- We'll create each group as a separate <div>, 
+         each hidden except the first. 
+         "Load More" will unhide the next group. -->
     {% for i in (0..group_count_minus1) %}
       {% assign startIndex = i | times: 5 %}
-      {% assign groupSlice = leftover_articles | slice: startIndex | slice: 0, 5 %}
-      {% capture groupJson %}{{ groupSlice | json }}{% endcapture %}
-      {% assign groups = groups | push: groupJson %}
+      {% assign chunkArticles = leftover_articles | slice: startIndex | slice: 0,5 %}
+
+      <!-- Show the first group, hide subsequent groups -->
+      {% if forloop.first %}
+        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: block;">
+      {% else %}
+        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: none;">
+      {% endif %}
+
+      <!-- Loop over these up to 5 articles -->
+      {% for article in chunkArticles %}
+        {% assign indexInGroup = forloop.index0 %}
+        {% if indexInGroup < 4 %}
+          {% assign cardClass = "small-post" %}
+          {% assign widthVal = 500 %}
+        {% else %}
+          {% assign cardClass = "big-post" %}
+          {% assign widthVal = 1200 %}
+        {% endif %}
+
+        <a class="{{ cardClass }} clickable-card" href="{{ article.url }}">
+          {% if article.image %}
+            <div class="{{ cardClass }}__image-wrap">
+              <img class="{{ cardClass }}__image"
+                   src="{{ article.image.src }}?width={{ widthVal }}"
+                   alt="{{ article.image.alt | default: '' }}">
+            </div>
+          {% endif %}
+          <div class="{{ cardClass }}__content">
+            <h3 class="{{ cardClass }}__title" style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
+              {{ article.title }}
+            </h3>
+            <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
+              {{ article.published_at }}{% if article.author %} | By {{ article.author }}{% endif %}
+            </p>
+            {% if article.summary_html %}
+              <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
+                {{ article.summary_html }}
+              </p>
+            {% endif %}
+          </div>
+        </a>
+      {% endfor %}
+      </div>
     {% endfor %}
 
-    <div id="LeftoverArticleContainer"></div>
-
+    <!-- If there's more than 1 group, show "Load More" button -->
     {% if group_count > 1 %}
-      <div class="load-more-wrapper">
-        <button id="LoadMoreBtn" class="load-more-button">Load more posts</button>
+      <div class="load-more-wrapper" style="margin-top:2rem; text-align:center;">
+        <button id="LoadMoreBtn" class="load-more-button"
+          style="padding:.75rem 1.5rem; background:#333; color:#fff; border:none; cursor:pointer; border-radius:4px;"
+        >
+          Load more posts
+        </button>
       </div>
-    {% endif %}
 
-    <script type="application/json" id="LeftoverGroupsData">
-      {{ groups | json }}
-    </script>
-    <script>
-      (function () {
-        var dataEl = document.getElementById('LeftoverGroupsData');
-        if (!dataEl) return;
-
-        var leftoverGroups = JSON.parse(dataEl.textContent);
-        var containerEl = document.getElementById('LeftoverArticleContainer');
-        var loadMoreBtn = document.getElementById('LoadMoreBtn');
+      <script>
+      (function(){
+        var totalGroups = {{ group_count }};
         var currentIndex = 0;
+        var loadMoreBtn = document.getElementById('LoadMoreBtn');
 
-        function renderGroup(jsonString) {
-          var articlesInGroup = JSON.parse(jsonString);
-          var htmlOutput = '';
-          for (var i = 0; i < articlesInGroup.length; i++) {
-            var art = articlesInGroup[i];
-            var idx = i;
-            var cardClass = idx < 4 ? 'small-post' : 'big-post';
-            var widthVal = idx < 4 ? 500 : 1200;
-
-            var imageBlock = '';
-            if (art.image) {
-              imageBlock = [
-                '<div class="' + cardClass + '__image-wrap">',
-                '<img class="' +
-                  cardClass +
-                  '__image" src="' +
-                  art.image.src +
-                  '?width=' +
-                  widthVal +
-                  '" alt="' +
-                  (art.image.alt ? art.image.alt : '') +
-                  '"/>',
-                '</div>',
-              ].join('');
-            }
-
-            htmlOutput += [
-              '<a class="' + cardClass + ' clickable-card" href="' + art.url + '">',
-              imageBlock,
-              '<div class="' + cardClass + '__content">',
-              '<h3 class="' +
-                cardClass +
-                '__title" style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">' +
-                art.title +
-                '</h3>',
-              '<p class="' +
-                cardClass +
-                '__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">' +
-                art.published_at +
-                (art.author ? ' | By ' + art.author : '') +
-                '</p>',
-              art.summary_html
-                ? '<p class="' +
-                  cardClass +
-                  '__excerpt" style="font-size:.9rem; line-height:1.4;">' +
-                  art.summary_html +
-                  '</p>'
-                : '',
-              '</div>',
-              '</a>',
-            ].join('');
+        loadMoreBtn.addEventListener('click', function(){
+          // Hide current group, show next group
+          var nextIndex = currentIndex + 1;
+          var nextChunk = document.querySelector('.leftover-chunk-' + nextIndex);
+          if(nextChunk){
+            nextChunk.style.display = 'block';
+            currentIndex = nextIndex;
           }
-          var wrapper = document.createElement('div');
-          wrapper.innerHTML = htmlOutput;
-          containerEl.appendChild(wrapper);
-        }
-
-        // Render the first group immediately
-        if (leftoverGroups.length > 0) {
-          renderGroup(leftoverGroups[currentIndex]);
-        }
-
-        // "Load More" logic
-        if (loadMoreBtn) {
-          if (leftoverGroups.length <= 1) {
+          // if we're at the last group, hide the button
+          if(currentIndex >= totalGroups - 1){
             loadMoreBtn.style.display = 'none';
           }
-          loadMoreBtn.addEventListener('click', function () {
-            currentIndex++;
-            if (currentIndex < leftoverGroups.length) {
-              renderGroup(leftoverGroups[currentIndex]);
-            }
-            if (currentIndex >= leftoverGroups.length - 1) {
-              loadMoreBtn.style.display = 'none';
-            }
-          });
-        }
+        });
       })();
-    </script>
+      </script>
+    {% endif %}
   {% endif %}
 {% endif %}
 
+<!-- Minimal CSS for hero, small, big -->
 <style>
-  .hero-article {
-    position: relative;
-    margin-bottom: 2rem;
-    overflow: hidden;
+.hero-article {
+  position: relative;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+.hero-article__link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+.hero-article__image {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+.hero-article__overlay {
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: rgba(0,0,0,0);
+}
+.hero-article__title {
+  margin: 0 0 .5rem;
+  color: #fff;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 2rem;
+  line-height:1.1;
+}
+@media screen and (min-width:750px){
+  .hero-article__overlay {
+    width:40%;
+    background: rgba(0,0,0,0.4);
+    align-items: flex-start;
   }
-  .hero-article__link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    position: relative;
-  }
+}
+@media screen and (max-width:749px){
   .hero-article__image {
-    width: 100%;
-    display: block;
-    object-fit: cover;
+    min-height:60vh;
   }
   .hero-article__overlay {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    background: rgba(0, 0, 0, 0);
+    justify-content:flex-end;
+    background: linear-gradient(to top, rgba(0,0,0,.5), transparent);
+    padding-bottom:2rem;
   }
-  .hero-article__title {
-    margin: 0 0 0.5rem;
-    color: #fff;
-    font-weight: bold;
-    font-style: italic;
-    font-size: 2rem;
-    line-height: 1.1;
-  }
-  @media screen and (min-width: 750px) {
-    .hero-article__overlay {
-      width: 40%;
-      background: rgba(0, 0, 0, 0.4);
-      align-items: flex-start;
-    }
-  }
-  @media screen and (max-width: 749px) {
-    .hero-article__image {
-      min-height: 60vh;
-    }
-    .hero-article__overlay {
-      justify-content: flex-end;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
-      padding-bottom: 2rem;
-    }
-  }
-
-  .clickable-card {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    border-radius: 4px;
-    overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    margin-bottom: 2rem;
-    background: #fff;
-    border: 1px solid #ddd;
-    padding: 1rem;
-  }
-  .clickable-card:hover {
-    transform: scale(1.01);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
-  }
-  .small-post {
-    display: flex;
-    gap: 1rem;
-  }
-  .small-post__image-wrap {
-    flex: 0 0 200px;
-    overflow: hidden;
-  }
-  .small-post__image {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    display: block;
-  }
-  .big-post__image-wrap {
-    margin-bottom: 0.5rem;
-    overflow: hidden;
-  }
-  .load-more-wrapper {
-    margin-top: 2rem;
-    text-align: center;
-  }
-  .load-more-button {
-    padding: 0.75rem 1.5rem;
-    background: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  .load-more-button:hover {
-    opacity: 0.9;
-  }
+}
+.clickable-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 2rem;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 1rem;
+}
+.clickable-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 3px 6px rgba(0,0,0,.15);
+}
+.small-post {
+  display: flex;
+  gap: 1rem;
+}
+.small-post__image-wrap {
+  flex: 0 0 200px;
+  overflow: hidden;
+}
+.small-post__image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.big-post__image-wrap {
+  margin-bottom: .5rem;
+  overflow: hidden;
+}
 </style>
