@@ -19,14 +19,16 @@
           >
         {% endif %}
         <div class="hero-article__overlay">
-          <!-- Title is white, bold, italic -->
-          <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
-          <p class="hero-article__meta">
+          <!-- All text white -->
+          <h2 class="hero-article__title" style="color:#fff;">
+            {{ first_article.title | escape }}
+          </h2>
+          <p class="hero-article__meta" style="color:#fff;">
             {{ first_article.published_at | time_tag: format: 'date' }}
             {% if first_article.author %} | By {{ first_article.author }}{% endif %}
           </p>
           {% if first_article.excerpt %}
-            <p class="hero-article__excerpt">
+            <p class="hero-article__excerpt" style="color:#fff;">
               {{ first_article.excerpt | strip_html | truncatewords: 30 }}
             </p>
           {% endif %}
@@ -69,7 +71,7 @@
 
           {% if indexInGroup < 4 %}
             {% assign cardClass = "small-post" %}
-            {% assign widthVal = 1000 %} <!-- Twice as large as 500 -->
+            {% assign widthVal = 600 %} <!-- ~20% bigger than 500 -->
           {% else %}
             {% assign cardClass = "medium-post" %}
             {% assign widthVal = 1200 %}
@@ -84,30 +86,55 @@
                 >
               </div>
             {% endif %}
-            <div class="{{ cardClass }}__content"
-                 {% if cardClass == "medium-post" %}
-                   style="border-top:1px solid #ccc;" <!-- thin gray border for "medium" -->
-                 {% endif %}
-            >
-              <h3 class="{{ cardClass }}__title"
-                  style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
-                {{ article.title }}
-              </h3>
-              <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
-                {% if cardClass == "small-post" %}
-                  <!-- small => show date only, no time -->
-                  {{ article.published_at | date: "%B %d, %Y" }}
-                {% else %}
-                  <!-- medium => keep original time or date? If you also want date only, do the same line. -->
-                  {{ article.published_at | time_tag: format: 'date' }}
-                {% endif %}
-                {% if article.author %} | By {{ article.author }}{% endif %}
-              </p>
-              <!-- Shorter excerpt on leftover -->
-              {% if article.summary_html %}
-                <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
-                  {{ article.summary_html | strip_html | truncatewords: 10 }}
+            <!-- Thin top border for leftover cards -->
+            <div class="{{ cardClass }}__content" style="border-top:1px solid #ccc; position: relative;">
+              {% if cardClass == "small-post" %}
+                <!-- For small post, date-only, no time -->
+                {% assign displayDate = article.published_at | date: "%B %d, %Y" %}
+              {% else %}
+                {% assign displayDate = article.published_at | time_tag: format: 'date' %}
+              {% endif %}
+
+              <!-- 
+                Center text on the image for small post 
+                We can do an overlay approach inside .small-post__image-wrap 
+                but to keep it simpler, let's just place the text here with an absolute overlay 
+                if you want the text strictly on top of the image. 
+              -->
+              {% if cardClass == "small-post" %}
+                <!-- Overwrite styles for the text to appear centered + white, overlay style if you want. -->
+                <div style="
+                  position:absolute; top:0; left:0; right:0; bottom:0; 
+                  display:flex; flex-direction:column; justify-content:center; align-items:center; 
+                  text-align:center; background: rgba(0,0,0,0.3); 
+                ">
+                  <h3 class="{{ cardClass }}__title" style="font-size:1.25rem; font-weight:bold; margin-bottom:.3rem; color:#fff;">
+                    {{ article.title }}
+                  </h3>
+                  <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.9; margin-bottom:.5rem; color:#fff;">
+                    {{ displayDate }}
+                    {% if article.author %} | By {{ article.author }}{% endif %}
+                  </p>
+                  {% if article.summary_html %}
+                    <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4; color:#fff;">
+                      {{ article.summary_html | strip_html | truncatewords: 25 }}
+                    </p>
+                  {% endif %}
+                </div>
+              {% else %}
+                <!-- For medium, keep standard text style below or not overlay? -->
+                <h3 class="{{ cardClass }}__title" style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
+                  {{ article.title }}
+                </h3>
+                <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
+                  {{ displayDate }}
+                  {% if article.author %} | By {{ article.author }}{% endif %}
                 </p>
+                {% if article.summary_html %}
+                  <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
+                    {{ article.summary_html | strip_html | truncatewords: 25 }}
+                  </p>
+                {% endif %}
               {% endif %}
             </div>
           </a>
@@ -161,7 +188,7 @@
 .hero-article__image {
   width: 100%;
   object-fit: cover;
-  max-height: 300px; /* half as tall as before */
+  max-height: 400px; /* a bit bigger than 300px */
   display: block;
 }
 .hero-article__overlay {
@@ -189,8 +216,9 @@
   }
 }
 @media screen and (max-width: 749px){
+  /* or min-height: 40vh to make it bigger on mobile if you like */
   .hero-article__image {
-    min-height:30vh; /* half of 60vh */
+    min-height:30vh;
   }
   .hero-article__overlay {
     justify-content:flex-end;
@@ -202,41 +230,28 @@
   display: block;
   text-decoration: none;
   color: inherit;
-  /* Remove background color / border from leftover */
   background: none;
   border: none;
   border-radius: 0;
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   margin-bottom: 2rem;
-  padding: 1rem;
 }
 .clickable-card:hover {
   transform: scale(1.01);
   box-shadow: 0 3px 6px rgba(0,0,0,.15);
 }
-.small-post {
-  display: flex;
-  gap: 1rem;
-}
-.small-post__image-wrap {
-  flex: 0 0 200px;
+.small-post__image-wrap,
+.medium-post__image-wrap {
+  position: relative;
   overflow: hidden;
 }
-.small-post__image {
+.small-post__image,
+.medium-post__image {
   width: 100%;
   height: auto;
   object-fit: cover;
   display: block;
-}
-.medium-post__image-wrap {
-  margin-bottom: .5rem;
-  overflow: hidden;
-}
-.medium-post__image {
-  max-height: 300px; /* half as tall as before */
-  width: 100%;
-  object-fit: cover;
-  display: block;
+  /* no max-height on small, we do 600 wide so it’s bigger horizontally */
 }
 </style>
