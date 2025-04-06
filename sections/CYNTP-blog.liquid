@@ -19,6 +19,248 @@
           >
         {% endif %}
         <div class="hero-article__overlay">
+          <!-- Title is white, bold, italic -->
+          <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
+          <p class="hero-article__meta">
+            {{ first_article.published_at | time_tag: format: 'date' }}
+            {% if first_article.author %} | By {{ first_article.author }}{% endif %}
+          </p>
+          {% if first_article.excerpt %}
+            <p class="hero-article__excerpt">
+              {{ first_article.excerpt | strip_html | truncatewords: 30 }}
+            </p>
+          {% endif %}
+        </div>
+      </a>
+    </div>
+  {% endif %}
+
+  <!-- =====================
+       2) LEFTOVER ARTICLES
+       ===================== -->
+  {% assign leftover_articles = all_articles | slice: 1, all_articles.size %}
+  {% assign leftover_count = leftover_articles.size %}
+
+  {% if leftover_count > 0 %}
+    {% assign group_count = leftover_count | divided_by: 5 %}
+    {% assign remainder = leftover_count | modulo: 5 %}
+    {% if remainder > 0 %}
+      {% assign group_count = group_count | plus: 1 %}
+    {% endif %}
+    {% assign group_count_minus1 = group_count | minus: 1 %}
+
+    <!-- 
+      Each group = up to 5 leftover articles.
+      The 1st chunk is displayed, the rest hidden.
+      "Load More" will unhide each subsequent chunk.
+    -->
+    {% for i in (0..group_count_minus1) %}
+      {% assign startIndex = i | times: 5 %}
+      {% assign chunkArticles = leftover_articles | slice: startIndex, 5 %}
+
+      {% if forloop.first %}
+        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: block;">
+      {% else %}
+        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: none;">
+      {% endif %}
+        <!-- Loop each article in this chunk -->
+        {% for article in chunkArticles %}
+          {% assign indexInGroup = forloop.index0 %}
+
+          {% if indexInGroup < 4 %}
+            {% assign cardClass = "small-post" %}
+            {% assign widthVal = 1000 %} <!-- Twice as large as 500 -->
+          {% else %}
+            {% assign cardClass = "medium-post" %}
+            {% assign widthVal = 1200 %}
+          {% endif %}
+
+          <a class="{{ cardClass }} clickable-card" href="{{ article.url }}">
+            {% if article.image %}
+              <div class="{{ cardClass }}__image-wrap">
+                <img class="{{ cardClass }}__image"
+                     src="{{ article.image | image_url: width: widthVal }}"
+                     alt="{{ article.image.alt | default: '' }}"
+                >
+              </div>
+            {% endif %}
+            <div class="{{ cardClass }}__content"
+                 {% if cardClass == "medium-post" %}
+                   style="border-top:1px solid #ccc;" <!-- thin gray border for "medium" -->
+                 {% endif %}
+            >
+              <h3 class="{{ cardClass }}__title"
+                  style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
+                {{ article.title }}
+              </h3>
+              <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
+                {% if cardClass == "small-post" %}
+                  <!-- small => show date only, no time -->
+                  {{ article.published_at | date: "%B %d, %Y" }}
+                {% else %}
+                  <!-- medium => keep original time or date? If you also want date only, do the same line. -->
+                  {{ article.published_at | time_tag: format: 'date' }}
+                {% endif %}
+                {% if article.author %} | By {{ article.author }}{% endif %}
+              </p>
+              <!-- Shorter excerpt on leftover -->
+              {% if article.summary_html %}
+                <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
+                  {{ article.summary_html | strip_html | truncatewords: 10 }}
+                </p>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    {% if group_count > 1 %}
+      <div class="load-more-wrapper" style="margin-top:2rem; text-align:center;">
+        <button id="LoadMoreBtn" class="load-more-button"
+                style="padding:.75rem 1.5rem; background:#333; color:#fff; border:none; 
+                       cursor:pointer; border-radius:4px;">
+          Load more posts
+        </button>
+      </div>
+      <script>
+      (function(){
+        var totalGroups = {{ group_count }};
+        var currentIndex = 0;
+        var loadMoreBtn = document.getElementById('LoadMoreBtn');
+
+        loadMoreBtn.addEventListener('click', function(){
+          var nextIndex = currentIndex + 1;
+          var nextChunk = document.querySelector('.leftover-chunk-' + nextIndex);
+          if(nextChunk){
+            nextChunk.style.display='block';
+            currentIndex = nextIndex;
+          }
+          if(currentIndex >= totalGroups -1){
+            loadMoreBtn.style.display='none';
+          }
+        });
+      })();
+      </script>
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+<style>
+.hero-article {
+  position: relative;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+.hero-article__link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+.hero-article__image {
+  width: 100%;
+  object-fit: cover;
+  max-height: 300px; /* half as tall as before */
+  display: block;
+}
+.hero-article__overlay {
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0,0,0,0);
+  justify-content: flex-start;
+}
+.hero-article__title {
+  margin: 0 0 .5rem;
+  color: #fff;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 2rem;
+  line-height:1.1;
+}
+@media screen and (min-width: 750px){
+  .hero-article__overlay {
+    width:40%;
+    background: rgba(0,0,0,0.4);
+    align-items:flex-start;
+  }
+}
+@media screen and (max-width: 749px){
+  .hero-article__image {
+    min-height:30vh; /* half of 60vh */
+  }
+  .hero-article__overlay {
+    justify-content:flex-end;
+    background: linear-gradient(to top, rgba(0,0,0,.5), transparent);
+    padding-bottom:2rem;
+  }
+}
+.clickable-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  /* Remove background color / border from leftover */
+  background: none;
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+.clickable-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 3px 6px rgba(0,0,0,.15);
+}
+.small-post {
+  display: flex;
+  gap: 1rem;
+}
+.small-post__image-wrap {
+  flex: 0 0 200px;
+  overflow: hidden;
+}
+.small-post__image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+.medium-post__image-wrap {
+  margin-bottom: .5rem;
+  overflow: hidden;
+}
+.medium-post__image {
+  max-height: 300px; /* half as tall as before */
+  width: 100%;
+  object-fit: cover;
+  display: block;
+}
+</style>
+{% assign all_articles = blog.articles %}
+{% assign first_article = all_articles | first %}
+
+{% if all_articles.size == 0 %}
+  <p>No articles found.</p>
+{% else %}
+  <!-- =====================
+       1) HERO ("Large") 
+       ===================== -->
+  {% if first_article %}
+    <div class="hero-article">
+      <!-- Thin gray border on top for "large" card -->
+      <a href="{{ first_article.url }}" class="hero-article__link" style="border-top:1px solid #ccc;">
+        {% if first_article.image %}
+          <img
+            class="hero-article__image"
+            src="{{ first_article.image | image_url: width: 1600 }}"
+            alt="{{ first_article.image.alt | default: '' }}"
+          >
+        {% endif %}
+        <div class="hero-article__overlay">
           <!-- All text white -->
           <h2 class="hero-article__title" style="color:#fff;">
             {{ first_article.title | escape }}
