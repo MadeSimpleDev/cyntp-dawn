@@ -27,11 +27,20 @@
     display: flex;
     flex-direction: column;
     gap: 2rem; /* Keep gap between cards */
-    max-width: 70%; /* Keep container width */
+    /* Apply wider width for mobile by default */
+    max-width: 95%; /* Or 100% if you prefer full width */
     margin: 0 auto; /* Keep container centered */
   }
 
+  /* Apply narrower width only on desktop */
+  @media screen and (min-width: 750px) {
+    .cyntp-vertical-blog__list {
+      max-width: 70%; /* Keep container width for desktop */
+    }
+  }
+
   /* ============= Copied Small Post Styles ============= */
+  /* ... rest of the small-post styles remain unchanged ... */
   .clickable-card {
     display: block;
     text-decoration: none;
