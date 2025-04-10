@@ -19,6 +19,12 @@
           >
         {% endif %}
         <div class="hero-article__overlay">
+          {% comment %} Add Tag Display Here {% endcomment %}
+          {% assign first_tag = first_article.tags | first %}
+          {% if first_tag %}
+            <span class="article-tag">{{ first_tag | upcase }}</span>
+          {% endif %}
+          {% comment %} End Tag Display {% endcomment %}
           <!-- Title is white, bold, italic -->
           <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
           {% comment %} Remove the meta paragraph below {% endcomment %}
@@ -94,10 +100,26 @@
                      style="border-top:1px solid #ccc;"
                    {% endif %}
               >
+                {% comment %} New Meta Structure for Small Post {% endcomment %}
+                {% assign current_tag = article.tags | first %}
+                <div class="small-post__meta-desktop">
+                  {% if current_tag %}<span class="article-tag">{{ current_tag | upcase }}</span>{% endif %}
+                  <span class="small-post__date">{{ article.published_at | date: "%B %d, %Y" }}</span>
+                  {% if article.author %} | By {{ article.author }}{% endif %}
+                </div>
+                <div class="small-post__meta-mobile">
+                   {% if current_tag %}<span class="article-tag">{{ current_tag | upcase }}</span>{% endif %}
+                   <span class="small-post__date">{{ article.published_at | date: "%B %d, %Y" }}</span>
+                   {% if article.author %} | By {{ article.author }}{% endif %}
+                </div>
+                {% comment %} End New Meta Structure {% endcomment %}
+
                 <h3 class="{{ cardClass }}__title"
                     style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
                   {{ article.title }}
                 </h3>
+                {% comment %} Remove old meta paragraph {% endcomment %}
+                {% comment %}
                 <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
                   {% if cardClass == "small-post" %}
                     <!-- small => show date only, no time -->
@@ -108,6 +130,7 @@
                   {% endif %}
                   {% if article.author %} | By {{ article.author }}{% endif %}
                 </p>
+                {% endcomment %}
                 <!-- Shorter excerpt on leftover - Increased truncatewords -->
                 {% comment %} Check if article.summary_html exists in Shopify admin for articles appearing here {% endcomment %}
                 {% if article.summary_html %}
@@ -201,9 +224,22 @@
   flex-direction: column;
   /* Adjust gradient to be lighter */
   background: rgba(0,0,0,0.3); /* Lighter overlay */
-  justify-content: flex-start;
+  /* Vertically center content */
+  justify-content: center;
   /* Ensure all text is white */
   color: #fff;
+}
+/* Add style for the new tag element */
+.article-tag {
+  display: inline-block;
+  background-color: red;
+  color: white;
+  padding: 0.2em 0.6em;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 3px;
+  margin-bottom: 0.5rem; /* Space below tag */
 }
 .hero-article__title {
   margin: 0 0 .5rem;
@@ -219,7 +255,8 @@
 .hero-article__meta, /* Keep style rule even if element removed, for potential future use */
 .hero-article__excerpt {
   color: #fff; /* Ensure white */
-  font-size: 1rem; /* Increase font size */
+  /* Increase excerpt font size */
+  font-size: 2rem; /* Increased from 1rem */
   text-wrap: pretty; /* Add text wrapping */
 }
 .hero-article__meta {
@@ -231,7 +268,7 @@
     width:40%;
     /* Adjust gradient */
     background: rgba(0,0,0,0.3);
-    align-items:flex-start;
+    align-items:flex-start; /* Keep left align on desktop */
   }
 }
 @media screen and (max-width: 749px){
@@ -239,17 +276,20 @@
     min-height:30vh; /* half of 60vh */
   }
   .hero-article__overlay {
-    justify-content:flex-end;
+    /* Keep vertical centering */
+    justify-content: center;
     /* Adjust gradient */
     background: linear-gradient(to top, rgba(0,0,0,.4), transparent);
     padding-bottom:2rem;
+    align-items: center; /* Center align text horizontally on mobile */
+    text-align: center; /* Center text */
   }
   .hero-article__title {
     font-size: 2.5rem; /* Adjusted for mobile */
   }
   .hero-article__meta,
   .hero-article__excerpt {
-    font-size: 0.9rem; /* Slightly smaller on mobile */
+    font-size: 1.5rem; /* Adjusted excerpt size for mobile */
   }
 }
 .clickable-card {
@@ -290,12 +330,29 @@
   object-fit: cover;
   display: block;
 }
-/* Vertically center the text content */
+/* Align text content to top */
 .small-post__content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* Align content to the top */
+  justify-content: flex-start;
   flex: 1; /* Allow content to take remaining space */
+}
+/* Styles for new meta structure */
+.small-post__meta-desktop { display: none; } /* Hide by default */
+.small-post__meta-mobile { display: block; } /* Show by default */
+.small-post__meta-desktop .article-tag,
+.small-post__meta-mobile .article-tag {
+   margin-right: 0.5rem; /* Space between tag and date */
+}
+.small-post__date { /* Style for date part */
+   font-size: .875rem; opacity:.8;
+}
+.small-post__meta-desktop,
+.small-post__meta-mobile {
+   margin-bottom: 0.5rem; /* Space below meta line */
+   font-size:.875rem; opacity:.8;
+   text-wrap: pretty; /* Apply pretty wrap */
 }
 /* Increase font sizes for small posts */
 .small-post__title {
@@ -304,12 +361,15 @@
   margin: 0 0 0.4rem !important;
   text-wrap: balance; /* Add text wrapping */
 }
+/* Remove old .small-post__meta rule */
+/*
 .small-post__meta {
-  font-size: 1rem !important; /* Increased size */
+  font-size: 1rem !important; *//* Increased size *//*
   opacity: .8 !important;
   margin-bottom: 0.6rem !important;
-  text-wrap: pretty; /* Add text wrapping */
+  text-wrap: pretty; *//* Add text wrapping *//*
 }
+*/
 .small-post__excerpt {
   font-size: 1rem !important; /* Increased size */
   line-height: 1.5 !important;
@@ -326,6 +386,16 @@
   object-fit: cover;
   display: block;
 }
+/* Styles for new medium post meta */
+.medium-post__meta-line {
+   margin-bottom: 0.5rem; /* Space below meta line */
+   font-size: 1rem; /* Copied from old .medium-post__meta */
+   opacity: .8; /* Copied from old .medium-post__meta */
+   text-wrap: pretty; /* Keep this */
+}
+.medium-post__meta-line .article-tag {
+   margin-right: 0.5rem; /* Space between tag and date */
+}
 /* Increase font sizes for medium posts */
 .medium-post__title {
   font-size: 1.75rem !important; /* Increased size */
@@ -333,15 +403,31 @@
   margin: 0 0 0.5rem !important;
   text-wrap: balance; /* Add text wrapping */
 }
+/* Remove old .medium-post__meta rule */
+/*
 .medium-post__meta {
-  font-size: 1rem !important; /* Increased size */
+  font-size: 1rem !important; *//* Increased size *//*
   opacity: .8 !important;
   margin-bottom: 0.7rem !important;
-  text-wrap: pretty; /* Add text wrapping */
+  text-wrap: pretty; *//* Add text wrapping *//*
 }
+*/
 .medium-post__excerpt {
   font-size: 1.1rem !important; /* Increased size */
   line-height: 1.5 !important;
   text-wrap: pretty; /* Add text wrapping */
+}
+
+/* Media Queries for Small Post Meta and Excerpt */
+@media screen and (min-width: 750px) {
+  .small-post__meta-desktop { display: block; } /* Show desktop meta */
+  .small-post__meta-mobile { display: none; } /* Hide mobile meta */
+  .small-post__excerpt { display: block !important; } /* Ensure excerpt shows on desktop */
+}
+
+@media screen and (max-width: 749px) {
+  .small-post__excerpt { display: none; } /* Hide excerpt on mobile */
+  .small-post__meta-desktop { display: none; } /* Ensure desktop meta hidden */
+  .small-post__meta-mobile { display: block; } /* Ensure mobile meta shown */
 }
 </style>
