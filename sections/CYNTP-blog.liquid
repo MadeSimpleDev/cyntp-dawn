@@ -140,13 +140,13 @@
                   {% if article.author %} | By {{ article.author }}{% endif %}
                 </p>
                 {% endcomment %}
-                <!-- Shorter excerpt on leftover - Increased truncatewords -->
-                {% comment %} Check if article.summary_html exists in Shopify admin for articles appearing here {% endcomment %}
-                {% if article.summary_html %}
+                {% comment %} Updated Excerpt Logic Below {% endcomment %}
+                {% if article.excerpt.size > 0 %}
                   <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
-                    {{ article.summary_html | strip_html | truncatewords: 20 }}
+                    {{ article.excerpt | strip_html | truncatewords: 20 }}
                   </p>
                 {% endif %}
+                {% comment %} End Updated Excerpt Logic {% endcomment %}
               </div>
             </a>
           {% endfor %}
