@@ -21,10 +21,13 @@
         <div class="hero-article__overlay">
           <!-- Title is white, bold, italic -->
           <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
+          {% comment %} Remove the meta paragraph below {% endcomment %}
+          {% comment %}
           <p class="hero-article__meta">
             {{ first_article.published_at | time_tag: format: 'date' }}
             {% if first_article.author %} | By {{ first_article.author }}{% endif %}
           </p>
+          {% endcomment %}
           {% if first_article.excerpt %}
             <p class="hero-article__excerpt">
               {{ first_article.excerpt | strip_html | truncatewords: 30 }}
@@ -208,14 +211,16 @@
   font-weight: bold;
   font-style: italic;
   /* Increase font size */
-  font-size: 2.5rem;
+  font-size: 3.5rem; /* Increased from 2.5rem */
   line-height:1.1;
+  text-wrap: balance; /* Add text wrapping */
 }
 /* Add rule for hero meta and excerpt text color and size */
-.hero-article__meta,
+.hero-article__meta, /* Keep style rule even if element removed, for potential future use */
 .hero-article__excerpt {
   color: #fff; /* Ensure white */
   font-size: 1rem; /* Increase font size */
+  text-wrap: pretty; /* Add text wrapping */
 }
 .hero-article__meta {
   margin-bottom: 0.5rem;
@@ -240,7 +245,7 @@
     padding-bottom:2rem;
   }
   .hero-article__title {
-    font-size: 2rem; /* Slightly smaller on mobile */
+    font-size: 2.5rem; /* Adjusted for mobile */
   }
   .hero-article__meta,
   .hero-article__excerpt {
@@ -297,15 +302,18 @@
   font-size: 1.5rem !important; /* Increased size */
   font-weight: bold !important;
   margin: 0 0 0.4rem !important;
+  text-wrap: balance; /* Add text wrapping */
 }
 .small-post__meta {
   font-size: 1rem !important; /* Increased size */
   opacity: .8 !important;
   margin-bottom: 0.6rem !important;
+  text-wrap: pretty; /* Add text wrapping */
 }
 .small-post__excerpt {
   font-size: 1rem !important; /* Increased size */
   line-height: 1.5 !important;
+  text-wrap: pretty; /* Add text wrapping */
 }
 
 .medium-post__image-wrap {
@@ -323,14 +331,17 @@
   font-size: 1.75rem !important; /* Increased size */
   font-weight: bold !important;
   margin: 0 0 0.5rem !important;
+  text-wrap: balance; /* Add text wrapping */
 }
 .medium-post__meta {
   font-size: 1rem !important; /* Increased size */
   opacity: .8 !important;
   margin-bottom: 0.7rem !important;
+  text-wrap: pretty; /* Add text wrapping */
 }
 .medium-post__excerpt {
   font-size: 1.1rem !important; /* Increased size */
   line-height: 1.5 !important;
+  text-wrap: pretty; /* Add text wrapping */
 }
 </style>

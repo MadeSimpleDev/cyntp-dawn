@@ -67,6 +67,7 @@
 
 .article-template__title {
   margin: 0;
+  text-wrap: balance; /* Add text wrapping */
 }
 
 .article-template__title:not(:only-child) {
@@ -92,6 +93,11 @@
   margin-bottom: 3rem;
 }
 
+/* Add rule for paragraphs within content */
+.article-template__content p {
+  text-wrap: pretty;
+}
+
 .article-template__social-sharing {
   margin-top: 3rem;
 }
@@ -115,6 +121,7 @@
 
 .article-template__comment-wrapper h2 {
   margin-top: 0;
+  text-wrap: balance; /* Add text wrapping */
 }
 
 .article-template__comments {
@@ -146,6 +153,7 @@
 
 .article-template__comments-comment p {
   margin: 0 0 1rem;
+  text-wrap: pretty; /* Add text wrapping */
 }
 
 .article-template__comment-fields > * {

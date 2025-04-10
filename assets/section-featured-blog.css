@@ -10,6 +10,7 @@
 
 .blog__title {
   margin: 0;
+  text-wrap: balance; /* Add text wrapping */
 }
 
 .blog__posts.articles-wrapper {
@@ -57,4 +58,13 @@
       margin-left: var(--grid-desktop-horizontal-spacing);
     }
   }
+}
+
+/* Add text-wrap for card headings and excerpts */
+.blog__posts .card__heading {
+  text-wrap: balance;
+}
+
+.blog__posts .article-card__excerpt {
+  text-wrap: pretty;
 }
