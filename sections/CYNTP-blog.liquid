@@ -49,71 +49,75 @@
     {% endif %}
     {% assign group_count_minus1 = group_count | minus: 1 %}
 
-    <!-- 
-      Each group = up to 5 leftover articles.
-      The 1st chunk is displayed, the rest hidden.
-      "Load More" will unhide each subsequent chunk.
-    -->
-    {% for i in (0..group_count_minus1) %}
-      {% assign startIndex = i | times: 5 %}
-      {% assign chunkArticles = leftover_articles | slice: startIndex, 5 %}
+    <!-- Add this container div -->
+    <div class="leftover-articles-container">
+      <!--
+        Each group = up to 5 leftover articles.
+        The 1st chunk is displayed, the rest hidden.
+        "Load More" will unhide each subsequent chunk.
+      -->
+      {% for i in (0..group_count_minus1) %}
+        {% assign startIndex = i | times: 5 %}
+        {% assign chunkArticles = leftover_articles | slice: startIndex, 5 %}
 
-      {% if forloop.first %}
-        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: block;">
-      {% else %}
-        <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: none;">
-      {% endif %}
-        <!-- Loop each article in this chunk -->
-        {% for article in chunkArticles %}
-          {% assign indexInGroup = forloop.index0 %}
+        {% if forloop.first %}
+          <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: block;">
+        {% else %}
+          <div class="leftover-chunk leftover-chunk-{{ i }}" style="display: none;">
+        {% endif %}
+          <!-- Loop each article in this chunk -->
+          {% for article in chunkArticles %}
+            {% assign indexInGroup = forloop.index0 %}
 
-          {% if indexInGroup < 4 %}
-            {% assign cardClass = "small-post" %}
-            {% assign widthVal = 1000 %} <!-- Twice as large as 500 -->
-          {% else %}
-            {% assign cardClass = "medium-post" %}
-            {% assign widthVal = 1200 %}
-          {% endif %}
-
-          <a class="{{ cardClass }} clickable-card" href="{{ article.url }}">
-            {% if article.image %}
-              <div class="{{ cardClass }}__image-wrap">
-                <img class="{{ cardClass }}__image"
-                     src="{{ article.image | image_url: width: widthVal }}"
-                     alt="{{ article.image.alt | default: '' }}"
-                >
-              </div>
+            {% if indexInGroup < 4 %}
+              {% assign cardClass = "small-post" %}
+              {% assign widthVal = 1000 %} <!-- Twice as large as 500 -->
+            {% else %}
+              {% assign cardClass = "medium-post" %}
+              {% assign widthVal = 1200 %}
             {% endif %}
-            <div class="{{ cardClass }}__content"
-                 {% if cardClass == "medium-post" %}
-                   style="border-top:1px solid #ccc;" <!-- thin gray border for "medium" -->
-                 {% endif %}
-            >
-              <h3 class="{{ cardClass }}__title"
-                  style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
-                {{ article.title }}
-              </h3>
-              <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
-                {% if cardClass == "small-post" %}
-                  <!-- small => show date only, no time -->
-                  {{ article.published_at | date: "%B %d, %Y" }}
-                {% else %}
-                  <!-- medium => keep original time or date? If you also want date only, do the same line. -->
-                  {{ article.published_at | time_tag: format: 'date' }}
-                {% endif %}
-                {% if article.author %} | By {{ article.author }}{% endif %}
-              </p>
-              <!-- Shorter excerpt on leftover -->
-              {% if article.summary_html %}
-                <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
-                  {{ article.summary_html | strip_html | truncatewords: 10 }}
-                </p>
+
+            <a class="{{ cardClass }} clickable-card" href="{{ article.url }}">
+              {% if article.image %}
+                <div class="{{ cardClass }}__image-wrap">
+                  <img class="{{ cardClass }}__image"
+                       src="{{ article.image | image_url: width: widthVal }}"
+                       alt="{{ article.image.alt | default: '' }}"
+                  >
+                </div>
               {% endif %}
-            </div>
-          </a>
-        {% endfor %}
-      </div>
-    {% endfor %}
+              <div class="{{ cardClass }}__content"
+                   {% if cardClass == "medium-post" %}
+                     style="border-top:1px solid #ccc;" <!-- thin gray border for "medium" -->
+                   {% endif %}
+              >
+                <h3 class="{{ cardClass }}__title"
+                    style="margin:0 0 .3rem; font-size:1.25rem; font-weight:bold;">
+                  {{ article.title }}
+                </h3>
+                <p class="{{ cardClass }}__meta" style="font-size:.875rem; opacity:.8; margin-bottom:.5rem;">
+                  {% if cardClass == "small-post" %}
+                    <!-- small => show date only, no time -->
+                    {{ article.published_at | date: "%B %d, %Y" }}
+                  {% else %}
+                    <!-- medium => keep original time or date? If you also want date only, do the same line. -->
+                    {{ article.published_at | time_tag: format: 'date' }}
+                  {% endif %}
+                  {% if article.author %} | By {{ article.author }}{% endif %}
+                </p>
+                <!-- Shorter excerpt on leftover - Increased truncatewords -->
+                {% if article.summary_html %}
+                  <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
+                    {{ article.summary_html | strip_html | truncatewords: 20 }}
+                  </p>
+                {% endif %}
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    <!-- Close the container div -->
+    </div>
 
     {% if group_count > 1 %}
       <div class="load-more-wrapper" style="margin-top:2rem; text-align:center;">
@@ -147,6 +151,7 @@
 {% endif %}
 
 <style>
+/* Existing styles... */
 .hero-article {
   position: relative;
   margin-bottom: 2rem;
@@ -156,6 +161,12 @@
 }
 @media screen and (min-width: 990px) { /* Apply only on larger screens */
   .hero-article {
+    max-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* Add this rule for the new container */
+  .leftover-articles-container {
     max-width: 70%;
     margin-left: auto;
     margin-right: auto;
