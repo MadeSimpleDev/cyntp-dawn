@@ -88,7 +88,7 @@
               {% endif %}
               <div class="{{ cardClass }}__content"
                    {% if cardClass == "medium-post" %}
-                     style="border-top:1px solid #ccc;" <!-- thin gray border for "medium" -->
+                     style="border-top:1px solid #ccc;"
                    {% endif %}
               >
                 <h3 class="{{ cardClass }}__title"
@@ -106,6 +106,7 @@
                   {% if article.author %} | By {{ article.author }}{% endif %}
                 </p>
                 <!-- Shorter excerpt on leftover - Increased truncatewords -->
+                {% comment %} Check if article.summary_html exists in Shopify admin for articles appearing here {% endcomment %}
                 {% if article.summary_html %}
                   <p class="{{ cardClass }}__excerpt" style="font-size:.9rem; line-height:1.4;">
                     {{ article.summary_html | strip_html | truncatewords: 20 }}
@@ -114,7 +115,7 @@
               </div>
             </a>
           {% endfor %}
-        </div>
+        </div> <!-- Moved this closing div tag outside the inner for loop -->
       {% endfor %}
     <!-- Close the container div -->
     </div>
