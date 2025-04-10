@@ -1,9 +1,18 @@
 {% assign all_articles = blog.articles %}
 {% assign first_article = all_articles | first %}
 
+{% comment %} Add Filter Links Section Below {% endcomment %}
+<div class="blog-filter-links">
+  <a href="/blogs/courses/tagged/gear">Gear</a>
+  <a href="/blogs/courses/tagged/courses">Courses</a>
+  <a href="/blogs/courses/tagged/trips">Trips</a>
+</div>
+{% comment %} End Filter Links Section {% endcomment %}
+
 {% if all_articles.size == 0 %}
   <p>No articles found.</p>
 {% else %}
+  {% comment %} Existing Hero Post Code Starts Here {% endcomment %}
   <!-- =====================
        1) HERO ("Large") 
        ===================== -->
@@ -178,6 +187,24 @@
 {% endif %}
 
 <style>
+/* Add styles for filter links */
+.blog-filter-links {
+  text-align: center;
+  margin-bottom: 2rem; /* Space below links */
+  padding-top: 1rem; /* Space above links */
+}
+.blog-filter-links a {
+  margin: 0 1rem; /* Space between links */
+  text-decoration: none;
+  color: #000; /* Black color */
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.blog-filter-links a:hover {
+  text-decoration: underline;
+}
+
 /* Existing styles... */
 .hero-article {
   position: relative;
@@ -345,13 +372,17 @@
 .small-post__meta-mobile .article-tag {
    margin-right: 0.5rem; /* Space between tag and date */
 }
-.small-post__date { /* Style for date part */
-   font-size: .875rem; opacity:.8;
+/* Style for date part - now black */
+.small-post__date {
+   font-size: .875rem;
+   color: #000; /* Black color */
 }
+/* Style for meta containers - now black, remove opacity */
 .small-post__meta-desktop,
 .small-post__meta-mobile {
    margin-bottom: 0.5rem; /* Space below meta line */
-   font-size:.875rem; opacity:.8;
+   font-size:.875rem;
+   color: #000; /* Black color */
    text-wrap: pretty; /* Apply pretty wrap */
 }
 /* Increase font sizes for small posts */
@@ -361,15 +392,6 @@
   margin: 0 0 0.4rem !important;
   text-wrap: balance; /* Add text wrapping */
 }
-/* Remove old .small-post__meta rule */
-/*
-.small-post__meta {
-  font-size: 1rem !important; *//* Increased size *//*
-  opacity: .8 !important;
-  margin-bottom: 0.6rem !important;
-  text-wrap: pretty; *//* Add text wrapping *//*
-}
-*/
 .small-post__excerpt {
   font-size: 1rem !important; /* Increased size */
   line-height: 1.5 !important;
@@ -386,11 +408,11 @@
   object-fit: cover;
   display: block;
 }
-/* Styles for new medium post meta */
+/* Styles for new medium post meta - now black, remove opacity */
 .medium-post__meta-line {
    margin-bottom: 0.5rem; /* Space below meta line */
-   font-size: 1rem; /* Copied from old .medium-post__meta */
-   opacity: .8; /* Copied from old .medium-post__meta */
+   font-size: 1rem;
+   color: #000; /* Black color */
    text-wrap: pretty; /* Keep this */
 }
 .medium-post__meta-line .article-tag {
@@ -403,15 +425,6 @@
   margin: 0 0 0.5rem !important;
   text-wrap: balance; /* Add text wrapping */
 }
-/* Remove old .medium-post__meta rule */
-/*
-.medium-post__meta {
-  font-size: 1rem !important; *//* Increased size *//*
-  opacity: .8 !important;
-  margin-bottom: 0.7rem !important;
-  text-wrap: pretty; *//* Add text wrapping *//*
-}
-*/
 .medium-post__excerpt {
   font-size: 1.1rem !important; /* Increased size */
   line-height: 1.5 !important;
@@ -420,9 +433,17 @@
 
 /* Media Queries for Small Post Meta and Excerpt */
 @media screen and (min-width: 750px) {
-  .small-post__meta-desktop { display: block; } /* Show desktop meta */
+  .small-post__meta-desktop {
+    display: block; /* Show desktop meta */
+    font-size: 0.95rem; /* Slightly larger on desktop */
+  }
   .small-post__meta-mobile { display: none; } /* Hide mobile meta */
   .small-post__excerpt { display: block !important; } /* Ensure excerpt shows on desktop */
+
+  /* Increase medium post meta size on desktop */
+  .medium-post__meta-line {
+    font-size: 1.1rem; /* Slightly larger on desktop */
+  }
 }
 
 @media screen and (max-width: 749px) {
