@@ -151,6 +151,15 @@
   position: relative;
   margin-bottom: 2rem;
   overflow: hidden;
+  /* Add max-width and center for desktop */
+  max-width: 100%; /* Default full width */
+}
+@media screen and (min-width: 990px) { /* Apply only on larger screens */
+  .hero-article {
+    max-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 .hero-article__link {
   display: block;
@@ -161,8 +170,13 @@
 .hero-article__image {
   width: 100%;
   object-fit: cover;
-  max-height: 300px; /* half as tall as before */
+  max-height: 300px; /* Default max height */
   display: block;
+}
+@media screen and (min-width: 750px) { /* Increase image height on desktop */
+  .hero-article__image {
+    max-height: 450px; /* Increased height */
+  }
 }
 .hero-article__overlay {
   position: absolute;
@@ -170,21 +184,36 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  background: rgba(0,0,0,0);
+  /* Adjust gradient to be lighter */
+  background: rgba(0,0,0,0.3); /* Lighter overlay */
   justify-content: flex-start;
+  /* Ensure all text is white */
+  color: #fff;
 }
 .hero-article__title {
   margin: 0 0 .5rem;
-  color: #fff;
+  color: #fff; /* Ensure white */
   font-weight: bold;
   font-style: italic;
-  font-size: 2rem;
+  /* Increase font size */
+  font-size: 2.5rem;
   line-height:1.1;
 }
+/* Add rule for hero meta and excerpt text color and size */
+.hero-article__meta,
+.hero-article__excerpt {
+  color: #fff; /* Ensure white */
+  font-size: 1rem; /* Increase font size */
+}
+.hero-article__meta {
+  margin-bottom: 0.5rem;
+}
+
 @media screen and (min-width: 750px){
   .hero-article__overlay {
     width:40%;
-    background: rgba(0,0,0,0.4);
+    /* Adjust gradient */
+    background: rgba(0,0,0,0.3);
     align-items:flex-start;
   }
 }
@@ -194,8 +223,16 @@
   }
   .hero-article__overlay {
     justify-content:flex-end;
-    background: linear-gradient(to top, rgba(0,0,0,.5), transparent);
+    /* Adjust gradient */
+    background: linear-gradient(to top, rgba(0,0,0,.4), transparent);
     padding-bottom:2rem;
+  }
+  .hero-article__title {
+    font-size: 2rem; /* Slightly smaller on mobile */
+  }
+  .hero-article__meta,
+  .hero-article__excerpt {
+    font-size: 0.9rem; /* Slightly smaller on mobile */
   }
 }
 .clickable-card {
@@ -243,6 +280,22 @@
   justify-content: center;
   flex: 1; /* Allow content to take remaining space */
 }
+/* Increase font sizes for small posts */
+.small-post__title {
+  font-size: 1.5rem !important; /* Increased size */
+  font-weight: bold !important;
+  margin: 0 0 0.4rem !important;
+}
+.small-post__meta {
+  font-size: 1rem !important; /* Increased size */
+  opacity: .8 !important;
+  margin-bottom: 0.6rem !important;
+}
+.small-post__excerpt {
+  font-size: 1rem !important; /* Increased size */
+  line-height: 1.5 !important;
+}
+
 .medium-post__image-wrap {
   margin-bottom: .5rem;
   overflow: hidden;
@@ -252,5 +305,20 @@
   width: 100%;
   object-fit: cover;
   display: block;
+}
+/* Increase font sizes for medium posts */
+.medium-post__title {
+  font-size: 1.75rem !important; /* Increased size */
+  font-weight: bold !important;
+  margin: 0 0 0.5rem !important;
+}
+.medium-post__meta {
+  font-size: 1rem !important; /* Increased size */
+  opacity: .8 !important;
+  margin-bottom: 0.7rem !important;
+}
+.medium-post__excerpt {
+  font-size: 1.1rem !important; /* Increased size */
+  line-height: 1.5 !important;
 }
 </style>
