@@ -19,6 +19,7 @@
     },
     "hero_banner_with_scroll_8aXYfH": {
       "type": "HeroBannerWithScroll",
+      "disabled": true,
       "custom_css": [
         "{height: 400px;}",
         ".hero-logo {width: 200px; /* or use a percentage like 50% */ height: auto; /* this keeps the aspect ratio */ max-width: 100%;}"
@@ -35,6 +36,22 @@
         "section_color_scheme": "",
         "enable_full_height": false,
         "enable_navbar_transparency": false
+      }
+    },
+    "image_banner_bxV3tr": {
+      "type": "image-banner",
+      "settings": {
+        "image": "shopify://shop_images/CYNTP_Character_Full_Color.png",
+        "image_overlay_opacity": 0,
+        "image_height": "small",
+        "desktop_content_position": "middle-center",
+        "show_text_box": false,
+        "desktop_content_alignment": "center",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": true,
+        "show_text_below": false
       }
     },
     "courses_by_state_Rrj8GU": {
@@ -94,6 +111,7 @@
   "order": [
     "main",
     "hero_banner_with_scroll_8aXYfH",
+    "image_banner_bxV3tr",
     "courses_by_state_Rrj8GU",
     "object_index_BzjYXD",
     "cyntp_comments_dqNX4D",
