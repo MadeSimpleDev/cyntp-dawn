@@ -11,6 +11,7 @@
   "sections": {
     "hero_banner_with_scroll_jmAwdC": {
       "type": "HeroBannerWithScroll",
+      "disabled": true,
       "custom_css": [
         "p,h1 {left: 5%; width: 90%; /* Ensures text stays centered */ text-align: left; font-style: oblique; font-weight: bold; color: white; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);}",
         "h1 {font-size: 4em;}"
@@ -25,7 +26,50 @@
         "button_link": "",
         "button_text": "",
         "section_color_scheme": "scheme-2",
-        "enable_full_height": false
+        "enable_full_height": false,
+        "enable_navbar_transparency": true
+      }
+    },
+    "rich_text_jcWgrf": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_BnYikU": {
+          "type": "heading",
+          "settings": {
+            "heading": "<em><strong>{{ metaobject.name.value }}</strong></em><em><strong> Golf Trip</strong></em>",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_BnYikU"
+      ],
+      "custom_css": [
+        "h2 {text-wrap: balance;}"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 56,
+        "padding_bottom": 16
+      }
+    },
+    "image_banner_bbWMk4": {
+      "type": "image-banner",
+      "settings": {
+        "image": "{{ metaobject.hero_image.value }}",
+        "image_overlay_opacity": 0,
+        "image_height": "small",
+        "desktop_content_position": "middle-center",
+        "show_text_box": true,
+        "desktop_content_alignment": "center",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": true,
+        "show_text_below": true
       }
     },
     "rich_text_w4PxUA": {
@@ -34,8 +78,8 @@
         "heading_4FUWDN": {
           "type": "heading",
           "settings": {
-            "heading": "{{ metaobject.summary.value }}",
-            "heading_size": "h1"
+            "heading": "<em><strong>{{ metaobject.summary.value }}</strong></em>",
+            "heading_size": "h2"
           }
         },
         "text_yCd3ak": {
@@ -49,13 +93,75 @@
         "heading_4FUWDN",
         "text_yCd3ak"
       ],
+      "custom_css": [
+        "h2 {text-wrap: balance;}",
+        "p {text-wrap: pretty;}"
+      ],
       "settings": {
-        "desktop_content_position": "left",
-        "content_alignment": "left",
+        "desktop_content_position": "center",
+        "content_alignment": "center",
         "color_scheme": "scheme-1",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
+      }
+    },
+    "rich_text_nNbd9A": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_P9fchY": {
+          "type": "heading",
+          "settings": {
+            "heading": "<em><strong>Courses You'll Be Playing</strong></em>",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_P9fchY"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "multicolumn_UXPU8W": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_xJRc8M": {
+          "type": "column",
+          "repeater": "{{ metaobject.courses.value }}",
+          "settings": {
+            "image": "{{ block.repeater.hero_image.value }}",
+            "title": "{{ block.repeater.name.value }}",
+            "text": "",
+            "link_label": "",
+            "link": "{{ block.repeater.system.url }}"
+          }
+        }
+      },
+      "block_order": [
+        "column_xJRc8M"
+      ],
+      "settings": {
+        "title": "",
+        "heading_size": "h2",
+        "image_width": "full",
+        "image_ratio": "square",
+        "columns_desktop": 2,
+        "column_alignment": "left",
+        "background_style": "none",
+        "button_label": "Button label",
+        "button_link": "",
+        "color_scheme": "",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "multicolumn_with_floating_GLCeRd": {
@@ -77,38 +183,51 @@
       "block_order": [
         "column_GyaxDK"
       ],
+      "disabled": true,
       "custom_css": [
         ".floating-header h2 {color: white;}",
         ".media {border-radius: 15px;}",
         " /* On devices with a viewport width of 1024px and above, center the container */@media screen and (min-width: 1024px) {slider-component {width: 50%; margin: 0 auto; /* This centers the container */ }}"
       ],
       "settings": {
+        "enable_desktop_slider": false,
+        "swipe_on_mobile": false,
         "title": "Courses You'll Be Playing",
         "heading_size": "h2",
-        "image_width": "full",
-        "image_ratio": "square",
-        "columns_desktop": 2,
-        "column_alignment": "left",
-        "background_style": "none",
-        "button_label": "",
-        "button_link": "",
         "color_scheme": "scheme-1",
-        "columns_mobile": "1",
-        "swipe_on_mobile": false,
         "padding_top": 36,
-        "padding_bottom": 36
+        "padding_bottom": 36,
+        "enable_course_articles": false,
+        "articles_blog": "",
+        "articles_limit": 4
+      }
+    },
+    "rich_text_JbMmtq": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_Tbt6PX": {
+          "type": "heading",
+          "settings": {
+            "heading": "<em><strong>Where You'll Be Staying</strong></em>",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_Tbt6PX"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 20,
+        "padding_bottom": 0
       }
     },
     "rich_text_MnRHq4": {
       "type": "rich-text",
       "blocks": {
-        "heading_gtDCP8": {
-          "type": "heading",
-          "settings": {
-            "heading": "Where You'll Be Staying",
-            "heading_size": "h2"
-          }
-        },
         "text_ijybFq": {
           "type": "text",
           "settings": {
@@ -130,10 +249,10 @@
         }
       },
       "block_order": [
-        "heading_gtDCP8",
         "text_ijybFq",
         "button_MapGci"
       ],
+      "disabled": true,
       "custom_css": [
         ".button {color: black; font-size: 1.25em; font-weight: bold; font-style: oblique; border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; border-top-left-radius: 50px; border-top-right-radius: 50px;}",
         ".rich-text__buttons {position: relative; left: 50%;}"
@@ -144,6 +263,65 @@
         "color_scheme": "scheme-1",
         "full_width": true,
         "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "image_with_text_p7LBLP": {
+      "type": "image-with-text",
+      "blocks": {
+        "text_J4Pnen": {
+          "type": "text",
+          "settings": {
+            "text": "{{ metaobject.housing_description | metafield_tag }}",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "text_J4Pnen"
+      ],
+      "settings": {
+        "image": "{{ metaobject.housing_media.value }}",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "center",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_P9XRWN": {
+      "type": "rich-text",
+      "blocks": {
+        "button_YfecN7": {
+          "type": "button",
+          "settings": {
+            "button_label": "Book Now",
+            "button_link": "{{ metaobject.link_to_housing.value }}",
+            "button_style_secondary": true,
+            "button_link_new_window": true,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false,
+            "button_link_2_new_window": false
+          }
+        }
+      },
+      "block_order": [
+        "button_YfecN7"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 0,
         "padding_bottom": 52
       }
     },
@@ -168,6 +346,7 @@
         "heading_KyMkyi",
         "text_ft77Dq"
       ],
+      "disabled": true,
       "custom_css": [],
       "settings": {
         "desktop_content_position": "center",
@@ -189,6 +368,7 @@
       "block_order": [
         "videeo_mobile_commerce_popclips_carousel_QL9XJq"
       ],
+      "disabled": true,
       "settings": {
         "include_margins": true
       }
@@ -212,29 +392,33 @@
       "block_order": [
         "column_d9HWNM"
       ],
+      "disabled": true,
       "settings": {
+        "enable_desktop_slider": false,
+        "swipe_on_mobile": false,
         "title": "CYNTP Suggested Trips",
         "heading_size": "h1",
-        "image_width": "third",
-        "image_ratio": "portrait",
-        "columns_desktop": 3,
-        "column_alignment": "left",
-        "background_style": "none",
-        "button_label": "",
-        "button_link": "",
         "color_scheme": "",
-        "columns_mobile": "1",
-        "swipe_on_mobile": false,
         "padding_top": 36,
-        "padding_bottom": 36
+        "padding_bottom": 36,
+        "enable_course_articles": false,
+        "articles_blog": "",
+        "articles_limit": 4
       }
     }
   },
   "order": [
     "hero_banner_with_scroll_jmAwdC",
+    "rich_text_jcWgrf",
+    "image_banner_bbWMk4",
     "rich_text_w4PxUA",
+    "rich_text_nNbd9A",
+    "multicolumn_UXPU8W",
     "multicolumn_with_floating_GLCeRd",
+    "rich_text_JbMmtq",
     "rich_text_MnRHq4",
+    "image_with_text_p7LBLP",
+    "rich_text_P9XRWN",
     "rich_text_ftccwj",
     "1738267823e657d34d",
     "multicolumn_with_floating_VLxeGJ"
