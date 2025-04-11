@@ -125,14 +125,14 @@
                 aria-label="{{ 'sections.video.load_video' | t: description: metaobject.name | escape }}"
               >
                 {% comment %} Optional: Add a poster image from metaobject if available {% endcomment %}
-                {% # Example: Check if metaobject.video_poster_image exists %}
-                {% # if metaobject.video_poster_image.value %}
-                {%
-                  # {{ metaobject.video_poster_image.value | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '375, 750, 1100, 1500', sizes: '100vw' }}
-                  {% # else
-                %}
+                {% comment %} Example: Check if metaobject.video_poster_image exists
+                  {% if metaobject.video_poster_image.value %}
+                    {{ metaobject.video_poster_image.value | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '375, 750, 1100, 1500', sizes: '100vw' }}
+                  {% else %}
+                    {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                  {% endif %}
+                {% endcomment %}
                 {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
-                {% # endif %}
                 <span class="deferred-media__poster-button motion-reduce">
                   <span class="svg-wrapper">
                     {{- 'icon-play.svg' | inline_asset_content -}}
