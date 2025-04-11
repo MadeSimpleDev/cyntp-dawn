@@ -17,26 +17,6 @@
         "padding_bottom": 36
       }
     },
-    "hero_banner_with_scroll_FCPkWk": {
-      "type": "HeroBannerWithScroll",
-      "custom_css": [
-        "p,h1 {left: 5%; width: 90%; /* Ensures text stays centered */ text-align: left; font-style: oblique; font-weight: bold; color: white; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);}",
-        "h1 {font-size: 4em;}"
-      ],
-      "settings": {
-        "hero_image": "shopify://shop_images/Contact_page_header.png",
-        "enable_scroll_indicator": true,
-        "enable_fade_overlay": false,
-        "logo_width": 200,
-        "heading": "Contact",
-        "subheading": "Courses You Need To Play",
-        "button_link": "",
-        "button_text": "Discover More",
-        "section_color_scheme": "",
-        "enable_full_height": false,
-        "enable_navbar_transparency": true
-      }
-    },
     "rich_text_zeKMdr": {
       "type": "rich-text",
       "blocks": {
@@ -73,9 +53,9 @@
     "image_banner_rhaKVn": {
       "type": "image-banner",
       "settings": {
-        "image": "shopify://shop_images/IMG_5261.jpg",
+        "image": "shopify://shop_images/Work_with_us_697de70a-9ecc-4037-921f-d541fab5fccc.png",
         "image_overlay_opacity": 0,
-        "image_height": "small",
+        "image_height": "adapt",
         "desktop_content_position": "bottom-center",
         "show_text_box": false,
         "desktop_content_alignment": "center",
@@ -101,6 +81,7 @@
       "block_order": [
         "caption_PJdniz"
       ],
+      "disabled": true,
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -257,7 +238,6 @@
   },
   "order": [
     "main",
-    "hero_banner_with_scroll_FCPkWk",
     "rich_text_zeKMdr",
     "image_banner_rhaKVn",
     "rich_text_T3pgHp",
