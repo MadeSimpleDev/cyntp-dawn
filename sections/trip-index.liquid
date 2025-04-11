@@ -1,0 +1,208 @@
+{% comment %}
+  /sections/trip-index.liquid
+
+  Displays all "Trip" metaobjects in a 3-col desktop, 2-col mobile grid.
+  Each card is clickable, showing hero_image with the Trip name on top.
+
+  For referencing fields, we assume:
+  - `shop.metaobjects["trips"].values` returns an array of your trip objects.
+  - Each trip has `.hero_image` and `.name`, plus `.system.url` for the detail page.
+{% endcomment %}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .trip-index__grid {
+    display: grid;
+    gap: 1.5rem;
+    /* 2 columns on mobile, 3 columns on larger screens */
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (min-width: 992px) {
+    .trip-index__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .trip-index__card {
+    position: relative;
+    overflow: hidden; /* let us clip the text overlay if needed */
+    border-radius: 6px; /* slight rounding if you want */
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+  }
+  .trip-index__card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  /* "Small blog post" size logic: let's fix a height & width ratio, or keep auto?
+     We'll do a set height for consistency.
+   */
+  .trip-index__image {
+    display: block;
+    width: 100%;
+    height: 200px; /* same as your "small-post" style? adjust if needed */
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .trip-index__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.75rem 1rem;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 1rem;
+    text-align: left;
+  }
+{%- endstyle -%}
+
+{% liquid
+  # 1) Grab all "trips" metaobjects
+  assign all_trips = shop.metaobjects.trips
+  if all_trips
+    assign trip_list = all_trips.values
+  else
+    assign trip_list = ''
+  endif
+
+  # 2) Possibly limit how many to show (user can override in the schema)
+  if trip_list and section.settings.limit > 0
+    assign trip_list = trip_list | slice: 0, section.settings.limit
+  endif
+
+  # 3) Decide if we show anything
+  assign show_section = trip_list
+%}
+
+{% if show_section %}
+  <div class="trip-index color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding">
+    <div class="page-width">
+      {%- unless section.settings.title == blank -%}
+        <div class="title-wrapper">
+          <h2 class="title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
+        </div>
+      {%- endunless -%}
+
+      <div class="trip-index__grid">
+        {% for trip in trip_list %}
+          <a
+            class="trip-index__card"
+            href="{{ trip.system.url }}"
+          >
+            {% if trip.hero_image %}
+              <img
+                class="trip-index__image"
+                src="{{ trip.hero_image | image_url: width: 600 }}"
+                alt="{{ trip.name | escape }}"
+              >
+            {% else %}
+              <!-- fallback placeholder if there's no hero_image -->
+              {{ 'placeholder-image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+            {% endif %}
+            <div class="trip-index__overlay">
+              {{ trip.name }}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% else %}
+  <!-- Optionally show a "No Trips Found" message or hide the section entirely -->
+  {% unless section.settings.hide_if_empty %}
+    <div class="page-width section-{{ section.id }}-padding">
+      <p>No trips found.</p>
+    </div>
+  {% endunless %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Trip Index",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Our Trips"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading Size",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Max Trips to Display (0 for all)",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_if_empty",
+      "label": "Hide section if no trips are found?",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trip Index"
+    }
+  ]
+}
+{% endschema %}
