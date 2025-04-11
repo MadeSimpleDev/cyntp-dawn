@@ -4,9 +4,6 @@
   /* Background color is handled by the color-scheme class added in liquid */
 }
 
-/* Padding is now handled by inline styles in the liquid file */
-/* Remove the .section-trip-experience-padding rules */
-
 .trip-experience__grid {
   display: grid;
   grid-template-columns: 1fr; /* Default to single column for mobile */
@@ -55,24 +52,62 @@
 .trip-experience__media iframe {
   background-color: rgba(var(--color-foreground), 0.03);
   border: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 
-/* Styles for blog link/card */
+/* Styles for custom blog link/item */
 .trip-experience__blog-link {
   display: block;
   text-decoration: none;
   color: inherit;
-  text-align: left; /* Align text left within the card */
+  border-radius: var(--media-radius);
+  overflow: hidden; /* Clip image and overlay to border radius */
+  box-shadow: var(--media-shadow-horizontal-offset) var(--media-shadow-vertical-offset) var(--media-shadow-blur-radius) rgba(var(--color-shadow), var(--media-shadow-opacity));
+  position: relative; /* Needed for absolute positioning of overlay */
 }
 
-/* Let the article-card snippet handle internal styling */
-.trip-experience__blog-link .card {
-   height: 100%; /* Make card fill the column space if needed */
+.trip-experience__blog-item {
+  position: relative; /* Context for the overlay */
+  background-color: rgba(var(--color-foreground), 0.03); /* Placeholder background */
 }
 
-/* Remove specific img/h4 styles if using article-card snippet */
-/*
-.trip-experience__blog-link img { ... }
-.trip-experience__blog-link h4 { ... }
-*/
+.trip-experience__blog-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute; /* Take up the space defined by the media container */
+  top: 0;
+  left: 0;
+  transition: transform var(--duration-long) ease;
+}
+
+.trip-experience__blog-link:hover .trip-experience__blog-image {
+  transform: scale(1.03);
+}
+
+.trip-experience__blog-title-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(var(--color-background), 0.85), rgba(var(--color-background), 0)); /* Gradient overlay */
+  color: rgb(var(--color-foreground)); /* Ensure text is readable */
+  z-index: 1; /* Sit above the image */
+  pointer-events: none; /* Allow clicks to go through to the link */
+}
+
+.trip-experience__blog-title {
+  margin: 0;
+  color: rgb(var(--color-foreground)); /* Explicitly set color */
+  word-break: break-word;
+}
+
+/* Remove styles for the old article-card snippet */
+/* .trip-experience__blog-link .card { ... } */

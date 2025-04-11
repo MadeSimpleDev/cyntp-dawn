@@ -150,16 +150,25 @@
         {% if has_blog %}
           <div class="trip-experience__column trip-experience__column--blog">
             <h3 class="trip-experience__caption">{{ 'sections.trip_experience.blog_caption' | t }}</h3>
-            <div class="trip-experience__blog-link">
-              {% render 'article-card',
-                article: latest_referencing_article,
-                show_image: true,
-                show_date: false,
-                show_author: false,
-                show_excerpt: false,
-                title_overlay: true
-              %}
-            </div>
+            {% comment %} Replace the article-card render with a custom structure {% endcomment %}
+            <a href="{{ latest_referencing_article.url }}" class="trip-experience__blog-link">
+              <div class="trip-experience__blog-item media media--landscape" style="--ratio-percent: 75%;"> {% comment %} Adjust ratio as needed, e.g., 75% for 4:3 or 56.25% for 16:9 {% endcomment %}
+                {%- if latest_referencing_article.image -%}
+                  {{ latest_referencing_article.image | image_url: width: 1200 | image_tag:
+                      loading: 'lazy',
+                      widths: '352, 720, 960, 1200',
+                      sizes: '(min-width: 750px) calc(50vw - 5rem), calc(100vw - 4rem)',
+                      alt: latest_referencing_article.image.alt | escape,
+                      class: 'trip-experience__blog-image motion-reduce'
+                  }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg placeholder trip-experience__blog-image' }}
+                {%- endif -%}
+                <div class="trip-experience__blog-title-overlay">
+                  <h4 class="trip-experience__blog-title h5">{{ latest_referencing_article.title | escape }}</h4>
+                </div>
+              </div>
+            </a>
           </div>
         {% endif %}
       </div>
