@@ -334,6 +334,7 @@
       "use_fewer_filters_html": "Use fewer filters or <a class=\"{{ class }}\" href=\"{{ link }}\">remove all</a>"
     },
     "video": {
+    "video": {
       "load_video": "Load video: {{ description }}"
     },
     "trip_experience": {
