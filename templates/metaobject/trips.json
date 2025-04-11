@@ -377,6 +377,20 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "video_BfFfVe": {
+      "type": "video",
+      "settings": {
+        "heading": "Video",
+        "heading_size": "h1",
+        "enable_video_looping": false,
+        "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "description": "",
+        "full_width": false,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -393,6 +407,7 @@
     "rich_text_ftccwj",
     "1738267823e657d34d",
     "multicolumn_with_floating_VLxeGJ",
-    "trip_experience_6GiU9X"
+    "trip_experience_6GiU9X",
+    "video_BfFfVe"
   ]
 }
