@@ -89,8 +89,8 @@
   ##################################################################
   # 5) Decide if we actually show the section
   ##################################################################
-  assign has_video = video_embed_url != blank
-  assign has_blog = latest_referencing_article != blank
+  assign has_video = video_embed_url
+  assign has_blog = latest_referencing_article
   assign show_section = has_video or has_blog
 %}
 
