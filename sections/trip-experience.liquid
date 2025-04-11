@@ -77,7 +77,25 @@
   if has_video or has_blog
     assign show_section = true
   endif
+
+  # --- DEBUG OUTPUT START ---
 %}
+<!--
+  Trip Experience Debug Info:
+  Metaobject ID: {{ current_trip_id | json }}
+  Raw Video URL: {{ raw_video_url | json }}
+  Parsed Video Embed URL: {{ video_embed_url | json }}
+  Parsed Video ID: {{ video_id | json }}
+  Parsed Video Host: {{ video_host | json }}
+  Has Video?: {{ has_video | json }}
+
+  Blog Handle Checked: {{ blogs.journal.handle | default: 'journal (Not Found?)' | json }}
+  Latest Referencing Article ID: {{ latest_referencing_article.id | json }}
+  Has Blog?: {{ has_blog | json }}
+
+  Show Section?: {{ show_section | json }}
+-->
+{% # --- DEBUG OUTPUT END --- %}
 
 {% if show_section %}
   <div class="trip-experience color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
@@ -107,7 +125,14 @@
                 aria-label="{{ 'sections.video.load_video' | t: description: metaobject.name | escape }}"
               >
                 {% comment %} Optional: Add a poster image from metaobject if available {% endcomment %}
+                {% # Example: Check if metaobject.video_poster_image exists %}
+                {% # if metaobject.video_poster_image.value %}
+                {%
+                  # {{ metaobject.video_poster_image.value | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '375, 750, 1100, 1500', sizes: '100vw' }}
+                  {% # else
+                %}
                 {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                {% # endif %}
                 <span class="deferred-media__poster-button motion-reduce">
                   <span class="svg-wrapper">
                     {{- 'icon-play.svg' | inline_asset_content -}}
