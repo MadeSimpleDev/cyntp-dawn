@@ -57,10 +57,10 @@
       margin-right: auto !important;
    }
 
-  /* --- NEW: Center 2-column layout and adjust gap --- */
+  /* --- NEW: Center 2-column layout and remove gap --- */
   .multicolumn-clickable-list.grid--2-col-desktop {
     justify-content: center; /* Center the grid items */
-    column-gap: var(--grid-desktop-horizontal-spacing); /* Use theme variable for gap */
+    column-gap: 0; /* Remove the gap between columns */
   }
   /* --- END NEW --- */
 }
