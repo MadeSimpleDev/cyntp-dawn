@@ -24,7 +24,7 @@
   # If it's blank AND we are on a metaobject page, try assigning the global one instead.
   # This ensures we prioritize the passed-in object if it exists.
   if current_metaobject == blank and request.page_type == 'metaobject'
-    assign current_metaobject = metaobject # Assign global metaobject
+    assign current_metaobject = metaobject
   endif
 
   # --- Initialize variables ---
