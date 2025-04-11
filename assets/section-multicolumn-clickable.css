@@ -44,19 +44,16 @@
 @media screen and (min-width: 990px) {
   .multicolumn-clickable .multicolumn-card__image-wrapper {
      width: 50% !important; /* Force 50% width */
-     /* Keep auto margins here for general centering within the column */
+     /* Ensure auto margins for centering */
      margin-left: auto !important;
      margin-right: auto !important;
   }
    /* Ensure full width setting is also overridden */
    .multicolumn-clickable .multicolumn-card__image-wrapper--full-width {
      width: 50% !important;
-   }
-   /* Adjust spacing for centered items if image is forced smaller */
-   .multicolumn-clickable .multicolumn-clickable-list__item.center .multicolumn-card__image-wrapper {
-      /* Keep auto margins here for general centering within the column */
-      margin-left: auto !important;
-      margin-right: auto !important;
+     /* Ensure auto margins for centering */
+     margin-left: auto !important;
+     margin-right: auto !important;
    }
 
   /* --- NEW: Center 2-column layout and remove gap --- */
@@ -70,34 +67,8 @@
     margin-right: 0 !important;
     padding-left: 0 !important; /* Ensure no padding */
     padding-right: 0 !important; /* Ensure no padding */
-    /* --- NEW: Constrain the width of the list item itself --- */
-    max-width: 48%; /* Adjust as needed, less than 50% to allow centering */
-    width: 100%; /* Ensure it tries to fill the constrained space */
-  }
-  /* --- Add rule to override image wrapper auto margins specifically for 2-col desktop --- */
-  .multicolumn-clickable-list.grid--2-col-desktop .multicolumn-clickable-list__item .multicolumn-card__image-wrapper {
-    margin-left: 0 !important; /* Override auto margin */
-    margin-right: 0 !important; /* Override auto margin */
   }
   /* --- END NEW --- */
-}
-/* --- END NEW --- */
-
-
-.multicolumn-clickable-list__item.center .multicolumn-card__image-wrapper:not(.multicolumn-card__image-wrapper--full-width),
-.multicolumn-clickable-list__item:only-child {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.multicolumn-clickable .button {
-  margin-top: 1.5rem;
-}
-
-@media screen and (min-width: 750px) {
-  .multicolumn-clickable .button {
-    margin-top: 4rem;
-  }
 }
 
 .multicolumn-clickable-list {
@@ -105,6 +76,11 @@
   margin-bottom: 0;
   padding: 0;
   list-style: none; /* Ensure no list bullets */
+  /* --- NEW: Constrain container width and center it --- */
+  max-width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  /* --- END NEW --- */
 }
 
 .multicolumn-clickable-list__item:only-child {
