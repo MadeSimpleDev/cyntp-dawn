@@ -64,11 +64,9 @@
   }
   /* --- Add rule to remove item margins specifically for 2-col desktop --- */
   .multicolumn-clickable-list.grid--2-col-desktop .multicolumn-clickable-list__item {
-    margin-left: 0;
-    margin-right: 0;
     /* If the above doesn't work due to higher specificity or !important elsewhere, try: */
-    /* margin-left: 0 !important; */
-    /* margin-right: 0 !important; */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
   /* --- END NEW --- */
 }
