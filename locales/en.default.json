@@ -336,6 +336,20 @@
     "video": {
       "load_video": "Load video: {{ description }}"
     },
+    "trip_experience": {
+      "name": "Trip Experience",
+      "video_caption": "Watch the Experience",
+      "blog_caption": "Read the Story",
+      "video_title": "Video about {{ trip_name }}",
+      "settings": {
+        "title": {
+          "label": "Heading"
+        }
+      },
+      "presets": {
+        "name": "Trip Experience"
+      }
+    },
     "slideshow": {
       "load_slide": "Load slide",
       "previous_slideshow": "Previous slide",

@@ -46,12 +46,12 @@
   assign latest_referencing_article = blank
   assign latest_published_at = '1970-01-01'
 
-  {% comment %} --- Find the latest blog post referencing this trip --- {% endcomment %}
-  {% comment %} Check blog exists and we have a trip ID {% endcomment %}
+  # --- Find the latest blog post referencing this trip ---
+  # Check blog exists and we have a trip ID
   if blogs.journal and current_trip_id != ''
     for article in blogs.journal.articles
       assign referenced_trip = article.metafields.custom.referenced_trip.value
-      {% comment %} Check if the referenced_trip metaobject value exists and its ID matches {% endcomment %}
+      # Check if the referenced_trip metaobject value exists and its ID matches
       if referenced_trip and referenced_trip.id == current_trip_id
         if article.published_at > latest_published_at
           assign latest_published_at = article.published_at
@@ -61,7 +61,7 @@
     endfor
   endif
 
-  {% comment %} Determine if we have content to show {% endcomment %}
+  # Determine if we have content to show
   assign has_video = false
   if video_embed_url != blank
     assign has_video = true
@@ -72,7 +72,7 @@
     assign has_blog = true
   endif
 
-  {% comment %} Only render the section if there's at least one column to show. {% endcomment %}
+  # Only render the section if there's at least one column to show.
   assign show_section = false
   if has_video or has_blog
     assign show_section = true
@@ -97,7 +97,8 @@
             <deferred-media
               class="trip-experience__media deferred-media gradient global-media-settings"
               data-media-id="{{ video_id }}"
-              style="--ratio-percent: 56.25%;" {% comment %} Default to 16:9, adjust if needed or use image aspect ratio {% endcomment %}
+              style="--ratio-percent: 56.25%;"
+              {% comment %} Default to 16:9, adjust if needed or use image aspect ratio {% endcomment %}
             >
               <button
                 id="Deferred-Poster-Modal-{{ section.id }}-{{ video_id }}"
@@ -120,8 +121,12 @@
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowfullscreen
                   title="{{ 'sections.trip_experience.video_title' | t: trip_name: metaobject.name | escape }}"
-                  {% if video_host == 'youtube' %} class="js-youtube" {% endif %}
-                  {% if video_host == 'vimeo' %} class="js-vimeo" {% endif %}
+                  {% if video_host == 'youtube' %}
+                    class="js-youtube"
+                  {% endif %}
+                  {% if video_host == 'vimeo' %}
+                    class="js-vimeo"
+                  {% endif %}
                 ></iframe>
               </template>
             </deferred-media>
@@ -150,7 +155,7 @@
 
 {% schema %}
 {
-  "name": "t:sections.trip_experience.name",
+  "name": "Experience",
   "tag": "section",
   "class": "section",
   "settings": [
@@ -206,27 +211,6 @@
     {
       "name": "t:sections.trip_experience.presets.name"
     }
-  ],
-  "locales": {
-    "en": {
-      "sections": {
-        "trip_experience": {
-          "name": "Trip Experience",
-          "settings": {
-            "title": {
-              "label": "Section Title (Optional)"
-            }
-          },
-          "presets": {
-            "name": "Trip Experience"
-          },
-          "video_caption": "Watch our experience",
-          "blog_caption": "Read our experience",
-          "video_title": "{{ trip_name }} Experience Video"
-        }
-      }
-    }
-    // Add other languages as needed
-  }
+  ]
 }
 {% endschema %}
