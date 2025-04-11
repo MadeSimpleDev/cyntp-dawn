@@ -1,98 +1,78 @@
 /* /assets/section-trip-experience.css */
 
 .trip-experience {
-    /* Add background color based on color scheme if needed */
-  }
+  /* Background color is handled by the color-scheme class added in liquid */
+}
 
-  .section-trip-experience-padding {
-    padding-top: var(--padding-top, 36px);
-    padding-bottom: var(--padding-bottom, 36px);
-  }
+/* Padding is now handled by inline styles in the liquid file */
+/* Remove the .section-trip-experience-padding rules */
 
+.trip-experience__grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Default to single column for mobile */
+  gap: 3rem; /* Adjust spacing as needed */
+  margin-top: 2rem; /* Space below optional title */
+}
+
+/* Apply 2-column layout on larger screens */
+@media screen and (min-width: 750px) {
   .trip-experience__grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Default to single column for mobile */
-    gap: 2rem; /* Adjust spacing as needed */
-    margin-top: 2rem; /* Space below optional title */
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
   }
 
-  /* Apply 2-column layout on larger screens */
-  @media screen and (min-width: 750px) {
-    .trip-experience__grid {
-      grid-template-columns: 1fr 1fr; /* Two equal columns */
-    }
-
-     /* If only one column exists, let it take full width */
-    .trip-experience__grid > .trip-experience__column:only-child {
-       grid-column: 1 / -1; /* Span across the grid */
-       max-width: 60rem; /* Optional: constrain width if only one */
-       margin-left: auto;
-       margin-right: auto;
-    }
+   /* If only one column exists, let it take full width */
+  .trip-experience__grid > .trip-experience__column:only-child {
+     grid-column: 1 / -1; /* Span across the grid */
+     max-width: 70rem; /* Optional: constrain width if only one */
+     margin-left: auto;
+     margin-right: auto;
   }
+}
 
-  .trip-experience__column {
-    /* Styles for the column container */
-  }
+.trip-experience__column {
+  /* Styles for the column container */
+}
 
-  .trip-experience__caption {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: var(--font-heading-scale); /* Adjust size as needed */
-    /* Add other styling like font-weight */
-  }
+.trip-experience__caption {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: var(--font-heading-scale); /* Adjust size as needed */
+  /* Add other styling like font-weight */
+}
 
-  .trip-experience__video-wrapper {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
-    height: 0;
-    overflow: hidden;
-    width: 100%;
-    background-color: rgba(0,0,0,0.1); /* Placeholder background */
-  }
+/* Styles for deferred-media video */
+.trip-experience__media {
+  /* The deferred-media component handles aspect ratio via --ratio-percent */
+  box-shadow: var(--media-shadow-horizontal-offset) var(--media-shadow-vertical-offset) var(--media-shadow-blur-radius) rgba(var(--color-shadow), var(--media-shadow-opacity));
+  border-radius: var(--media-radius);
+  overflow: hidden; /* Ensures border-radius applies to content */
+}
 
-  .trip-experience__video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
+.trip-experience__poster {
+  /* Style the poster button if needed */
+}
 
-  .trip-experience__blog-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    /* Add card-like styling if desired */
-    /* border: 1px solid rgba(var(--color-foreground), 0.1); */
-    /* padding: 1rem; */
-    /* border-radius: var(--card-corner-radius); */
-    text-align: center;
-  }
+.trip-experience__media iframe {
+  background-color: rgba(var(--color-foreground), 0.03);
+  border: 0;
+}
 
-  .trip-experience__blog-link img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 1rem;
-    /* Add styling for image aspect ratio or fixed height if needed */
-  }
 
-  .trip-experience__blog-link h4 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    font-size: 1.1em; /* Adjust as needed */
-  }
+/* Styles for blog link/card */
+.trip-experience__blog-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  text-align: left; /* Align text left within the card */
+}
 
-  /* Add styles for padding based on schema settings */
-  .section-trip-experience-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+/* Let the article-card snippet handle internal styling */
+.trip-experience__blog-link .card {
+   height: 100%; /* Make card fill the column space if needed */
+}
 
-  @media screen and (min-width: 750px) {
-    .section-trip-experience-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
+/* Remove specific img/h4 styles if using article-card snippet */
+/*
+.trip-experience__blog-link img { ... }
+.trip-experience__blog-link h4 { ... }
+*/

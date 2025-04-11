@@ -1,107 +1,143 @@
 {% comment %} /sections/trip-experience.liquid {% endcomment %}
 {{ 'section-trip-experience.css' | asset_url | stylesheet_tag }}
+{{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
-{% comment %}
-  We'll ensure metaobject references are protected by an {% if metaobject %} check
-  to avoid errors if metaobject isn't available. We'll also replace the
-  {%- liquid -%} logic with standard Liquid syntax.
-{% endcomment %}
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
 
-{% assign video_url = '' %}
-{% assign current_trip_id = '' %}
-{% if metaobject %}
-  {% assign video_url = metaobject.trip_video_url.value %}
-  {% assign current_trip_id = metaobject.id %}
-{% endif %}
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
 
-{% assign latest_referencing_article = blank %}
-{% assign latest_published_at = '1970-01-01' %}
+{% liquid
+  assign raw_video_url = ''
+  assign current_trip_id = ''
+  if metaobject
+    assign raw_video_url = metaobject.trip_video_url.value
+    assign current_trip_id = metaobject.id
+  endif
 
-{% comment %}
-  --- Find the latest blog post referencing this trip ---
-  This example assumes a blog handle of 'journal'. Adjust if needed.
-{% endcomment %}
-{% if blogs.journal %}
-  {% for article in blogs.journal.articles %}
-    {% assign referenced_trip = article.metafields.custom.referenced_trip.value %}
-    {% if referenced_trip and referenced_trip.id == current_trip_id %}
-      {% if article.published_at > latest_published_at %}
-        {% assign latest_published_at = article.published_at %}
-        {% assign latest_referencing_article = article %}
-      {% endif %}
-    {% endif %}
-  {% endfor %}
-{% endif %}
+  assign video_embed_url = ''
+  assign video_id = ''
+  assign video_host = ''
 
-{% comment %} Determine if we have content to show {% endcomment %}
-{% assign has_video = false %}
-{% if video_url != blank %}
-  {% assign has_video = true %}
-{% endif %}
+  if raw_video_url contains 'youtube.com/watch?v='
+    assign video_id = raw_video_url | split: 'v=' | last | split: '&' | first
+    assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
+    assign video_host = 'youtube'
+  elsif raw_video_url contains 'youtu.be/'
+    assign video_id = raw_video_url | split: 'youtu.be/' | last | split: '?' | first
+    assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
+    assign video_host = 'youtube'
+  elsif raw_video_url contains 'vimeo.com/'
+    assign video_id = raw_video_url | split: '.com/' | last | split: '?' | first
+    assign video_embed_url = 'https://player.vimeo.com/video/' | append: video_id | append: '?autoplay=1'
+    assign video_host = 'vimeo'
+  endif
 
-{% assign has_blog = false %}
-{% if latest_referencing_article != blank %}
-  {% assign has_blog = true %}
-{% endif %}
+  assign latest_referencing_article = blank
+  assign latest_published_at = '1970-01-01'
 
-{% comment %}
-  Only render the section if there's at least one column to show.
-{% endcomment %}
-{% assign show_section = false %}
-{% if has_video or has_blog %}
-  {% assign show_section = true %}
-{% endif %}
+  {% comment %} --- Find the latest blog post referencing this trip --- {% endcomment %}
+  if blogs.journal and current_trip_id != '' {% comment %} Check blog exists and we have a trip ID {% endcomment %}
+    for article in blogs.journal.articles
+      assign referenced_trip = article.metafields.custom.referenced_trip.value
+      {% comment %} Check if the referenced_trip metaobject value exists and its ID matches {% endcomment %}
+      if referenced_trip and referenced_trip.id == current_trip_id
+        if article.published_at > latest_published_at
+          assign latest_published_at = article.published_at
+          assign latest_referencing_article = article
+        endif
+      endif
+    endfor
+  endif
+
+  {% comment %} Determine if we have content to show {% endcomment %}
+  assign has_video = false
+  if video_embed_url != blank
+    assign has_video = true
+  endif
+
+  assign has_blog = false
+  if latest_referencing_article != blank
+    assign has_blog = true
+  endif
+
+  {% comment %} Only render the section if there's at least one column to show. {% endcomment %}
+  assign show_section = false
+  if has_video or has_blog
+    assign show_section = true
+  endif
+%}
 
 {% if show_section %}
   <div class="trip-experience color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
     <div class="page-width">
-      {% comment %}
-        Optional section title if needed:
-        <div class="title-wrapper title-wrapper--no-top-margin">
-          <h2 class="title inline-richtext {{ section.settings.heading_size }}">
-            {{ section.settings.title }}
-          </h2>
+      {% comment %} Optional section title {% endcomment %}
+      {%- unless section.settings.title == blank -%}
+        <div class="title-wrapper title-wrapper--no-top-margin{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          <h2 class="title inline-richtext {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
         </div>
-      {% endcomment %}
+      {%- endunless -%}
 
-      <div class="trip-experience__grid">
+      <div class="trip-experience__grid{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         {% if has_video %}
           <div class="trip-experience__column trip-experience__column--video">
-            <h3 class="trip-experience__caption">Watch our experience</h3>
-            <div class="trip-experience__video-wrapper">
-              {% comment %} Basic iframe embed for the video URL {% endcomment %}
-              <iframe
-                src="{{ video_url }}"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                title="Trip Experience Video"
-              ></iframe>
-            </div>
+            <h3 class="trip-experience__caption">{{ 'sections.trip_experience.video_caption' | t }}</h3>
+            {% comment %} Use deferred-media for better performance and consistency {% endcomment %}
+            <deferred-media
+              class="trip-experience__media deferred-media gradient global-media-settings"
+              data-media-id="{{ video_id }}"
+              style="--ratio-percent: 56.25%;" {% comment %} Default to 16:9, adjust if needed or use image aspect ratio {% endcomment %}
+            >
+              <button
+                id="Deferred-Poster-Modal-{{ section.id }}-{{ video_id }}"
+                class="trip-experience__poster media deferred-media__poster media--landscape"
+                type="button"
+                aria-label="{{ 'sections.video.load_video' | t: description: metaobject.name | escape }}"
+              >
+                {% comment %} Optional: Add a poster image from metaobject if available {% endcomment %}
+                {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                <span class="deferred-media__poster-button motion-reduce">
+                  <span class="svg-wrapper">
+                    {{- 'icon-play.svg' | inline_asset_content -}}
+                  </span>
+                </span>
+              </button>
+              <template>
+                <iframe
+                  src="{{ video_embed_url }}"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                  title="{{ 'sections.trip_experience.video_title' | t: trip_name: metaobject.name | escape }}"
+                  {% if video_host == 'youtube' %} class="js-youtube" {% endif %}
+                  {% if video_host == 'vimeo' %} class="js-vimeo" {% endif %}
+                ></iframe>
+              </template>
+            </deferred-media>
           </div>
         {% endif %}
 
         {% if has_blog %}
           <div class="trip-experience__column trip-experience__column--blog">
-            <h3 class="trip-experience__caption">Read our experience</h3>
+            <h3 class="trip-experience__caption">{{ 'sections.trip_experience.blog_caption' | t }}</h3>
             <div class="trip-experience__blog-link">
-              {% comment %} Simple link - could be enhanced with an article card snippet {% endcomment %}
-              <a href="{{ latest_referencing_article.url }}">
-                {% if latest_referencing_article.image %}
-                  <img
-                    src="{{ latest_referencing_article.image | image_url: width: 400 }}"
-                    alt="{{ latest_referencing_article.image.alt | escape }}"
-                    loading="lazy"
-                    width="400"
-                    height="{{ 400 | divided_by: latest_referencing_article.image.aspect_ratio | round }}"
-                  >
-                {% endif %}
-                <h4>{{ latest_referencing_article.title }}</h4>
-              </a>
-              {% comment %}
-                Optional excerpt/summary display:
-                {{ latest_referencing_article.excerpt_or_content | strip_html | truncatewords: 30 }}
-              {% endcomment %}
+              {% comment %} Render using the article card snippet for consistency {% endcomment %}
+              {% render 'article-card',
+                article: latest_referencing_article,
+                show_image: true,
+                show_date: false,
+                show_author: false,
+                show_excerpt: true
+              %}
             </div>
           </div>
         {% endif %}
@@ -112,36 +148,36 @@
 
 {% schema %}
 {
-  "name": "Trip Experience",
+  "name": "t:sections.trip_experience.name",
   "tag": "section",
   "class": "section",
   "settings": [
     {
       "type": "text",
       "id": "title",
-      "label": "Section Title (Optional)",
+      "label": "t:sections.trip_experience.settings.title.label",
       "default": "Trip Experience"
     },
     {
       "type": "select",
       "id": "heading_size",
       "options": [
-        { "value": "h2", "label": "Small" },
-        { "value": "h1", "label": "Medium" },
-        { "value": "h0", "label": "Large" }
+        { "value": "h2", "label": "t:sections.all.heading_size.options__1.label" },
+        { "value": "h1", "label": "t:sections.all.heading_size.options__2.label" },
+        { "value": "h0", "label": "t:sections.all.heading_size.options__3.label" }
       ],
       "default": "h1",
-      "label": "Heading size"
+      "label": "t:sections.all.heading_size.label"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "Color scheme",
+      "label": "t:sections.all.colors.label",
       "default": "scheme-1"
     },
     {
       "type": "header",
-      "content": "Section Padding"
+      "content": "t:sections.all.padding.section_padding_heading"
     },
     {
       "type": "range",
@@ -150,7 +186,7 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "Top padding",
+      "label": "t:sections.all.padding.padding_top",
       "default": 36
     },
     {
@@ -160,14 +196,35 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "Bottom padding",
+      "label": "t:sections.all.padding.padding_bottom",
       "default": 36
     }
   ],
   "presets": [
     {
-      "name": "Trip Experience"
+      "name": "t:sections.trip_experience.presets.name"
     }
-  ]
+  ],
+  "locales": {
+    "en": {
+      "sections": {
+        "trip_experience": {
+          "name": "Trip Experience",
+          "settings": {
+            "title": {
+              "label": "Section Title (Optional)"
+            }
+          },
+          "presets": {
+            "name": "Trip Experience"
+          },
+          "video_caption": "Watch our experience",
+          "blog_caption": "Read our experience",
+          "video_title": "{{ trip_name }} Experience Video"
+        }
+      }
+    }
+    // Add other languages as needed
+  }
 }
 {% endschema %}
