@@ -126,80 +126,42 @@
         "color_scheme": "",
         "full_width": true,
         "padding_top": 40,
-        "padding_bottom": 52
+        "padding_bottom": 24
       }
     },
-    "multicolumn_UXPU8W": {
-      "type": "multicolumn",
+    "multicolumn_clickable_UiYGzp": {
+      "type": "multicolumn-clickable",
       "blocks": {
-        "column_xJRc8M": {
+        "column_kgTAKj": {
           "type": "column",
           "repeater": "{{ metaobject.courses.value }}",
           "settings": {
             "image": "{{ block.repeater.hero_image.value }}",
             "title": "{{ block.repeater.name.value }}",
             "text": "",
-            "link_label": "",
-            "link": "{{ block.repeater.system.url }}"
+            "link": "{{ block.repeater.system.url }}",
+            "link_label": ""
           }
         }
       },
       "block_order": [
-        "column_xJRc8M"
+        "column_kgTAKj"
       ],
       "settings": {
         "title": "",
-        "heading_size": "h2",
+        "heading_size": "h1",
         "image_width": "full",
         "image_ratio": "square",
         "columns_desktop": 2,
-        "column_alignment": "left",
+        "column_alignment": "center",
         "background_style": "none",
-        "button_label": "Button label",
+        "button_label": "",
         "button_link": "",
         "color_scheme": "",
         "columns_mobile": "2",
         "swipe_on_mobile": false,
-        "padding_top": 36,
+        "padding_top": 0,
         "padding_bottom": 36
-      }
-    },
-    "multicolumn_with_floating_GLCeRd": {
-      "type": "multicolumn-with-floating",
-      "blocks": {
-        "column_GyaxDK": {
-          "type": "column",
-          "repeater": "{{ metaobject.courses.value }}",
-          "settings": {
-            "image": "{{ block.repeater.hero_image.value }}",
-            "floating_header": "{{ block.repeater.name.value }}",
-            "title": "",
-            "text": "",
-            "link_label": "",
-            "link": "{{ block.repeater.system.url }}"
-          }
-        }
-      },
-      "block_order": [
-        "column_GyaxDK"
-      ],
-      "disabled": true,
-      "custom_css": [
-        ".floating-header h2 {color: white;}",
-        ".media {border-radius: 15px;}",
-        " /* On devices with a viewport width of 1024px and above, center the container */@media screen and (min-width: 1024px) {slider-component {width: 50%; margin: 0 auto; /* This centers the container */ }}"
-      ],
-      "settings": {
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "title": "Courses You'll Be Playing",
-        "heading_size": "h2",
-        "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36,
-        "enable_course_articles": false,
-        "articles_blog": "",
-        "articles_limit": 4
       }
     },
     "rich_text_JbMmtq": {
@@ -413,8 +375,7 @@
     "image_banner_bbWMk4",
     "rich_text_w4PxUA",
     "rich_text_nNbd9A",
-    "multicolumn_UXPU8W",
-    "multicolumn_with_floating_GLCeRd",
+    "multicolumn_clickable_UiYGzp",
     "rich_text_JbMmtq",
     "rich_text_MnRHq4",
     "image_with_text_p7LBLP",
