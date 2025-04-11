@@ -70,6 +70,9 @@
     margin-right: 0 !important;
     padding-left: 0 !important; /* Ensure no padding */
     padding-right: 0 !important; /* Ensure no padding */
+    /* --- NEW: Constrain the width of the list item itself --- */
+    max-width: 48%; /* Adjust as needed, less than 50% to allow centering */
+    width: 100%; /* Ensure it tries to fill the constrained space */
   }
   /* --- Add rule to override image wrapper auto margins specifically for 2-col desktop --- */
   .multicolumn-clickable-list.grid--2-col-desktop .multicolumn-clickable-list__item .multicolumn-card__image-wrapper {
