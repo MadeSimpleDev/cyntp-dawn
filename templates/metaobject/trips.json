@@ -373,6 +373,9 @@
       "settings": {
         "title": "Trip Experience",
         "heading_size": "h1",
+        "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "blog_selection": "news",
+        "referenced_metaobject": "",
         "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 36
