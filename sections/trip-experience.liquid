@@ -28,7 +28,9 @@
     assign current_metaobject = metaobject
   endif
 
+  ##################################################################
   # 2) Extract the trip_video_url and metaobject ID if available
+  ##################################################################
   assign raw_video_url = ''
   assign current_trip_id = ''
 
@@ -44,10 +46,15 @@
   assign video_id = ''
   assign video_host = ''
 
-  # Strip out "www." so that your if/elsif checks match "youtube.com" or "youtu.be"
-  assign sanitized_url = raw_video_url | replace: 'www.', ''
+  # Downcase & remove "www." so we can match a variety of YouTube URLs
+  assign sanitized_url = raw_video_url | downcase | replace: 'www.', ''
 
-  if sanitized_url contains 'youtube.com/watch?v='
+  # We'll check for embed links first, then watch links, then short links, then vimeo
+  if sanitized_url contains 'youtube.com/embed/'
+    assign video_id = sanitized_url | split: 'embed/' | last | split: '?' | first
+    assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
+    assign video_host = 'youtube'
+  elsif sanitized_url contains 'youtube.com/watch?v='
     assign video_id = sanitized_url | split: 'v=' | last | split: '&' | first
     assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
     assign video_host = 'youtube'
@@ -150,15 +157,36 @@
         {% if has_blog %}
           <div class="trip-experience__column trip-experience__column--blog">
             <h3 class="trip-experience__caption">{{ 'sections.trip_experience.blog_caption' | t }}</h3>
-            <div class="trip-experience__blog-link">
-              {% render 'article-card',
-                article: latest_referencing_article,
-                show_image: true,
-                show_date: false,
-                show_author: false,
-                show_excerpt: false,
-                title_overlay: true
-              %}
+            <div class="trip-experience__blog-link" style="position: relative; display: inline-block;">
+              <a href="{{ latest_referencing_article.url }}" style="text-decoration: none; color: inherit;">
+                {% comment %} If the article has an image, display it. Otherwise, fallback placeholder. {% endcomment %}
+                {% if latest_referencing_article.image %}
+                  <img
+                    src="{{ latest_referencing_article.image | image_url: width: 800, crop: 'center' }}"
+                    alt="{{ latest_referencing_article.title | escape }}"
+                    style="display: block; width: 100%; height: auto;"
+                  >
+                {% else %}
+                  {{ 'placeholder-image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                {% endif %}
+
+                {% comment %} Title overlay on top of the image {% endcomment %}
+                <div
+                  style="
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: #fff;
+                    font-size: 1.25rem;
+                    background-color: rgba(0,0,0,0.4);
+                    padding: 0.5rem 1rem;
+                    border-radius: 0.25rem;
+                  "
+                >
+                  {{ latest_referencing_article.title }}
+                </div>
+              </a>
             </div>
           </div>
         {% endif %}
