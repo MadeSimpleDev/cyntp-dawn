@@ -185,7 +185,7 @@
         "column_WENqpM": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/CYNTP_Character_Wordmark_forLightBG_f1466168-c2cf-44b0-a94d-182ec796239f.png",
+            "image": "shopify://shop_images/farm_links.png",
             "title": "",
             "text": "",
             "link_label": "",
@@ -195,7 +195,7 @@
         "column_Atmhnr": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/CYNTP_Character_Wordmark_forLightBG.png",
+            "image": "shopify://shop_images/sentryworld.png",
             "title": "",
             "text": "",
             "link_label": "",
@@ -205,7 +205,97 @@
         "column_eKwxdk": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/CYNTP_Character_Wordmark_forLightBG_f1466168-c2cf-44b0-a94d-182ec796239f.png",
+            "image": "shopify://shop_images/Black_Desert.jpg",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_9VK43Y": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/play_golf_myrtle.png",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_wPdyqW": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Sand_hollow.png",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_wmAn6a": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Visit-Williamsburg-Logo.jpg",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_cTfhQj": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/sequoyah_national.png",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_KiCfKM": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/evermore.jpg",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_D883RT": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Big_Cedar.jpg",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_NarAR3": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/golf_galaxy.jpg",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_QnRjH7": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/PGA_Tour_Superstore.webp",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_Q89DJM": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Travismathew_logo.jpg",
             "title": "",
             "text": "",
             "link_label": "",
@@ -216,13 +306,22 @@
       "block_order": [
         "column_WENqpM",
         "column_Atmhnr",
-        "column_eKwxdk"
+        "column_eKwxdk",
+        "column_9VK43Y",
+        "column_wPdyqW",
+        "column_wmAn6a",
+        "column_cTfhQj",
+        "column_KiCfKM",
+        "column_D883RT",
+        "column_NarAR3",
+        "column_QnRjH7",
+        "column_Q89DJM"
       ],
       "settings": {
         "title": "",
         "heading_size": "h2",
-        "image_width": "half",
-        "image_ratio": "square",
+        "image_width": "full",
+        "image_ratio": "adapt",
         "columns_desktop": 3,
         "column_alignment": "center",
         "background_style": "none",
