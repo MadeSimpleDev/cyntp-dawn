@@ -120,13 +120,16 @@
         "text_4RyAhV": {
           "type": "text",
           "settings": {
-            "text": "<p>As mentioned in the previous paragraph. We enjoy finding the next best golf trip. If we haven’t had a chance to experience your amazing course or set of courses yet, we want to make it happen. Whenever we go on trips, we bring our camera gear and document our time in the town and on the course. These videos can be seen all over our social media pages (Instagram, TikTok, and Youtube) and throughout our website. With millions of visitors to our socials and website monthly, we are certain that we can get your course or your gear in front of a very targeted audience. For more information send us message through the form below.</p>"
+            "text": "<p>We enjoy finding the next best golf trip. If we haven’t had a chance to experience your amazing course or resort, we want to make it happen. Whenever we go on trips, we gather content and document our time in the town and on the course. These videos can be seen all over our social media pages (Instagram, TikTok, and Youtube) and throughout our website. With millions of visitors to our socials and website monthly, we are certain that we can get your course, resort, or even gear in front of a very targeted audience. For more information send us a message through the form below.</p>"
           }
         }
       },
       "block_order": [
         "heading_CR36Eh",
         "text_4RyAhV"
+      ],
+      "custom_css": [
+        "p {text-wrap:pretty;}"
       ],
       "settings": {
         "desktop_content_position": "center",
