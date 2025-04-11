@@ -44,26 +44,29 @@
   ##################################################################
   # 2) Get the trip's video URL from the `trip_video_url` field
   ##################################################################
-  assign raw_video_url = ''
-  if show_section and current_trip.trip_video_url
-    assign raw_video_url = current_trip.trip_video_url.value
-  endif
+  assign raw_video_url = current_trip.trip_video_url.value
 
-  # Basic YouTube embed logic
+  assign check_url = raw_video_url | strip | downcase
+  assign url_to_split = raw_video_url | strip | replace: 'www.', ''
+
   assign video_embed_url = ''
-  if raw_video_url != blank
-    assign lower_url = raw_video_url | downcase
-    # Check for watch?v= pattern or youtu.be or fallback
-    if lower_url contains 'youtube.com/watch?v='
-      assign video_id = lower_url | split: 'v=' | last | split: '&' | first
-      assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id
-    elsif lower_url contains 'youtu.be/'
-      assign video_id = lower_url | split: 'youtu.be/' | last | split: '?' | first
-      assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id
-    else
-      # If user gave an embed link, or some other format, just use raw
-      assign video_embed_url = raw_video_url
-    endif
+  assign video_id = ''
+
+  if check_url contains 'youtube.com/watch?v='
+    # We do the split on url_to_split so we keep uppercase letters
+    assign video_id = url_to_split | split: 'v=' | last | split: '&' | first
+    assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id
+  elsif check_url contains 'youtu.be/'
+    # same logic
+    assign video_id = url_to_split | split: 'youtu.be/' | last | split: '?' | first
+    assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id
+  elsif check_url contains 'vimeo.com/'
+    # vimeo doesn’t care about letter case as much, but we keep it consistent
+    assign video_id = url_to_split | split: '.com/' | last | split: '?' | first
+    assign video_embed_url = 'https://player.vimeo.com/video/' | append: video_id
+  else
+    # If user pasted an actual embed link or random link. Just use it directly
+    assign video_embed_url = raw_video_url
   endif
 
   ##################################################################
