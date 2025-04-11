@@ -18,14 +18,19 @@
 
 {% liquid
   # --- Attempt to get the metaobject ---
-  # Use passed metaobject if available, otherwise try global metaobject on metaobject pages
+  # Initialize with the passed-in metaobject (could be blank)
   assign current_metaobject = metaobject
+
+  # If it's blank AND we are on a metaobject page, try assigning the global one instead.
+  # This ensures we prioritize the passed-in object if it exists.
   if current_metaobject == blank and request.page_type == 'metaobject'
-    assign current_metaobject = metaobject
+    assign current_metaobject = metaobject # Assign global metaobject
   endif
 
+  # --- Initialize variables ---
   assign raw_video_url = ''
   assign current_trip_id = ''
+  # Check if we successfully got a metaobject (either passed in or global)
   if current_metaobject
     assign raw_video_url = current_metaobject.trip_video_url.value
     assign current_trip_id = current_metaobject.id
@@ -58,7 +63,7 @@
 
   assign latest_referencing_article = blank
   assign latest_published_at = '1970-01-01'
-  assign blog_handle_to_check = 'journal' # IMPORTANT: Verify this is your blog's handle
+  assign blog_handle_to_check = 'news' # IMPORTANT: Verify this is your blog's handle
 
   # --- Find the latest blog post referencing this trip ---
   # Check blog exists and we have a trip ID from the metaobject
@@ -235,7 +240,7 @@
   ],
   "presets": [
     {
-      "name": "t:sections.trip_experience.presets.name" // Use translation key
+      "name": "t:sections.trip_experience.presets.name" // Corrected to use translation key
     }
   ]
 }
