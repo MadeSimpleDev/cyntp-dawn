@@ -1,0 +1,165 @@
+{% comment %} /sections/trip-experience.liquid {% endcomment %}
+{{ 'section-trip-experience.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign video_url = metaobject.trip_video_url.value
+  assign current_trip_id = metaobject.id
+  assign latest_referencing_article = blank
+  assign latest_published_at = '1970-01-01' // Initialize with a very old date
+
+  // --- Find the latest blog post referencing this trip ---
+  // Consider making the blog handle a setting if needed, or loop through multiple blogs.
+  // This example assumes a blog with the handle 'journal'. Adjust if needed.
+  // You might need to loop through blogs[settings.blog].articles or even all blogs.articles
+  for article in blogs.journal.articles
+    assign referenced_trip = article.metafields.custom.referenced_trip.value
+    if referenced_trip and referenced_trip.id == current_trip_id
+      if article.published_at > latest_published_at
+        assign latest_published_at = article.published_at
+        assign latest_referencing_article = article
+      endif
+    endif
+  endfor
+
+  // Determine if we have content to show
+  assign has_video = false
+  if video_url != blank
+    assign has_video = true
+  endif
+
+  assign has_blog = false
+  if latest_referencing_article != blank
+    assign has_blog = true
+  endif
+
+  // Only render the section if there's at least one column to show
+  if has_video or has_blog
+    assign show_section = true
+  else
+    assign show_section = false
+  endif
+-%}
+
+{%- if show_section -%}
+  <div class="trip-experience color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+    <div class="page-width">
+      {% comment %} Optional: Add a section title if needed via settings {% endcomment %}
+      {% comment %}
+        <div class="title-wrapper title-wrapper--no-top-margin">
+          <h2 class="title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
+        </div>
+      {% endcomment %}
+
+      <div class="trip-experience__grid">
+        {%- if has_video -%}
+          <div class="trip-experience__column trip-experience__column--video">
+            <h3 class="trip-experience__caption">Watch our experience</h3>
+            <div class="trip-experience__video-wrapper">
+              {% comment %} Basic iframe embed - enhance if needed for specific providers {% endcomment %}
+              <iframe
+                src="{{ video_url }}"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                title="Trip Experience Video"
+              ></iframe>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if has_blog -%}
+          <div class="trip-experience__column trip-experience__column--blog">
+            <h3 class="trip-experience__caption">Read our experience</h3>
+            <div class="trip-experience__blog-link">
+              {% comment %} Simple link - could be enhanced with article card snippet {% endcomment %}
+              <a href="{{ latest_referencing_article.url }}">
+                {% if latest_referencing_article.image %}
+                  <img
+                    src="{{ latest_referencing_article.image | image_url: width: 400 }}"
+                    alt="{{ latest_referencing_article.image.alt | escape }}"
+                    loading="lazy"
+                    width="400"
+                    height="{{ 400 | divided_by: latest_referencing_article.image.aspect_ratio | round }}"
+                  >
+                {% endif %}
+                <h4>{{ latest_referencing_article.title }}</h4>
+              </a>
+              {% comment %} Optional: Add excerpt or other details {% endcomment %}
+              {% comment %}
+                {% if latest_referencing_article.excerpt_or_content contains '<p>' %}
+                  {{ latest_referencing_article.excerpt_or_content | strip_html | truncatewords: 30 }}
+                {% else %}
+                  <p>{{ latest_referencing_article.excerpt_or_content | strip_html | truncatewords: 30 }}</p>
+                {% endif %}
+              {% endcomment %}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Trip Experience",
+    "tag": "section",
+    "class": "section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Section Title (Optional)",
+        "default": "Trip Experience"
+      },
+      {
+         "type": "select",
+         "id": "heading_size",
+         "options": [
+           { "value": "h2", "label": "Small" },
+           { "value": "h1", "label": "Medium" },
+           { "value": "h0", "label": "Large" }
+         ],
+         "default": "h1",
+         "label": "Heading size"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "Color scheme",
+        "default": "scheme-1"
+      },
+      {
+        "type": "header",
+        "content": "Section Padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Top padding",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Bottom padding",
+        "default": 36
+      }
+    ],
+    "presets": [
+      {
+        "name": "Trip Experience"
+      }
+    ]
+  }
+{% endschema %}
