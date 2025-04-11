@@ -99,11 +99,22 @@
   assign has_video = video_embed_url
   assign has_blog = latest_referencing_article
   assign show_section = has_video
+%}
+
+{%- comment -%}
+  DEBUG OUTPUT:
+  Remove or comment out once you're done debugging
+{%- endcomment -%}
+{% if show_section %}
+  <!-- DEBUG: raw_video_url = {{ raw_video_url }} -->
+  <!-- DEBUG: sanitized_url = {{ sanitized_url }} -->
+  <!-- DEBUG: video_embed_url = {{ video_embed_url }} -->
+  <!-- DEBUG: video_host = {{ video_host }} -->
+{% endif %}
 
 {% if show_section %}
   <div class="trip-experience color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
     <div class="page-width">
-      {% comment %} Optional title for the section {% endcomment %}
       {%- unless section.settings.title == blank -%}
         <div class="title-wrapper title-wrapper--no-top-margin{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
           <h2 class="title inline-richtext {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
@@ -112,8 +123,9 @@
 
       <div class="trip-experience__grid{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         {% if has_video %}
+          <!-- CHANGED CAPTION TEXT -->
           <div class="trip-experience__column trip-experience__column--video">
-            <h3 class="trip-experience__caption">{{ 'sections.trip_experience.video_caption' | t }}</h3>
+            <h3 class="trip-experience__caption">Watch our Experience</h3>
             <deferred-media
               id="Deferred-Media-{{ section.id }}-{{ video_id }}"
               class="trip-experience__media deferred-media gradient global-media-settings"
@@ -124,9 +136,8 @@
                 id="Deferred-Poster-{{ section.id }}-{{ video_id }}"
                 class="trip-experience__poster media deferred-media__poster media--landscape"
                 type="button"
-                aria-label="{{ 'sections.video.load_video' | t: description: 'Trip Experience Video' | escape }}"
+                aria-label="Watch our Experience"
               >
-                {% comment %} If you have a poster image, swap it in here. Otherwise, fallback placeholder: {% endcomment %}
                 {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
 
                 <span class="deferred-media__poster-button motion-reduce">
@@ -141,7 +152,7 @@
                   frameborder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowfullscreen
-                  title="{{ 'sections.trip_experience.video_title' | t: trip_name: current_metaobject.name | default: 'Trip' | escape }}"
+                  title="Watch our Experience"
                   {% if video_host == 'youtube' %}
                     class="js-youtube"
                   {% elsif video_host == 'vimeo' %}
@@ -154,33 +165,36 @@
         {% endif %}
 
         {% if has_blog %}
+          <!-- CHANGED CAPTION TEXT -->
           <div class="trip-experience__column trip-experience__column--blog">
-            <h3 class="trip-experience__caption">{{ 'sections.trip_experience.blog_caption' | t }}</h3>
+            <h3 class="trip-experience__caption">Read about our Experience</h3>
             <div class="trip-experience__blog-link" style="position: relative; display: inline-block;">
               <a href="{{ latest_referencing_article.url }}" style="text-decoration: none; color: inherit;">
-                {% comment %} If the article has an image, display it. Otherwise, fallback placeholder. {% endcomment %}
                 {% if latest_referencing_article.image %}
                   <img
                     src="{{ latest_referencing_article.image | image_url: width: 800, crop: 'center' }}"
                     alt="{{ latest_referencing_article.title | escape }}"
                     style="display: block; width: 100%; height: auto;"
-                  />
+                  >
                 {% else %}
                   {{ 'placeholder-image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
                 {% endif %}
 
-                {% comment %} Title overlay on top of the image {% endcomment %}
-                <div style="
-                  position: absolute;
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50%, -50%);
-                  color: #fff;
-                  font-size: 1.25rem;
-                  background-color: rgba(0,0,0,0.4);
-                  padding: 0.5rem 1rem;
-                  border-radius: 0.25rem;
-                ">
+                {% comment %}
+                  Increase text size, position at bottom left:
+                {% endcomment %}
+                <div
+                  style="
+                    position: absolute;
+                    bottom: 1rem;
+                    left: 1rem;
+                    color: #fff;
+                    font-size: 1.5rem; /* Larger text */
+                    background-color: rgba(0,0,0,0.4);
+                    padding: 0.5rem 1rem;
+                    border-radius: 0.25rem;
+                  "
+                >
                   {{ latest_referencing_article.title }}
                 </div>
               </a>
@@ -201,29 +215,29 @@
     {
       "type": "text",
       "id": "title",
-      "label": "t:sections.trip_experience.settings.title.label",
+      "label": "Trip Experience Title",
       "default": "Trip Experience"
     },
     {
       "type": "select",
       "id": "heading_size",
       "options": [
-        { "value": "h2", "label": "t:sections.all.heading_size.options__1.label" },
-        { "value": "h1", "label": "t:sections.all.heading_size.options__2.label" },
-        { "value": "h0", "label": "t:sections.all.heading_size.options__3.label" }
+        { "value": "h2", "label": "Heading H2" },
+        { "value": "h1", "label": "Heading H1" },
+        { "value": "h0", "label": "Heading H0" }
       ],
       "default": "h1",
-      "label": "t:sections.all.heading_size.label"
+      "label": "Heading size"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
+      "label": "Color scheme",
       "default": "scheme-1"
     },
     {
       "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
+      "content": "Section padding"
     },
     {
       "type": "range",
@@ -232,7 +246,7 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
+      "label": "Padding top",
       "default": 36
     },
     {
@@ -242,13 +256,13 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
+      "label": "Padding bottom",
       "default": 36
     }
   ],
   "presets": [
     {
-      "name": "t:sections.trip_experience.presets.name"
+      "name": "Trip Experience"
     }
   ]
 }
