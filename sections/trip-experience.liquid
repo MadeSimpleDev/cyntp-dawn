@@ -1,4 +1,8 @@
-{% comment %} /sections/trip-experience.liquid (Hardcoded YouTube embed) {% endcomment %}
+{% comment %}
+  /sections/trip-experience.liquid
+  Using the trip's hero_image as the video poster.
+{% endcomment %}
+
 {{ 'section-trip-experience.css' | asset_url | stylesheet_tag }}
 {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
@@ -16,33 +20,108 @@
 {%- endstyle -%}
 
 {% liquid
-  ##################################################################
-  # 1) Hardcode a YouTube embed URL (ignore metaobject logic)
-  ##################################################################
-  assign video_embed_url = 'https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1&autoplay=1'
-  assign has_video = true
+  ######################################################
+  # 1) Load metaobject, fetch trip_video_url & hero_image
+  ######################################################
+  assign current_metaobject = metaobject
 
-  ##################################################################
-  # 2) (Optional) Try to find a blog article in the 'news' blog
-  ##################################################################
-  assign latest_referencing_article = blank
-  assign blog_handle_to_check = 'news'
-
-  # Example logic to get the first article in the 'news' blog
-  if blogs[blog_handle_to_check] and blogs[blog_handle_to_check].articles.size > 0
-    assign latest_referencing_article = blogs[blog_handle_to_check].articles[0]
+  # If no metaobject was directly assigned, but we're on a metaobject page,
+  # then the global 'metaobject' might apply
+  if current_metaobject == blank and request.page_type == 'metaobject'
+    assign current_metaobject = metaobject
   endif
 
+  # Initialize fields
+  assign raw_video_url = ''
+  assign trip_hero_image = ''
+  assign current_trip_id = ''
+
+  if current_metaobject
+    # Make sure these field handles match your actual metafields
+    assign raw_video_url = current_metaobject.trip_video_url.value
+    assign trip_hero_image = current_metaobject.hero_image.value
+    assign current_trip_id = current_metaobject.id
+  endif
+
+  ######################################################
+  # 2) Build an embed URL for YouTube or Vimeo
+  ######################################################
+  assign video_embed_url = ''
+  assign video_id = ''
+  assign video_host = ''
+
+  # Downcase & remove "www." so we can match a variety of YouTube URLs
+  assign sanitized_url = raw_video_url | downcase | replace: 'www.', ''
+
+  if sanitized_url contains 'youtube.com/embed/'
+    assign video_id = sanitized_url | split: 'embed/' | last | split: '?' | first
+    assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
+    assign video_host = 'youtube'
+  elsif sanitized_url contains 'youtube.com/watch?v='
+    assign video_id = sanitized_url | split: 'v=' | last | split: '&' | first
+    assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
+    assign video_host = 'youtube'
+  elsif sanitized_url contains 'youtu.be/'
+    assign video_id = sanitized_url | split: 'youtu.be/' | last | split: '?' | first
+    assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
+    assign video_host = 'youtube'
+  elsif sanitized_url contains 'vimeo.com/'
+    assign video_id = sanitized_url | split: '.com/' | last | split: '?' | first
+    assign video_embed_url = 'https://player.vimeo.com/video/' | append: video_id | append: '?autoplay=1'
+    assign video_host = 'vimeo'
+  endif
+
+  ######################################################
+  # 3) Find the latest blog post in the 'news' blog
+  ######################################################
+  assign latest_referencing_article = blank
+  assign latest_published_at = '1970-01-01'
+  assign blog_handle_to_check = 'news'
+
+  if blogs[blog_handle_to_check] and current_trip_id != ''
+    for article in blogs[blog_handle_to_check].articles
+      if article.metafields.custom.referenced_trip
+        if article.metafields.custom.referenced_trip.value
+          assign referenced_trip = article.metafields.custom.referenced_trip.value
+          if referenced_trip.id == current_trip_id
+            if article.published_at > latest_published_at
+              assign latest_published_at = article.published_at
+              assign latest_referencing_article = article
+            endif
+          endif
+        endif
+      endif
+    endfor
+  endif
+
+  ######################################################
+  # 4) Decide if we have a video or a blog to show
+  ######################################################
+  assign has_video = video_embed_url
   assign has_blog = latest_referencing_article
   assign show_section = has_video
 %}
+
+{%- comment -%}
+  DEBUG (optional):
+  Remove these lines once you're done troubleshooting
+{%- endcomment -%}
+{% if show_section %}
+  <!-- DEBUG: raw_video_url = {{ raw_video_url }} -->
+  <!-- DEBUG: trip_hero_image = {{ trip_hero_image }} -->
+  <!-- DEBUG: sanitized_url = {{ sanitized_url }} -->
+  <!-- DEBUG: video_embed_url = {{ video_embed_url }} -->
+  <!-- DEBUG: video_host = {{ video_host }} -->
+{% endif %}
 
 {% if show_section %}
   <div class="trip-experience color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
     <div class="page-width">
       {%- unless section.settings.title == blank -%}
         <div class="title-wrapper title-wrapper--no-top-margin">
-          <h2 class="title inline-richtext {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
+          <h2 class="title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title }}
+          </h2>
         </div>
       {%- endunless -%}
 
@@ -51,18 +130,31 @@
           <div class="trip-experience__column trip-experience__column--video">
             <h3 class="trip-experience__caption">Watch our Experience</h3>
             <deferred-media
-              id="Deferred-Media-Hardcoded"
+              id="Deferred-Media-{{ section.id }}-{{ video_id }}"
               class="trip-experience__media deferred-media gradient global-media-settings"
-              data-media-id="hardcoded-youtube"
+              data-media-id="{{ video_id }}"
               style="--ratio-percent: 56.25%;"
             >
               <button
-                id="Deferred-Poster-Hardcoded"
+                id="Deferred-Poster-{{ section.id }}-{{ video_id }}"
                 class="trip-experience__poster media deferred-media__poster media--landscape"
                 type="button"
                 aria-label="Watch our Experience"
               >
-                {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                {% comment %}
+                  Use the trip.hero_image as the poster image if present,
+                  else fallback to a placeholder
+                {% endcomment %}
+                {% if trip_hero_image != blank %}
+                  <img
+                    src="{{ trip_hero_image | image_url: width: 1200 }}"
+                    alt="Trip Hero Image"
+                    style="display:block; width:100%; height:100%; object-fit:cover;"
+                  >
+                {% else %}
+                  {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                {% endif %}
+
                 <span class="deferred-media__poster-button motion-reduce">
                   <span class="svg-wrapper">
                     {{ 'icon-play.svg' | inline_asset_content }}
@@ -70,14 +162,20 @@
                 </span>
               </button>
               <template>
-                <iframe
-                  src="{{ video_embed_url }}"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowfullscreen
-                  title="Watch our Experience"
-                  class="js-youtube"
-                ></iframe>
+                {% if video_embed_url != '' %}
+                  <iframe
+                    src="{{ video_embed_url }}"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                    title="Watch our Experience"
+                    {% if video_host == 'youtube' %}
+                      class="js-youtube"
+                    {% elsif video_host == 'vimeo' %}
+                      class="js-vimeo"
+                    {% endif %}
+                  ></iframe>
+                {% endif %}
               </template>
             </deferred-media>
           </div>
@@ -97,6 +195,7 @@
                 {% else %}
                   {{ 'placeholder-image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
                 {% endif %}
+
                 <div
                   style="
                     position: absolute;
@@ -122,7 +221,7 @@
 
 {% schema %}
 {
-  "name": "Experience",
+  "name": "Trip Experience",
   "tag": "section",
   "class": "section",
   "settings": [
@@ -176,7 +275,7 @@
   ],
   "presets": [
     {
-      "name": "Hardcoded Experience (Test)"
+      "name": "Trip Experience"
     }
   ]
 }
