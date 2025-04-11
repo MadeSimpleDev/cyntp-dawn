@@ -124,10 +124,10 @@
               {% comment %} Default to 16:9, adjust if needed or use image aspect ratio {% endcomment %}
             >
               <button
-                id="Deferred-Poster-Modal-{{ section.id }}-{{ video_id }}"
+                id="Deferred-Poster-{{ section.id }}-{{ video_id }}"
                 class="trip-experience__poster media deferred-media__poster media--landscape"
                 type="button"
-                aria-label="{{ 'sections.video.load_video' | t: description: current_metaobject.name | default: 'video' | escape }}"
+                aria-label="{{ 'sections.video.load_video' | t: description: 'Trip Experience Video' | escape }}"
               >
                 {% comment %} Optional: Add a poster image from metaobject if available {% endcomment %}
                 {% comment %}

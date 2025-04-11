@@ -340,7 +340,7 @@
     "trip_experience": {
       "name": "Trip Experience",
       "video_caption": "Watch the Experience",
-      "blog_caption": "Read the Story",
+      "blog_caption": "Read about our Experience",
       "video_title": "Video about {{ trip_name }}",
       "settings": {
         "title": {
