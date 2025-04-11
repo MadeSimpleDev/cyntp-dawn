@@ -168,11 +168,11 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#f7f7f7",
+          "background": "#ffffff",
           "background_gradient": "",
           "text": "#282f25",
           "button": "#c3996b",
-          "button_label": "#f7f7f7",
+          "button_label": "#ffffff",
           "secondary_button_label": "#5a5152",
           "shadow": "#121212"
         }
