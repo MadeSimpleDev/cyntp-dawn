@@ -367,6 +367,16 @@
         "articles_blog": "",
         "articles_limit": 4
       }
+    },
+    "trip_experience_6GiU9X": {
+      "type": "trip-experience",
+      "settings": {
+        "title": "Trip Experience",
+        "heading_size": "h1",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -382,6 +392,7 @@
     "rich_text_P9XRWN",
     "rich_text_ftccwj",
     "1738267823e657d34d",
-    "multicolumn_with_floating_VLxeGJ"
+    "multicolumn_with_floating_VLxeGJ",
+    "trip_experience_6GiU9X"
   ]
 }
