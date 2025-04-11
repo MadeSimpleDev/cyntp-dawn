@@ -1,4 +1,4 @@
-{% comment %} /sections/trip-experience.liquid {% endcomment %}
+{% comment %} /sections/trip-experience.liquid (Hardcoded YouTube embed) {% endcomment %}
 {{ 'section-trip-experience.css' | asset_url | stylesheet_tag }}
 {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
@@ -7,7 +7,6 @@
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
-
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
@@ -18,131 +17,55 @@
 
 {% liquid
   ##################################################################
-  # 1) Try to get the metaobject (from section setting or page)
+  # 1) Hardcode a YouTube embed URL (ignore metaobject logic)
   ##################################################################
-  assign current_metaobject = metaobject
-
-  # If no metaobject was directly assigned, but we are on a metaobject page,
-  # then the global 'metaobject' might apply
-  if current_metaobject == blank and request.page_type == 'metaobject'
-    assign current_metaobject = metaobject
-  endif
+  assign video_embed_url = 'https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1&autoplay=1'
+  assign has_video = true
 
   ##################################################################
-  # 2) Extract the trip_video_url and metaobject ID if available
-  ##################################################################
-  assign raw_video_url = ''
-  assign current_trip_id = ''
-
-  if current_metaobject
-    assign raw_video_url = current_metaobject.trip_video_url.value
-    assign current_trip_id = current_metaobject.id
-  endif
-
-  ##################################################################
-  # 3) Build an embed URL for YouTube or Vimeo if raw_video_url is set
-  ##################################################################
-  assign video_embed_url = ''
-  assign video_id = ''
-  assign video_host = ''
-
-  # Downcase & remove "www." so we can match a variety of YouTube URLs
-  assign sanitized_url = raw_video_url | downcase | replace: 'www.', ''
-
-  # We'll check for embed links first, then watch links, then short links, then vimeo
-  if sanitized_url contains 'youtube.com/embed/'
-    assign video_id = sanitized_url | split: 'embed/' | last | split: '?' | first
-    assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
-    assign video_host = 'youtube'
-  elsif sanitized_url contains 'youtube.com/watch?v='
-    assign video_id = sanitized_url | split: 'v=' | last | split: '&' | first
-    assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
-    assign video_host = 'youtube'
-  elsif sanitized_url contains 'youtu.be/'
-    assign video_id = sanitized_url | split: 'youtu.be/' | last | split: '?' | first
-    assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
-    assign video_host = 'youtube'
-  elsif sanitized_url contains 'vimeo.com/'
-    assign video_id = sanitized_url | split: '.com/' | last | split: '?' | first
-    assign video_embed_url = 'https://player.vimeo.com/video/' | append: video_id | append: '?autoplay=1'
-    assign video_host = 'vimeo'
-  endif
-
-  ##################################################################
-  # 4) Find the latest blog post in the 'news' blog referencing this trip
+  # 2) (Optional) Try to find a blog article in the 'news' blog
   ##################################################################
   assign latest_referencing_article = blank
-  assign latest_published_at = '1970-01-01'
   assign blog_handle_to_check = 'news'
 
-  if blogs[blog_handle_to_check] and current_trip_id != ''
-    for article in blogs[blog_handle_to_check].articles
-      if article.metafields.custom.referenced_trip
-        # Confirm the metafield has a value
-        if article.metafields.custom.referenced_trip.value
-          assign referenced_trip = article.metafields.custom.referenced_trip.value
-          # Compare IDs
-          if referenced_trip.id == current_trip_id
-            if article.published_at > latest_published_at
-              assign latest_published_at = article.published_at
-              assign latest_referencing_article = article
-            endif
-          endif
-        endif
-      endif
-    endfor
+  # Example logic to get the first article in the 'news' blog
+  if blogs[blog_handle_to_check] and blogs[blog_handle_to_check].articles.size > 0
+    assign latest_referencing_article = blogs[blog_handle_to_check].articles[0]
   endif
 
-  ##################################################################
-  # 5) Decide if we actually show the section
-  ##################################################################
-  assign has_video = video_embed_url
   assign has_blog = latest_referencing_article
   assign show_section = has_video
 %}
-
-{%- comment -%}
-  DEBUG OUTPUT:
-  Remove or comment out once you're done debugging
-{%- endcomment -%}
-{% if show_section %}
-  <!-- DEBUG: raw_video_url = {{ raw_video_url }} -->
-  <!-- DEBUG: sanitized_url = {{ sanitized_url }} -->
-  <!-- DEBUG: video_embed_url = {{ video_embed_url }} -->
-  <!-- DEBUG: video_host = {{ video_host }} -->
-{% endif %}
 
 {% if show_section %}
   <div class="trip-experience color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
     <div class="page-width">
       {%- unless section.settings.title == blank -%}
-        <div class="title-wrapper title-wrapper--no-top-margin{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        <div class="title-wrapper title-wrapper--no-top-margin">
           <h2 class="title inline-richtext {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
         </div>
       {%- endunless -%}
 
-      <div class="trip-experience__grid{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <div class="trip-experience__grid">
         {% if has_video %}
-          <!-- CHANGED CAPTION TEXT -->
           <div class="trip-experience__column trip-experience__column--video">
             <h3 class="trip-experience__caption">Watch our Experience</h3>
             <deferred-media
-              id="Deferred-Media-{{ section.id }}-{{ video_id }}"
+              id="Deferred-Media-Hardcoded"
               class="trip-experience__media deferred-media gradient global-media-settings"
-              data-media-id="{{ video_id }}"
+              data-media-id="hardcoded-youtube"
               style="--ratio-percent: 56.25%;"
             >
               <button
-                id="Deferred-Poster-{{ section.id }}-{{ video_id }}"
+                id="Deferred-Poster-Hardcoded"
                 class="trip-experience__poster media deferred-media__poster media--landscape"
                 type="button"
                 aria-label="Watch our Experience"
               >
                 {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
-
                 <span class="deferred-media__poster-button motion-reduce">
                   <span class="svg-wrapper">
-                    {{- 'icon-play.svg' | inline_asset_content -}}
+                    {{ 'icon-play.svg' | inline_asset_content }}
                   </span>
                 </span>
               </button>
@@ -153,11 +76,7 @@
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowfullscreen
                   title="Watch our Experience"
-                  {% if video_host == 'youtube' %}
-                    class="js-youtube"
-                  {% elsif video_host == 'vimeo' %}
-                    class="js-vimeo"
-                  {% endif %}
+                  class="js-youtube"
                 ></iframe>
               </template>
             </deferred-media>
@@ -165,7 +84,6 @@
         {% endif %}
 
         {% if has_blog %}
-          <!-- CHANGED CAPTION TEXT -->
           <div class="trip-experience__column trip-experience__column--blog">
             <h3 class="trip-experience__caption">Read about our Experience</h3>
             <div class="trip-experience__blog-link" style="position: relative; display: inline-block;">
@@ -179,17 +97,13 @@
                 {% else %}
                   {{ 'placeholder-image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
                 {% endif %}
-
-                {% comment %}
-                  Increase text size, position at bottom left:
-                {% endcomment %}
                 <div
                   style="
                     position: absolute;
                     bottom: 1rem;
                     left: 1rem;
                     color: #fff;
-                    font-size: 1.5rem; /* Larger text */
+                    font-size: 1.5rem;
                     background-color: rgba(0,0,0,0.4);
                     padding: 0.5rem 1rem;
                     border-radius: 0.25rem;
@@ -208,7 +122,7 @@
 
 {% schema %}
 {
-  "name": "Experience",
+  "name": "Hardcoded Experience (Test)",
   "tag": "section",
   "class": "section",
   "settings": [
@@ -262,7 +176,7 @@
   ],
   "presets": [
     {
-      "name": "Trip Experience"
+      "name": "Hardcoded Experience (Test)"
     }
   ]
 }
