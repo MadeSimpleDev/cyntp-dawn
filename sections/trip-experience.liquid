@@ -28,6 +28,7 @@
   assign video_id = ''
   assign video_host = ''
 
+  # --- Parse Video URL ---
   if raw_video_url contains 'youtube.com/watch?v='
     assign video_id = raw_video_url | split: 'v=' | last | split: '&' | first
     assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
@@ -46,7 +47,8 @@
   assign latest_published_at = '1970-01-01'
 
   {% comment %} --- Find the latest blog post referencing this trip --- {% endcomment %}
-  if blogs.journal and current_trip_id != '' {% comment %} Check blog exists and we have a trip ID {% endcomment %}
+  {% comment %} Check blog exists and we have a trip ID {% endcomment %}
+  if blogs.journal and current_trip_id != ''
     for article in blogs.journal.articles
       assign referenced_trip = article.metafields.custom.referenced_trip.value
       {% comment %} Check if the referenced_trip metaobject value exists and its ID matches {% endcomment %}
