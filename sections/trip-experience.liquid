@@ -118,8 +118,9 @@
             <h3 class="trip-experience__caption">{{ 'sections.trip_experience.video_caption' | t }}</h3>
             {% comment %} Use deferred-media for better performance and consistency {% endcomment %}
             <deferred-media
+              id="Deferred-Media-{{ section.id }}-{{ video_id }}" {% comment %} Added unique ID here {% endcomment %}
               class="trip-experience__media deferred-media gradient global-media-settings"
-              data-media-id="{{ video_id }}"
+              data-media-id="{{ video_id }}" {% comment %} Ensure this uses the parsed video_id {% endcomment %}
               style="--ratio-percent: 56.25%;"
               {% comment %} Default to 16:9, adjust if needed or use image aspect ratio {% endcomment %}
             >
@@ -166,6 +167,7 @@
 
         {% if has_blog %}
           <div class="trip-experience__column trip-experience__column--blog">
+            {% comment %} Ensure this key matches the one in locales/en.default.json {% endcomment %}
             <h3 class="trip-experience__caption">{{ 'sections.trip_experience.blog_caption' | t }}</h3>
             <div class="trip-experience__blog-link">
               {% comment %} Render using the article card snippet for consistency {% endcomment %}
