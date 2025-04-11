@@ -87,7 +87,7 @@
 
   assign has_video = video_embed_url
   assign has_blog = referencing_article
-  assign show_section = has_video or has_blog
+  assign show_section = has_video
 %}
 
 {% if show_section %}
@@ -178,17 +178,6 @@
         { "value": "h1", "label": "Heading H1" },
         { "value": "h0", "label": "Heading H0" }
       ]
-    },
-    {
-      "type": "text",
-      "id": "video_url",
-      "label": "Video URL",
-      "default": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    },
-    {
-      "type": "image_picker",
-      "id": "preview_image",
-      "label": "Video Preview Image"
     },
     {
       "type": "blog",
