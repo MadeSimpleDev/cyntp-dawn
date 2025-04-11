@@ -99,7 +99,6 @@
   assign has_video = video_embed_url
   assign has_blog = latest_referencing_article
   assign show_section = has_video
-%}
 
 {% if show_section %}
   <div class="trip-experience color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
@@ -165,25 +164,23 @@
                     src="{{ latest_referencing_article.image | image_url: width: 800, crop: 'center' }}"
                     alt="{{ latest_referencing_article.title | escape }}"
                     style="display: block; width: 100%; height: auto;"
-                  >
+                  />
                 {% else %}
                   {{ 'placeholder-image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
                 {% endif %}
 
                 {% comment %} Title overlay on top of the image {% endcomment %}
-                <div
-                  style="
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    color: #fff;
-                    font-size: 1.25rem;
-                    background-color: rgba(0,0,0,0.4);
-                    padding: 0.5rem 1rem;
-                    border-radius: 0.25rem;
-                  "
-                >
+                <div style="
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  color: #fff;
+                  font-size: 1.25rem;
+                  background-color: rgba(0,0,0,0.4);
+                  padding: 0.5rem 1rem;
+                  border-radius: 0.25rem;
+                ">
                   {{ latest_referencing_article.title }}
                 </div>
               </a>
