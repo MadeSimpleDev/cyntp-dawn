@@ -69,6 +69,14 @@
     padding-right: 0 !important; /* Ensure no padding */
   }
   /* --- END NEW --- */
+
+  /* --- NEW: Constrain container width and center it ON DESKTOP --- */
+  .multicolumn-clickable-list {
+    max-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* --- END NEW --- */
 }
 
 .multicolumn-clickable-list {
@@ -76,11 +84,6 @@
   margin-bottom: 0;
   padding: 0;
   list-style: none; /* Ensure no list bullets */
-  /* --- NEW: Constrain container width and center it --- */
-  max-width: 70%;
-  margin-left: auto;
-  margin-right: auto;
-  /* --- END NEW --- */
 }
 
 .multicolumn-clickable-list__item:only-child {
@@ -138,6 +141,8 @@
 @media screen and (max-width: 989px) {
   .multicolumn-clickable .multicolumn-card__image-wrapper {
     width: 100% !important; /* Ensure full width on mobile */
+    margin-left: 0 !important; /* Ensure no horizontal margin */
+    margin-right: 0 !important; /* Ensure no horizontal margin */
   }
 }
 /* --- END NEW --- */
@@ -146,11 +151,11 @@
   .multicolumn-clickable-list {
     margin: 0;
     width: 100%;
+    max-width: none; /* Override desktop max-width */
   }
 
   .multicolumn-clickable-list:not(.slider) {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    /* Removed padding-left and padding-right */
   }
 }
 
