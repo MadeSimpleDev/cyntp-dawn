@@ -40,17 +40,17 @@
   width: 50%;
 }
 
-/* --- NEW: Force 50% image width on desktop --- */
+/* --- NEW: Force 60% image width on desktop --- */
 @media screen and (min-width: 990px) {
   .multicolumn-clickable .multicolumn-card__image-wrapper {
-     width: 50% !important; /* Force 50% width */
+     width: 60% !important; /* Force 60% width */
      /* Ensure auto margins for centering */
      margin-left: auto !important;
      margin-right: auto !important;
   }
    /* Ensure full width setting is also overridden */
    .multicolumn-clickable .multicolumn-card__image-wrapper--full-width {
-     width: 50% !important;
+     width: 60% !important; /* Force 60% width */
      /* Ensure auto margins for centering */
      margin-left: auto !important;
      margin-right: auto !important;
@@ -133,6 +133,14 @@
   left: 50%;
   transform: translateX(-50%);
 }
+
+/* --- NEW: Ensure mobile image width is 100% --- */
+@media screen and (max-width: 989px) {
+  .multicolumn-clickable .multicolumn-card__image-wrapper {
+    width: 100% !important; /* Ensure full width on mobile */
+  }
+}
+/* --- END NEW --- */
 
 @media screen and (max-width: 749px) {
   .multicolumn-clickable-list {
@@ -234,8 +242,7 @@
 }
 
 .multicolumn-card > .multicolumn-card__image-wrapper--full-width:not(.multicolumn-card-spacing) {
-  border-top-left-radius: calc(var(--text-boxes-radius) - var(--text-boxes-border-width));
-  border-top-right-radius: calc(var(--text-boxes-radius) - var(--text-boxes-border-width));
+  /* Removed border-radius properties */
   overflow: hidden;
 }
 
@@ -249,7 +256,7 @@
   color: inherit; /* Inherit text color from parent */
   text-decoration: none; /* Remove underline */
   height: 100%;
-  border-radius: var(--text-boxes-radius); /* Apply border radius if card has one */
+  /* Removed border-radius property */
 }
 
 .multicolumn-card__link:hover .multicolumn-card {
