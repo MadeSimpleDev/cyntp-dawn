@@ -17,95 +17,87 @@
 {%- endstyle -%}
 
 {% liquid
-  # --- Attempt to get the metaobject ---
-  # Initialize with the passed-in metaobject (could be blank)
+  ##################################################################
+  # 1) Try to get the metaobject (from section setting or page)
+  ##################################################################
   assign current_metaobject = metaobject
 
-  # If it's blank AND we are on a metaobject page, try assigning the global one instead.
-  # This ensures we prioritize the passed-in object if it exists.
+  # If no metaobject was directly assigned, but we are on a metaobject page,
+  # then the global 'metaobject' might apply
   if current_metaobject == blank and request.page_type == 'metaobject'
     assign current_metaobject = metaobject
   endif
 
-  # --- Initialize variables ---
+  # 2) Extract the trip_video_url and metaobject ID if available
   assign raw_video_url = ''
   assign current_trip_id = ''
-  # Check if we successfully got a metaobject (either passed in or global)
+
   if current_metaobject
     assign raw_video_url = current_metaobject.trip_video_url.value
     assign current_trip_id = current_metaobject.id
   endif
 
-  # --- Fallback/Example Video URL if metaobject or its field is missing ---
-  # You might want to remove this or change the default if a video isn't guaranteed
-  if raw_video_url == blank
-    # assign raw_video_url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' # Example/Placeholder
-  endif
-
+  ##################################################################
+  # 3) Build an embed URL for YouTube or Vimeo if raw_video_url is set
+  ##################################################################
   assign video_embed_url = ''
   assign video_id = ''
   assign video_host = ''
 
-  # --- Parse Video URL ---
-  if raw_video_url contains 'youtube.com/watch?v='
-    assign video_id = raw_video_url | split: 'v=' | last | split: '&' | first
+  # Strip out "www." so that your if/elsif checks match "youtube.com" or "youtu.be"
+  assign sanitized_url = raw_video_url | replace: 'www.', ''
+
+  if sanitized_url contains 'youtube.com/watch?v='
+    assign video_id = sanitized_url | split: 'v=' | last | split: '&' | first
     assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
     assign video_host = 'youtube'
-  elsif raw_video_url contains 'youtu.be/'
-    assign video_id = raw_video_url | split: 'youtu.be/' | last | split: '?' | first
+  elsif sanitized_url contains 'youtu.be/'
+    assign video_id = sanitized_url | split: 'youtu.be/' | last | split: '?' | first
     assign video_embed_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?enablejsapi=1&autoplay=1'
     assign video_host = 'youtube'
-  elsif raw_video_url contains 'vimeo.com/'
-    assign video_id = raw_video_url | split: '.com/' | last | split: '?' | first
+  elsif sanitized_url contains 'vimeo.com/'
+    assign video_id = sanitized_url | split: '.com/' | last | split: '?' | first
     assign video_embed_url = 'https://player.vimeo.com/video/' | append: video_id | append: '?autoplay=1'
     assign video_host = 'vimeo'
   endif
 
+  ##################################################################
+  # 4) Find the latest blog post in the 'news' blog referencing this trip
+  ##################################################################
   assign latest_referencing_article = blank
   assign latest_published_at = '1970-01-01'
-  assign blog_handle_to_check = 'news'
+  assign blog_handle_to_check = 'news' # Confirmed your blog is "news"
 
-  # --- Find the latest blog post referencing this trip ---
-  # Check blog exists and we have a trip ID from the metaobject
   if blogs[blog_handle_to_check] and current_trip_id != ''
     for article in blogs[blog_handle_to_check].articles
-      # Ensure the metafield and its value exist before comparing IDs
-      if article.metafields.custom.referenced_trip and article.metafields.custom.referenced_trip.value
-        assign referenced_trip = article.metafields.custom.referenced_trip.value
-        if referenced_trip.id == current_trip_id
-          if article.published_at > latest_published_at
-            assign latest_published_at = article.published_at
-            assign latest_referencing_article = article
+      if article.metafields.custom.referenced_trip
+        # Confirm the metafield has a value
+        if article.metafields.custom.referenced_trip.value
+          assign referenced_trip = article.metafields.custom.referenced_trip.value
+          # Compare IDs
+          if referenced_trip.id == current_trip_id
+            if article.published_at > latest_published_at
+              assign latest_published_at = article.published_at
+              assign latest_referencing_article = article
+            endif
           endif
         endif
       endif
     endfor
   endif
 
-  # Determine if we have content to show
-  assign has_video = false
-  if video_embed_url != blank
-    assign has_video = true
-  endif
-
-  assign has_blog = false
-  if latest_referencing_article != blank
-    assign has_blog = true
-  endif
-
-  # Only render the section if there's at least one column to show.
-  assign show_section = false
-  if has_video or has_blog
-    assign show_section = true
-  endif
+  ##################################################################
+  # 5) Decide if we actually show the section
+  ##################################################################
+  assign has_video = video_embed_url != blank
+  assign has_blog = latest_referencing_article != blank
+  assign show_section = has_video or has_blog
 %}
-
-{% # --- REMOVED DEBUG OUTPUT --- %}
 
 {% if show_section %}
   <div class="trip-experience color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
     <div class="page-width">
-      {% comment %} Optional section title {% endcomment %}
+      {% comment %} Optional title for the section {% endcomment %}
       {%- unless section.settings.title == blank -%}
         <div class="title-wrapper title-wrapper--no-top-margin{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
           <h2 class="title inline-richtext {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
@@ -116,13 +108,11 @@
         {% if has_video %}
           <div class="trip-experience__column trip-experience__column--video">
             <h3 class="trip-experience__caption">{{ 'sections.trip_experience.video_caption' | t }}</h3>
-            {% comment %} Use deferred-media for better performance and consistency {% endcomment %}
             <deferred-media
-              id="Deferred-Media-{{ section.id }}-{{ video_id }}" {% comment %} Added unique ID here {% endcomment %}
+              id="Deferred-Media-{{ section.id }}-{{ video_id }}"
               class="trip-experience__media deferred-media gradient global-media-settings"
-              data-media-id="{{ video_id }}" {% comment %} Ensure this uses the parsed video_id {% endcomment %}
+              data-media-id="{{ video_id }}"
               style="--ratio-percent: 56.25%;"
-              {% comment %} Default to 16:9, adjust if needed or use image aspect ratio {% endcomment %}
             >
               <button
                 id="Deferred-Poster-{{ section.id }}-{{ video_id }}"
@@ -130,16 +120,9 @@
                 type="button"
                 aria-label="{{ 'sections.video.load_video' | t: description: 'Trip Experience Video' | escape }}"
               >
-                {% comment %} Optional: Add a poster image from metaobject if available {% endcomment %}
-                {% comment %}
-                  Example: Check if current_metaobject.video_poster_image exists
-                  {% if current_metaobject.video_poster_image.value %}
-                    {{ current_metaobject.video_poster_image.value | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '375, 750, 1100, 1500', sizes: '100vw' }}
-                  {% else %}
-                    {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
-                  {% endif %}
-                {% endcomment %}
+                {% comment %} If you have a poster image, swap it in here. Otherwise, fallback placeholder: {% endcomment %}
                 {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+
                 <span class="deferred-media__poster-button motion-reduce">
                   <span class="svg-wrapper">
                     {{- 'icon-play.svg' | inline_asset_content -}}
@@ -155,8 +138,7 @@
                   title="{{ 'sections.trip_experience.video_title' | t: trip_name: current_metaobject.name | default: 'Trip' | escape }}"
                   {% if video_host == 'youtube' %}
                     class="js-youtube"
-                  {% endif %}
-                  {% if video_host == 'vimeo' %}
+                  {% elsif video_host == 'vimeo' %}
                     class="js-vimeo"
                   {% endif %}
                 ></iframe>
@@ -167,10 +149,8 @@
 
         {% if has_blog %}
           <div class="trip-experience__column trip-experience__column--blog">
-            {% comment %} Ensure this key matches the one in locales/en.default.json {% endcomment %}
             <h3 class="trip-experience__caption">{{ 'sections.trip_experience.blog_caption' | t }}</h3>
             <div class="trip-experience__blog-link">
-              {% comment %} Render using the article card snippet for consistency {% endcomment %}
               {% render 'article-card',
                 article: latest_referencing_article,
                 show_image: true,
@@ -243,7 +223,7 @@
   ],
   "presets": [
     {
-      "name": "t:sections.trip_experience.presets.name" // Corrected to use translation key
+      "name": "t:sections.trip_experience.presets.name"
     }
   ]
 }
