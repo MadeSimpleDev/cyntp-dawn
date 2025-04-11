@@ -44,8 +44,9 @@
 @media screen and (min-width: 990px) {
   .multicolumn-clickable .multicolumn-card__image-wrapper {
      width: 50% !important; /* Force 50% width */
-     margin-left: auto !important; /* Ensure centering if needed */
-     margin-right: auto !important; /* Ensure centering if needed */
+     /* Keep auto margins here for general centering within the column */
+     margin-left: auto !important;
+     margin-right: auto !important;
   }
    /* Ensure full width setting is also overridden */
    .multicolumn-clickable .multicolumn-card__image-wrapper--full-width {
@@ -53,6 +54,7 @@
    }
    /* Adjust spacing for centered items if image is forced smaller */
    .multicolumn-clickable .multicolumn-clickable-list__item.center .multicolumn-card__image-wrapper {
+      /* Keep auto margins here for general centering within the column */
       margin-left: auto !important;
       margin-right: auto !important;
    }
@@ -62,11 +64,17 @@
     justify-content: center; /* Center the grid items */
     column-gap: 0; /* Remove the gap between columns */
   }
-  /* --- Add rule to remove item margins specifically for 2-col desktop --- */
+  /* --- Update rule to remove item margins AND PADDING specifically for 2-col desktop --- */
   .multicolumn-clickable-list.grid--2-col-desktop .multicolumn-clickable-list__item {
-    /* If the above doesn't work due to higher specificity or !important elsewhere, try: */
     margin-left: 0 !important;
     margin-right: 0 !important;
+    padding-left: 0 !important; /* Ensure no padding */
+    padding-right: 0 !important; /* Ensure no padding */
+  }
+  /* --- Add rule to override image wrapper auto margins specifically for 2-col desktop --- */
+  .multicolumn-clickable-list.grid--2-col-desktop .multicolumn-clickable-list__item .multicolumn-card__image-wrapper {
+    margin-left: 0 !important; /* Override auto margin */
+    margin-right: 0 !important; /* Override auto margin */
   }
   /* --- END NEW --- */
 }
