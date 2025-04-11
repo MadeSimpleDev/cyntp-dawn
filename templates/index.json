@@ -100,7 +100,7 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/14-Celebrity.webp",
-            "floating_header": "Flaoting",
+            "floating_header": "Floating",
             "title": "",
             "text": "",
             "link_label": "",

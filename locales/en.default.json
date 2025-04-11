@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "password_page": {
@@ -334,13 +343,12 @@
       "use_fewer_filters_html": "Use fewer filters or <a class=\"{{ class }}\" href=\"{{ link }}\">remove all</a>"
     },
     "video": {
-    "video": {
       "load_video": "Load video: {{ description }}"
     },
     "trip_experience": {
       "name": "Trip Experience",
       "video_caption": "Watch the Experience",
-      "blog_caption": "Read about our Experience",
+      "blog_caption": "Read the Story",
       "video_title": "Video about {{ trip_name }}",
       "settings": {
         "title": {
