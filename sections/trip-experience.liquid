@@ -17,11 +17,24 @@
 {%- endstyle -%}
 
 {% liquid
+  # --- Attempt to get the metaobject ---
+  # Use passed metaobject if available, otherwise try global metaobject on metaobject pages
+  assign current_metaobject = metaobject
+  if current_metaobject == blank and request.page_type == 'metaobject'
+    assign current_metaobject = metaobject # On metaobject pages, the global 'metaobject' should be available
+  endif
+
   assign raw_video_url = ''
   assign current_trip_id = ''
-  if metaobject
-    assign raw_video_url = metaobject.trip_video_url.value
-    assign current_trip_id = metaobject.id
+  if current_metaobject
+    assign raw_video_url = current_metaobject.trip_video_url.value
+    assign current_trip_id = current_metaobject.id
+  endif
+
+  # --- Fallback/Example Video URL if metaobject or its field is missing ---
+  # You might want to remove this or change the default if a video isn't guaranteed
+  if raw_video_url == blank
+    # assign raw_video_url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' # Example/Placeholder
   endif
 
   assign video_embed_url = ''
@@ -45,17 +58,20 @@
 
   assign latest_referencing_article = blank
   assign latest_published_at = '1970-01-01'
+  assign blog_handle_to_check = 'journal' # IMPORTANT: Verify this is your blog's handle
 
   # --- Find the latest blog post referencing this trip ---
-  # Check blog exists and we have a trip ID
-  if blogs.journal and current_trip_id != ''
-    for article in blogs.journal.articles
-      assign referenced_trip = article.metafields.custom.referenced_trip.value
-      # Check if the referenced_trip metaobject value exists and its ID matches
-      if referenced_trip and referenced_trip.id == current_trip_id
-        if article.published_at > latest_published_at
-          assign latest_published_at = article.published_at
-          assign latest_referencing_article = article
+  # Check blog exists and we have a trip ID from the metaobject
+  if blogs[blog_handle_to_check] and current_trip_id != ''
+    for article in blogs[blog_handle_to_check].articles
+      # Ensure the metafield and its value exist before comparing IDs
+      if article.metafields.custom.referenced_trip and article.metafields.custom.referenced_trip.value
+        assign referenced_trip = article.metafields.custom.referenced_trip.value
+        if referenced_trip.id == current_trip_id
+          if article.published_at > latest_published_at
+            assign latest_published_at = article.published_at
+            assign latest_referencing_article = article
+          endif
         endif
       endif
     endfor
@@ -77,25 +93,9 @@
   if has_video or has_blog
     assign show_section = true
   endif
-
-  # --- DEBUG OUTPUT START ---
 %}
-<!--
-  Trip Experience Debug Info:
-  Metaobject ID: {{ current_trip_id | json }}
-  Raw Video URL: {{ raw_video_url | json }}
-  Parsed Video Embed URL: {{ video_embed_url | json }}
-  Parsed Video ID: {{ video_id | json }}
-  Parsed Video Host: {{ video_host | json }}
-  Has Video?: {{ has_video | json }}
 
-  Blog Handle Checked: {{ blogs.journal.handle | default: 'journal (Not Found?)' | json }}
-  Latest Referencing Article ID: {{ latest_referencing_article.id | json }}
-  Has Blog?: {{ has_blog | json }}
-
-  Show Section?: {{ show_section | json }}
--->
-{% # --- DEBUG OUTPUT END --- %}
+{% # --- REMOVED DEBUG OUTPUT --- %}
 
 {% if show_section %}
   <div class="trip-experience color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
@@ -122,12 +122,13 @@
                 id="Deferred-Poster-Modal-{{ section.id }}-{{ video_id }}"
                 class="trip-experience__poster media deferred-media__poster media--landscape"
                 type="button"
-                aria-label="{{ 'sections.video.load_video' | t: description: metaobject.name | escape }}"
+                aria-label="{{ 'sections.video.load_video' | t: description: current_metaobject.name | default: 'video' | escape }}"
               >
                 {% comment %} Optional: Add a poster image from metaobject if available {% endcomment %}
-                {% comment %} Example: Check if metaobject.video_poster_image exists
-                  {% if metaobject.video_poster_image.value %}
-                    {{ metaobject.video_poster_image.value | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '375, 750, 1100, 1500', sizes: '100vw' }}
+                {% comment %}
+                  Example: Check if current_metaobject.video_poster_image exists
+                  {% if current_metaobject.video_poster_image.value %}
+                    {{ current_metaobject.video_poster_image.value | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '375, 750, 1100, 1500', sizes: '100vw' }}
                   {% else %}
                     {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
                   {% endif %}
@@ -145,7 +146,7 @@
                   frameborder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowfullscreen
-                  title="{{ 'sections.trip_experience.video_title' | t: trip_name: metaobject.name | escape }}"
+                  title="{{ 'sections.trip_experience.video_title' | t: trip_name: current_metaobject.name | default: 'Trip' | escape }}"
                   {% if video_host == 'youtube' %}
                     class="js-youtube"
                   {% endif %}
@@ -180,7 +181,7 @@
 
 {% schema %}
 {
-  "name": "Experience",
+  "name": "Experience", // Use translation key
   "tag": "section",
   "class": "section",
   "settings": [
@@ -234,7 +235,7 @@
   ],
   "presets": [
     {
-      "name": "t:sections.trip_experience.presets.name"
+      "name": "t:sections.trip_experience.presets.name" // Use translation key
     }
   ]
 }
