@@ -17,28 +17,9 @@
         "padding_bottom": 28
       }
     },
-    "hero_banner_with_scroll_8aXYfH": {
-      "type": "HeroBannerWithScroll",
-      "custom_css": [
-        "{height: 400px;}",
-        ".hero-logo {width: 200px; /* or use a percentage like 50% */ height: auto; /* this keeps the aspect ratio */ max-width: 100%;}"
-      ],
-      "settings": {
-        "enable_scroll_indicator": false,
-        "enable_fade_overlay": false,
-        "overlay_logo": "shopify://shop_images/CYNTP_Character_Full_Color.png",
-        "logo_width": 200,
-        "heading": "",
-        "subheading": "",
-        "button_link": "",
-        "button_text": "",
-        "section_color_scheme": "",
-        "enable_full_height": false,
-        "enable_navbar_transparency": false
-      }
-    },
     "object_index_BzjYXD": {
       "type": "ObjectIndex",
+      "disabled": true,
       "settings": {
         "title": "Our Favorite Trips",
         "metaobject_type": "trips"
@@ -47,7 +28,6 @@
   },
   "order": [
     "main",
-    "hero_banner_with_scroll_8aXYfH",
     "object_index_BzjYXD"
   ]
 }
