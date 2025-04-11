@@ -21,7 +21,7 @@
   # Use passed metaobject if available, otherwise try global metaobject on metaobject pages
   assign current_metaobject = metaobject
   if current_metaobject == blank and request.page_type == 'metaobject'
-    assign current_metaobject = metaobject # On metaobject pages, the global 'metaobject' should be available
+    assign current_metaobject = metaobject
   endif
 
   assign raw_video_url = ''
@@ -181,7 +181,7 @@
 
 {% schema %}
 {
-  "name": "Experience", // Use translation key
+  "name": "Experience",
   "tag": "section",
   "class": "section",
   "settings": [
