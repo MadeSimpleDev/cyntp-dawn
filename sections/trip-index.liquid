@@ -1,8 +1,9 @@
 {% comment %}
   /sections/trip-index.liquid
 
-  - Lists all metaobjects of type "trips" in a 3-col desktop, 2-col mobile grid.
-  - Displays each trip's hero_image and name (h3), with no gradient background.
+  Lists all metaobjects of type "trips" in a grid.
+  - 2 columns on mobile, 3 columns on larger screens
+  - Each card has .hero_image with an H3 floating at bottom-left (white text, slightly larger)
 {% endcomment %}
 
 {%- style -%}
@@ -21,12 +22,11 @@
   .trip-index__grid {
     display: grid;
     gap: 1.5rem;
-    /* 2 columns on smaller screens, 3 columns on desktop */
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
   }
   @media screen and (min-width: 992px) {
     .trip-index__grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
     }
   }
 
@@ -52,19 +52,20 @@
     object-position: center;
   }
 
-  /* Float the text at the bottom-left, no background overlay */
+  /* Floating text overlay */
   .trip-index__overlay {
     position: absolute;
     bottom: 0.75rem;
     left: 0.75rem;
-    color: #fff;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.6); /* helps text stand out if needed */
+    color: #fff; /* White text */
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6); /* Helps visibility on busy images */
   }
 
   .trip-index__title {
     margin: 0;
-    font-size: 1.5rem; /* Adjust larger/smaller as desired */
+    font-size: 1.75rem; /* Larger heading */
     line-height: 1.2;
+    color: #fff; /* Ensure text is white */
   }
 {%- endstyle -%}
 
@@ -100,10 +101,7 @@
 
       <div class="trip-index__grid">
         {% for trip in trip_list %}
-          <a
-            class="trip-index__card"
-            href="{{ trip.system.url }}"
-          >
+          <a class="trip-index__card" href="{{ trip.system.url }}">
             {% if trip.hero_image %}
               <img
                 class="trip-index__image"
