@@ -24,10 +24,23 @@
         "title": "Our Favorite Trips",
         "metaobject_type": "trips"
       }
+    },
+    "trip_index_teXnJx": {
+      "type": "trip-index",
+      "settings": {
+        "title": "Our Trips",
+        "heading_size": "h2",
+        "limit": 0,
+        "hide_if_empty": false,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
     "main",
+    "trip_index_teXnJx",
     "object_index_BzjYXD"
   ]
 }
