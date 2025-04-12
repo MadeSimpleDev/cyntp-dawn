@@ -1,113 +1,11 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "hero_banner_with_scroll_A3VxQt": {
-      "type": "HeroBannerWithScroll",
-      "disabled": true,
-      "custom_css": [
-        "h1 {font-size: 4em; font-weight: bold; font-style: oblique;}",
-        "p {font-weight: bold; font-style: oblique;}"
-      ],
-      "settings": {
-        "hero_image": "shopify://shop_images/Feed_Header.png",
-        "enable_scroll_indicator": false,
-        "enable_fade_overlay": false,
-        "logo_width": 200,
-        "heading": "The CYNTP Feed",
-        "subheading": "Trips - Giveaways - Promos - News",
-        "button_link": "",
-        "button_text": "Discover More",
-        "section_color_scheme": "scheme-1",
-        "enable_full_height": false,
-        "enable_navbar_transparency": true
-      }
-    },
-    "newsletter_qBhkMT": {
-      "type": "newsletter",
-      "blocks": {
-        "heading_QntNJG": {
-          "type": "heading",
-          "settings": {
-            "heading": "Subscribe to our emails",
-            "heading_size": "h1"
-          }
-        },
-        "paragraph_yh4pC4": {
-          "type": "paragraph",
-          "settings": {
-            "text": "<p>Be the first to know about new collections and exclusive offers.</p>"
-          }
-        },
-        "email_form_E4wd9F": {
-          "type": "email_form",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "heading_QntNJG",
-        "paragraph_yh4pC4",
-        "email_form_E4wd9F"
-      ],
-      "disabled": true,
-      "settings": {
-        "color_scheme": "",
-        "full_width": true,
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
-    "rich_text_XeXd7A": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_V6xp6F": {
-          "type": "heading",
-          "settings": {
-            "heading": "All Articles",
-            "heading_size": "h2"
-          }
-        }
-      },
-      "block_order": [
-        "heading_V6xp6F"
-      ],
-      "disabled": true,
-      "settings": {
-        "desktop_content_position": "left",
-        "content_alignment": "left",
-        "color_scheme": "scheme-1",
-        "full_width": true,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
     "main": {
-      "type": "main-blog",
-      "custom_css": [
-        "h1 {display: none;}"
-      ],
-      "settings": {
-        "layout": "collage",
-        "show_image": true,
-        "image_height": "small",
-        "show_date": true,
-        "show_author": true,
-        "padding_top": 0,
-        "padding_bottom": 24
-      }
+      "type": "cyntp-blog",
+      "settings": {}
     }
   },
   "order": [
-    "hero_banner_with_scroll_A3VxQt",
-    "newsletter_qBhkMT",
-    "rich_text_XeXd7A",
     "main"
   ]
 }
