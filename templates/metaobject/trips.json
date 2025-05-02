@@ -147,6 +147,9 @@
       "block_order": [
         "column_kgTAKj"
       ],
+      "custom_css": [
+        "img {border-radius: 15px;}"
+      ],
       "settings": {
         "title": "",
         "heading_size": "h1",
