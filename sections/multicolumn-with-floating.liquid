@@ -30,16 +30,23 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    /* Limit width and center the wrapper */
-    max-width: 70%;
+    /* Default to full width for mobile */
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-    /* End width limit */
-    width: 100%; /* Keep this for flex context, max-width will constrain */
+    width: 100%; /* Keep this for flex context */
     position: relative;
     padding: 10px 0;
     margin-bottom: 2rem;
   }
+
+  /* Apply 70% width only on desktop */
+  @media screen and (min-width: 750px) {
+    .multicolumn-float__heading-wrapper {
+      max-width: 70%;
+    }
+  }
+
   .multicolumn-float__heading-wrapper::before,
   .multicolumn-float__heading-wrapper::after {
     content: '';

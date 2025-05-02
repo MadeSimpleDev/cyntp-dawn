@@ -123,7 +123,7 @@
   }
   /* Increase font sizes for small posts */
   .small-post__title {
-    font-size: 1.5rem !important; /* Increased size */
+    font-size: 22px !important; /* Changed from 1.5rem to match section heading */
     font-weight: bold !important;
     margin: 0 0 0.4rem !important;
     text-wrap: balance; /* Add text wrapping */
@@ -163,15 +163,21 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    /* Limit width and center the wrapper */
-    max-width: 70%;
+    /* Default to full width for mobile */
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-    /* End width limit */
-    width: 100%; /* Keep this for flex context, max-width will constrain */
+    width: 100%; /* Keep this for flex context */
     position: relative;
     padding: 10px 0;
     margin-bottom: 2rem;
+  }
+
+  /* Apply 70% width only on desktop */
+  @media screen and (min-width: 750px) {
+    .cyntp-vertical-blog__heading-wrapper {
+      max-width: 70%;
+    }
   }
 
   .cyntp-vertical-blog__heading-wrapper::before,
