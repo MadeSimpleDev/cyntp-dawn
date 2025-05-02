@@ -421,13 +421,13 @@
 }
 /* Increase font sizes for small posts */
 .small-post__title {
-  font-size: 1.5rem !important; /* Increased size */
+  font-size: 18px !important; /* Match vertical blog mobile */
   font-weight: bold !important;
   margin: 0 0 0.4rem !important;
   text-wrap: balance; /* Add text wrapping */
 }
 .small-post__excerpt {
-  font-size: 1rem !important; /* Increased size */
+  font-size: 1rem !important; /* Match vertical blog mobile (though hidden) */
   line-height: 1.5 !important;
   text-wrap: pretty; /* Add text wrapping */
 }
@@ -454,13 +454,13 @@
 }
 /* Increase font sizes for medium posts */
 .medium-post__title {
-  font-size: 1.75rem !important; /* Increased size */
+  font-size: 18px !important; /* Match small post mobile */
   font-weight: bold !important;
   margin: 0 0 0.5rem !important;
   text-wrap: balance; /* Add text wrapping */
 }
 .medium-post__excerpt {
-  font-size: 1.1rem !important; /* Increased size */
+  font-size: 1rem !important; /* Match small post mobile (though hidden) */
   line-height: 1.5 !important;
   text-wrap: pretty; /* Add text wrapping */
 }
@@ -472,16 +472,32 @@
     font-size: 0.95rem; /* Slightly larger on desktop */
   }
   .small-post__meta-mobile { display: none; } /* Hide mobile meta */
-  .small-post__excerpt { display: block !important; } /* Ensure excerpt shows on desktop */
+  .small-post__excerpt {
+    display: block !important; /* Ensure excerpt shows on desktop */
+    font-size: 1.2rem !important; /* Match vertical blog desktop excerpt */
+  }
+  /* Add rule to increase title size on desktop */
+  .small-post__title {
+    font-size: 22px !important; /* Match vertical blog desktop title */
+  }
 
   /* Increase medium post meta size on desktop */
   .medium-post__meta-line {
     font-size: 1.1rem; /* Slightly larger on desktop */
   }
+  /* Update medium post title and excerpt for desktop */
+  .medium-post__title {
+    font-size: 24px !important; /* Slightly larger than small post desktop */
+  }
+  .medium-post__excerpt {
+    display: block !important; /* Ensure excerpt shows on desktop */
+    font-size: 1.2rem !important; /* Match small post desktop excerpt */
+  }
 }
 
 @media screen and (max-width: 749px) {
   .small-post__excerpt { display: none; } /* Hide excerpt on mobile */
+  .medium-post__excerpt { display: none; } /* Hide medium excerpt on mobile too */
   .small-post__meta-desktop { display: none; } /* Ensure desktop meta hidden */
   .small-post__meta-mobile { display: block; } /* Ensure mobile meta shown */
 }
