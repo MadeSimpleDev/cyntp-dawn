@@ -317,6 +317,11 @@
         "column_QnRjH7",
         "column_Q89DJM"
       ],
+      "custom_css": [
+        ".media {height: 120px;}",
+        "img {object-fit: contain;}",
+        "@media screen and (min-width: 750px) {img{width: 50%; }}"
+      ],
       "settings": {
         "title": "",
         "heading_size": "h2",
