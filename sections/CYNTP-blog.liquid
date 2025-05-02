@@ -32,7 +32,7 @@
           {% comment %} Add Tag Display Here {% endcomment %}
           {% assign first_tag = first_article.tags | first %}
           {% if first_tag %}
-            <span class="article-tag">{{ first_tag | upcase }}</span>
+            <span class="article-tag" data-tag="{{ first_tag | downcase }}">{{ first_tag | upcase }}</span>
           {% endif %}
           {% comment %} End Tag Display {% endcomment %}
           <!-- Title is white, bold, italic -->
@@ -111,12 +111,12 @@
                 {% comment %} New Meta Structure for Small Post {% endcomment %}
                 {% assign current_tag = article.tags | first %}
                 <div class="small-post__meta-desktop">
-                  {% if current_tag %}<span class="article-tag">{{ current_tag | upcase }}</span>{% endif %}
+                  {% if current_tag %}<span class="article-tag" data-tag="{{ current_tag | downcase }}">{{ current_tag | upcase }}</span>{% endif %}
                   <span class="small-post__date">{{ article.published_at | date: "%B %d, %Y" }}</span>
                   {% if article.author %} | By {{ article.author }}{% endif %}
                 </div>
                 <div class="small-post__meta-mobile">
-                   {% if current_tag %}<span class="article-tag">{{ current_tag | upcase }}</span>{% endif %}
+                   {% if current_tag %}<span class="article-tag" data-tag="{{ current_tag | downcase }}">{{ current_tag | upcase }}</span>{% endif %}
                    <span class="small-post__date">{{ article.published_at | date: "%B %d, %Y" }}</span>
                    {% if article.author %} | By {{ article.author }}{% endif %}
                 </div>
@@ -258,7 +258,7 @@
 /* Add style for the new tag element */
 .article-tag {
   display: inline-block;
-  background-color: red;
+  /* background-color: red; Removed default red */
   color: white;
   padding: 0.2em 0.6em;
   font-size: 0.8rem;
@@ -267,6 +267,12 @@
   border-radius: 3px;
   margin-bottom: 0.5rem; /* Space below tag */
 }
+/* Add specific colors based on data-tag attribute */
+.article-tag[data-tag="news"] { background-color: #c3996b; } /* Tan */
+.article-tag[data-tag="courses"] { background-color: #282e24; } /* Dark Green */
+.article-tag[data-tag="gear"] { background-color: #595051; } /* Brown */
+.article-tag[data-tag="trips"] { background-color: #90aab6; } /* Light Blue */
+
 .hero-article__title {
   margin: 0 0 .5rem;
   color: #fff; /* Ensure white */
