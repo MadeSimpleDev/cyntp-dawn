@@ -59,6 +59,13 @@
         "show_text_below": false
       }
     },
+    "courses_by_state_dropdown_KbdcEj": {
+      "type": "CoursesByStateDropdown",
+      "name": "USA Golf Courses Dropdown",
+      "settings": {
+        "color_scheme": ""
+      }
+    },
     "courses_by_state_Rrj8GU": {
       "type": "CoursesByState",
       "custom_css": [],
@@ -118,6 +125,7 @@
     "main",
     "hero_banner_with_scroll_8aXYfH",
     "image_banner_bxV3tr",
+    "courses_by_state_dropdown_KbdcEj",
     "courses_by_state_Rrj8GU",
     "object_index_BzjYXD",
     "cyntp_comments_dqNX4D",
