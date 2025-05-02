@@ -123,7 +123,7 @@
   }
   /* Increase font sizes for small posts */
   .small-post__title {
-    font-size: 22px !important; /* Changed from 1.5rem to match section heading */
+    font-size: 18px !important; /* Set mobile font size */
     font-weight: bold !important;
     margin: 0 0 0.4rem !important;
     text-wrap: balance; /* Add text wrapping */
@@ -143,10 +143,18 @@
   @media screen and (min-width: 750px) {
     .small-post__meta-desktop {
       display: block; /* Show desktop meta */
-      font-size: 0.95rem; /* Slightly larger on desktop */
+      font-size: 1rem !important; /* Increased size for desktop meta */
     }
     .small-post__meta-mobile { display: none; } /* Hide mobile meta */
-    .small-post__excerpt { display: block !important; } /* Ensure excerpt shows on desktop */
+    .small-post__excerpt {
+      display: block !important; /* Ensure excerpt shows on desktop */
+      font-size: 1.1rem !important; /* Increased size for desktop excerpt */
+    }
+
+    /* Add rule to increase title size on desktop */
+    .small-post__title {
+      font-size: 22px !important; /* Restore desktop font size */
+    }
   }
 
   @media screen and (max-width: 749px) {
