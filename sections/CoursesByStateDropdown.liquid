@@ -1,0 +1,266 @@
+{% comment %} Copy content from CoursesByState.liquid and modify {% endcomment %}
+{% schema %}
+{
+  "name": "USA Golf Courses Dropdown",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "USA Golf Courses Dropdown"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="golf-courses-dropdown-section color-{{ section.settings.color_scheme }}">
+  <!-- 1) Gather All Courses -->
+  {% assign all_courses = shop.metaobjects.course.values %}
+
+  <!-- 2) Build Unique List of States -->
+  {% assign states_csv = '' %}
+  {% for c in all_courses %}
+    {% if c.state and c.state.value != blank %}
+      {% unless states_csv contains c.state.value %}
+        {% assign states_csv = states_csv | append: c.state.value | append: ',' %}
+      {% endunless %}
+    {% endif %}
+  {% endfor %}
+  {% assign states_array = states_csv | split: ',' | uniq | sort %}
+
+  <!-- 3) Section Header -->
+  <div class="golf-courses-container">
+    <div class="section-header">
+      <h2 class="section-title">Golf Courses by State</h2>
+    </div>
+
+    <!-- 4) Loop Through Each State & Show Dropdown -->
+    <div class="golf-courses-grid">
+      {% for st in states_array %}
+        {% assign st_stripped = st | strip %}
+        {% if st_stripped != blank %}
+          <div class="golf-course-state">
+            <h3>{{ st_stripped }}</h3>
+            <select class="state-course-dropdown" aria-label="Select a course in {{ st_stripped }}">
+              <option value="">Select a Course...</option>
+              {% for course in all_courses %}
+                {% if course.state and course.state.value == st_stripped %}
+                  <option value="/pages/courses/{{ course.system.handle }}">
+                    {{ course.name.value }}
+                  </option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- (Optional) 5) Featured Destinations Dropdown -->
+  {% assign has_featured_destinations = false %}
+  {% for course in all_courses %}
+    {% if course.featured_destination == true %}
+      {% assign has_featured_destinations = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% if has_featured_destinations %}
+    <div class="golf-courses-container">
+      <div class="section-header">
+        <h2 class="section-title">USA Featured Golf Destinations</h2>
+      </div>
+      <div class="golf-courses-grid">
+        {% for st in states_array %}
+          {% assign st_stripped = st | strip %}
+          {% assign has_featured_in_state = false %}
+          {% for course in all_courses %}
+            {% if course.featured_destination == true and course.state and course.state.value == st_stripped %}
+              {% assign has_featured_in_state = true %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+
+          {% if has_featured_in_state %}
+            <div class="golf-course-state">
+              <h3>{{ st_stripped }}</h3>
+               <select class="state-course-dropdown" aria-label="Select a featured course in {{ st_stripped }}">
+                <option value="">Select a Course...</option>
+                {% for course in all_courses %}
+                  {% if course.featured_destination == true and course.state and course.state.value == st_stripped %}
+                    <option value="/pages/courses/{{ course.system.handle }}">
+                      {{ course.name.value }}
+                    </option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const dropdowns = document.querySelectorAll('.golf-courses-dropdown-section .state-course-dropdown');
+    dropdowns.forEach(dropdown => {
+      dropdown.addEventListener('change', function(event) {
+        const selectedUrl = event.target.value;
+        if (selectedUrl) {
+          window.location.href = selectedUrl;
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  /* 🌟 Scoped Section Styling */
+  .golf-courses-dropdown-section {
+    text-align: center;
+    padding: 40px 20px;
+    position: relative;
+  }
+
+  /* 🌟 Scoped Container */
+  .golf-courses-dropdown-section .golf-courses-container {
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  /* 🌟 Scoped Title Wrapper */
+  .golf-courses-dropdown-section .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    position: relative;
+    padding: 10px 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .golf-courses-dropdown-section .section-header {
+      max-width: 70%; /* Match other sections */
+    }
+  }
+
+  /* 🌟 Section Titles */
+  .golf-courses-dropdown-section .section-title {
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #c3996b !important; /* Golden Color */
+    position: relative;
+    background-color: var(--color-background);
+    padding: 0 20px;
+    z-index: 2;
+    white-space: nowrap;
+  }
+
+  /* 🌟 Title Bars */
+  .golf-courses-dropdown-section .section-header::before,
+  .golf-courses-dropdown-section .section-header::after {
+    content: '';
+    flex-grow: 1;
+    height: 2px;
+    background-color: #c3996b !important;
+    display: block;
+  }
+  .golf-courses-dropdown-section .section-header::before {
+    margin-right: 15px;
+  }
+  .golf-courses-dropdown-section .section-header::after {
+    margin-left: 15px;
+  }
+
+  /* 🌟 Grid Layout */
+  .golf-courses-dropdown-section .golf-courses-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px; /* Increased gap slightly */
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  /* 🌟 Each "State" Card */
+  .golf-courses-dropdown-section .golf-course-state {
+    padding: 10px;
+    background: transparent;
+    border-radius: 4px;
+    border: none;
+    display: flex; /* Use flexbox for alignment */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+  }
+
+  /* Larger & Centered State Names */
+  .golf-courses-dropdown-section .golf-course-state h3 {
+    font-size: 22px;
+    margin-bottom: 10px; /* Increased margin */
+    color: var(--color-heading, #333);
+    text-align: center;
+    width: 100%; /* Ensure h3 takes full width for centering */
+  }
+
+  /* 🌟 Dropdown Styling */
+  .golf-courses-dropdown-section .state-course-dropdown {
+    width: 100%; /* Make dropdown fill its container */
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    cursor: pointer;
+    appearance: none; /* Remove default system appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M6 8L0 2l1.4-1.4L6 5.2 10.6.6 12 2z'/%3E%3C/svg%3E"); /* Custom arrow */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+  }
+
+  .golf-courses-dropdown-section .state-course-dropdown:focus {
+    outline: none;
+    border-color: var(--color-accent, #c3996b);
+    box-shadow: 0 0 0 1px var(--color-accent, #c3996b);
+  }
+
+  /* 🌟 Responsive Breakpoints */
+  @media (max-width: 1024px) {
+    .golf-courses-dropdown-section .golf-courses-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 768px) {
+    .golf-courses-dropdown-section .golf-courses-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px; /* Adjust gap for smaller screens */
+    }
+     .golf-courses-dropdown-section .state-course-dropdown {
+        font-size: 13px; /* Slightly smaller font on mobile */
+     }
+  }
+   @media (max-width: 480px) {
+    .golf-courses-dropdown-section .golf-courses-grid {
+      grid-template-columns: 1fr; /* Single column on very small screens */
+    }
+     .golf-courses-dropdown-section .golf-course-state h3 {
+        font-size: 20px;
+     }
+  }
+</style>
