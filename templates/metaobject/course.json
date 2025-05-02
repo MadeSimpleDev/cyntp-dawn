@@ -16,7 +16,7 @@
           "type": "heading",
           "settings": {
             "heading": "{{ metaobject.name.value }}",
-            "heading_size": "h0"
+            "heading_size": "h1"
           }
         }
       },
@@ -55,7 +55,8 @@
         "button_link": "",
         "button_text": "Discover More",
         "section_color_scheme": "scheme-2",
-        "enable_full_height": false
+        "enable_full_height": false,
+        "enable_navbar_transparency": true
       }
     },
     "animated_scoreboard_RdfQQk": {
@@ -109,7 +110,7 @@
         "color_scheme": "scheme-1",
         "image_behavior": "none",
         "mobile_content_alignment": "center",
-        "padding_top": 0,
+        "padding_top": 64,
         "padding_bottom": 0
       }
     },
