@@ -302,6 +302,11 @@
     background: rgba(0,0,0,0.3);
     align-items:flex-start; /* Keep left align on desktop */
   }
+  /* Add this rule to control the tag width within the hero overlay on desktop */
+  .hero-article__overlay .article-tag {
+    width: auto; /* Ensure tag only takes content width */
+    align-self: flex-start; /* Align tag itself to the start of the flex container */
+  }
 }
 @media screen and (max-width: 749px){
   .hero-article__image {
