@@ -163,7 +163,12 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    width: 100%;
+    /* Limit width and center the wrapper */
+    max-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    /* End width limit */
+    width: 100%; /* Keep this for flex context, max-width will constrain */
     position: relative;
     padding: 10px 0;
     margin-bottom: 2rem;
