@@ -1,5 +1,6 @@
 {% assign all_articles = blog.articles %}
 {% assign first_article = all_articles | first %}
+{% assign allowed_tags = 'news,courses,gear,trips' | split: ',' %}
 
 {% comment %} Add Filter Links Section Below {% endcomment %}
 <div class="blog-filter-links">
@@ -29,10 +30,18 @@
           >
         {% endif %}
         <div class="hero-article__overlay">
-          {% comment %} Add Tag Display Here {% endcomment %}
-          {% assign first_tag = first_article.tags | first %}
-          {% if first_tag %}
-            <span class="article-tag" data-tag="{{ first_tag | downcase }}">{{ first_tag | upcase }}</span>
+          {% comment %} Add Tag Display Here - Filtered {% endcomment %}
+          {% assign hero_display_tag = blank %}
+          {% for tag in first_article.tags %}
+            {% assign current_tag_downcased = tag | downcase %}
+            {% if allowed_tags contains current_tag_downcased %}
+              {% assign hero_display_tag = tag %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+
+          {% if hero_display_tag != blank %}
+            <span class="article-tag" data-tag="{{ hero_display_tag | downcase }}">{{ hero_display_tag | upcase }}</span>
           {% endif %}
           {% comment %} End Tag Display {% endcomment %}
           <!-- Title is white, bold, italic -->
@@ -108,15 +117,24 @@
                      style="border-top:1px solid #ccc;"
                    {% endif %}
               >
+                {% comment %} Filter tag logic for leftover articles {% endcomment %}
+                {% assign display_tag = blank %}
+                {% for tag in article.tags %}
+                  {% assign current_tag_downcased = tag | downcase %}
+                  {% if allowed_tags contains current_tag_downcased %}
+                    {% assign display_tag = tag %}
+                    {% break %}
+                  {% endif %}
+                {% endfor %}
+
                 {% comment %} New Meta Structure for Small Post {% endcomment %}
-                {% assign current_tag = article.tags | first %}
                 <div class="small-post__meta-desktop">
-                  {% if current_tag %}<span class="article-tag" data-tag="{{ current_tag | downcase }}">{{ current_tag | upcase }}</span>{% endif %}
+                  {% if display_tag != blank %}<span class="article-tag" data-tag="{{ display_tag | downcase }}">{{ display_tag | upcase }}</span>{% endif %}
                   <span class="small-post__date">{{ article.published_at | date: "%B %d, %Y" }}</span>
                   {% if article.author %} | By {{ article.author }}{% endif %}
                 </div>
                 <div class="small-post__meta-mobile">
-                   {% if current_tag %}<span class="article-tag" data-tag="{{ current_tag | downcase }}">{{ current_tag | upcase }}</span>{% endif %}
+                   {% if display_tag != blank %}<span class="article-tag" data-tag="{{ display_tag | downcase }}">{{ display_tag | upcase }}</span>{% endif %}
                    <span class="small-post__date">{{ article.published_at | date: "%B %d, %Y" }}</span>
                    {% if article.author %} | By {{ article.author }}{% endif %}
                 </div>
