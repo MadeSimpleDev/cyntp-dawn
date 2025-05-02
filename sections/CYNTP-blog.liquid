@@ -37,13 +37,11 @@
           {% comment %} End Tag Display {% endcomment %}
           <!-- Title is white, bold, italic -->
           <h2 class="hero-article__title">{{ first_article.title | escape }}</h2>
-          {% comment %} Remove the meta paragraph below {% endcomment %}
-          {% comment %}
+        
           <p class="hero-article__meta">
             {{ first_article.published_at | time_tag: format: 'date' }}
             {% if first_article.author %} | By {{ first_article.author }}{% endif %}
           </p>
-          {% endcomment %}
           {% if first_article.excerpt %}
             <p class="hero-article__excerpt">
               {{ first_article.excerpt | strip_html | truncatewords: 30 }}
