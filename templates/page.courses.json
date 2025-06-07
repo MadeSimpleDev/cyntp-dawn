@@ -68,6 +68,7 @@
     },
     "courses_by_state_Rrj8GU": {
       "type": "CoursesByState",
+      "disabled": true,
       "custom_css": [],
       "settings": {
         "color_scheme": ""
